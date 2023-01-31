@@ -1,6 +1,6 @@
 package com.haduc.beshop.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,7 +32,7 @@ public class Category implements Serializable {
   private boolean isDelete;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
-  @JsonManagedReference
+  @JsonIgnore
   private Set<Product> productList;
 
 

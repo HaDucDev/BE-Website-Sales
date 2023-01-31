@@ -1,8 +1,6 @@
 package com.haduc.beshop.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,28 +47,26 @@ public class Product implements Serializable {
   @Column(name = "is_delete")
   private boolean isDelete;
 
+  @Column
+  private Integer rating;// sao trung binh cua san pham
+
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "category_id")
-  @JsonBackReference
   private Category category;
 
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "supplier_id")
-  @JsonBackReference
   private Supplier supplier;
 
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  @JsonManagedReference
-  @JsonIgnore
+  @JsonIgnore// ko lay field nay khi tra ve json
   private Set<Cart> cartEntities;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-  @JsonBackReference
   @JsonIgnore
   private Set<OrderDetail> productEntities;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-  @JsonManagedReference
   @JsonIgnore
   private Set<Reviews> reviewsEntities;
 

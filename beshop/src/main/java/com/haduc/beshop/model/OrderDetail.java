@@ -1,7 +1,5 @@
 package com.haduc.beshop.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,13 +30,10 @@ public class OrderDetail implements Serializable {
 
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "orders_id", referencedColumnName = "orders_id", insertable = false, updatable = false, nullable = false)
-  @JsonBackReference
-  @JsonIgnore
   private Order order;
 
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false, nullable = false)
-  @JsonBackReference
   private Product product;
 
 }

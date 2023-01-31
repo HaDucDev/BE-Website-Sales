@@ -1,7 +1,6 @@
 package com.haduc.beshop.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,7 +34,6 @@ public class Supplier implements Serializable {
   private boolean isDelete = Boolean.FALSE;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "supplier")
-  @JsonManagedReference
   @JsonIgnore
   private Set<Product> productSet;
 }
