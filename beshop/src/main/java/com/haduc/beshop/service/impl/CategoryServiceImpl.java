@@ -3,9 +3,11 @@ package com.haduc.beshop.service.impl;
 import com.haduc.beshop.model.Category;
 import com.haduc.beshop.repository.ICategoryRepository;
 import com.haduc.beshop.service.ICategoryService;
-import com.haduc.beshop.util.payload.request.admin.CategoryRequest;
+import com.haduc.beshop.util.payload.request.admin.CreateCategoryRequest;
+import com.haduc.beshop.util.payload.request.admin.UpdateCategoryRequest;
 import com.haduc.beshop.util.payload.response.admin.GetCategoryResponse;
 import com.haduc.beshop.util.payload.response.admin.MessageResponse;
+import com.haduc.beshop.util.payload.response.admin.UpdateCategoryResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,13 +35,22 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
-    public MessageResponse createCategory(CategoryRequest categoryRequest) {
+    public MessageResponse createCategory(CreateCategoryRequest createCategoryRequest) {
 
         Category category= new Category();
-        category.setCategoryName(categoryRequest.getCategoryName());
+        category.setCategoryName(createCategoryRequest.getCategoryName());
         //this.iCategoryRepository.save(category); luu
         Category savaCategory= this.iCategoryRepository.save(category);
         return new MessageResponse(String.format("Category %s được tạo thành công!", savaCategory.getCategoryName()));
 
+    }
+
+    @Override
+    public UpdateCategoryResponse updateCategory(UpdateCategoryRequest updateCategoryRequest) {
+        Category category = this.iCategoryRepository.findByCategoryIdAndIsDeleteFalse(updateCategoryRequest.getCategoryId());
+        category.setCategoryName(updateCategoryRequest.getCategoryName());
+        Category savaCategory= this.iCategoryRepository.save(category);
+        UpdateCategoryResponse updateCategory= this.modelMapper.map(savaCategory,UpdateCategoryResponse.class);
+        return updateCategory;
     }
 }

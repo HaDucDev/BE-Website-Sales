@@ -2,7 +2,8 @@ package com.haduc.beshop.controller;
 
 import com.haduc.beshop.model.Category;
 import com.haduc.beshop.service.ICategoryService;
-import com.haduc.beshop.util.payload.request.admin.CategoryRequest;
+import com.haduc.beshop.util.payload.request.admin.CreateCategoryRequest;
+import com.haduc.beshop.util.payload.request.admin.UpdateCategoryRequest;
 import com.haduc.beshop.util.payload.response.admin.GetCategoryResponse;
 import com.haduc.beshop.util.payload.response.admin.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,18 @@ public class CategoryController {
 
 
     @PostMapping
-    public ResponseEntity<MessageResponse> createTopic(@RequestBody @Valid CategoryRequest categoryRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.iCategoryService.createCategory(categoryRequest));
+    public ResponseEntity<MessageResponse> createCategory(@RequestBody @Valid CreateCategoryRequest createCategoryRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iCategoryService.createCategory(createCategoryRequest));
+    }
+
+
+    @PutMapping
+    public ResponseEntity<MessageResponse> updateCategory(@RequestBody @Valid UpdateCategoryRequest createCategoryRequest) {
+        return ResponseEntity.status(HttpStatus.OK)
+                        .body(new MessageResponse(
+                        String.format("Loại hàng có id là %s được cập nhật thành công!",
+                                this.iCategoryService.updateCategory(createCategoryRequest).getCategoryId().toString())
+                ));
     }
 
 
