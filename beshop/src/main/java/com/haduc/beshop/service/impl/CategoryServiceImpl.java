@@ -3,12 +3,14 @@ package com.haduc.beshop.service.impl;
 import com.haduc.beshop.model.Category;
 import com.haduc.beshop.repository.ICategoryRepository;
 import com.haduc.beshop.service.ICategoryService;
+import com.haduc.beshop.util.exception.NotXException;
 import com.haduc.beshop.util.payload.request.admin.CreateCategoryRequest;
 import com.haduc.beshop.util.payload.request.admin.UpdateCategoryRequest;
 import com.haduc.beshop.util.payload.response.admin.GetCategoryResponse;
 import com.haduc.beshop.util.payload.response.admin.MessageResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,7 +48,9 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public  MessageResponse updateCategory(UpdateCategoryRequest updateCategoryRequest) {
-        Category category = this.iCategoryRepository.findByCategoryIdAndIsDeleteFalse(updateCategoryRequest.getCategoryId());
+        Category category =  this.iCategoryRepository
+                .findByCategoryIdAndIsDeleteFalse(updateCategoryRequest.getCategoryId())
+                .orElseThrow(() -> new NotXException("Không tìm thấy category này",HttpStatus.NOT_FOUND));
         category.setCategoryName(updateCategoryRequest.getCategoryName());
         Category savaCategory= this.iCategoryRepository.save(category);
         return new MessageResponse(String.format("Loại hàng có id là %s được cập nhật thành công!", savaCategory.getCategoryId().toString()));
