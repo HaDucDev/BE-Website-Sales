@@ -7,7 +7,6 @@ import com.haduc.beshop.util.payload.request.admin.CreateCategoryRequest;
 import com.haduc.beshop.util.payload.request.admin.UpdateCategoryRequest;
 import com.haduc.beshop.util.payload.response.admin.GetCategoryResponse;
 import com.haduc.beshop.util.payload.response.admin.MessageResponse;
-import com.haduc.beshop.util.payload.response.admin.UpdateCategoryResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,11 +45,10 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
-    public UpdateCategoryResponse updateCategory(UpdateCategoryRequest updateCategoryRequest) {
+    public  MessageResponse updateCategory(UpdateCategoryRequest updateCategoryRequest) {
         Category category = this.iCategoryRepository.findByCategoryIdAndIsDeleteFalse(updateCategoryRequest.getCategoryId());
         category.setCategoryName(updateCategoryRequest.getCategoryName());
         Category savaCategory= this.iCategoryRepository.save(category);
-        UpdateCategoryResponse updateCategory= this.modelMapper.map(savaCategory,UpdateCategoryResponse.class);
-        return updateCategory;
+        return new MessageResponse(String.format("Loại hàng có id là %s được cập nhật thành công!", savaCategory.getCategoryId().toString()));
     }
 }

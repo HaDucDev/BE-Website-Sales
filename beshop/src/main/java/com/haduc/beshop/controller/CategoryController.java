@@ -44,12 +44,8 @@ public class CategoryController {
 
 
     @PutMapping
-    public ResponseEntity<MessageResponse> updateCategory(@RequestBody @Valid UpdateCategoryRequest createCategoryRequest) {
-        return ResponseEntity.status(HttpStatus.OK)
-                        .body(new MessageResponse(
-                        String.format("Loại hàng có id là %s được cập nhật thành công!",
-                                this.iCategoryService.updateCategory(createCategoryRequest).getCategoryId().toString())
-                ));
+    public ResponseEntity<MessageResponse> updateCategory(@RequestBody @Valid UpdateCategoryRequest updateCategoryRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iCategoryService.updateCategory(updateCategoryRequest));
     }
 
 
