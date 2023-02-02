@@ -1,4 +1,4 @@
-package com.haduc.beshop.util.payload.request.admin;
+package com.haduc.beshop.util.payload.response.admin;
 
 
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryResponse {
+public class GetCategoryResponse {
 
     private Integer categoryId;
 
