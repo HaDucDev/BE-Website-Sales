@@ -32,7 +32,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(NotXException.class)
-    public ResponseEntity<MessageResponse> handleUteForumException(NotXException exception) {
+    public ResponseEntity<MessageResponse> handleNotXException(NotXException exception) {
         return ResponseEntity.status(exception.getHttpStatus())
                 .body(new MessageResponse(exception.getMessage()));
     }
