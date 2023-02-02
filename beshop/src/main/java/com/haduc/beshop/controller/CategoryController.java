@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -36,7 +37,7 @@ public class CategoryController {
 
 
     @PostMapping
-    public ResponseEntity<MessageResponse> createTopic(@RequestBody CategoryRequest categoryRequest) {
+    public ResponseEntity<MessageResponse> createTopic(@RequestBody @Valid CategoryRequest categoryRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iCategoryService.createCategory(categoryRequest));
     }
 
