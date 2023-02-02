@@ -21,4 +21,6 @@ public interface ICategoryService {
 
     MessageResponse updateCategory(UpdateCategoryRequest updateCategoryRequest);
 
+    void deleteById(Integer id);
+
 }

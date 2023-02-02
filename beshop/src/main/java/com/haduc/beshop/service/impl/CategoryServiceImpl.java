@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -54,5 +55,16 @@ public class CategoryServiceImpl implements ICategoryService {
         category.setCategoryName(updateCategoryRequest.getCategoryName());
         Category savaCategory= this.iCategoryRepository.save(category);
         return new MessageResponse(String.format("Loại hàng có id là %s được cập nhật thành công!", savaCategory.getCategoryId().toString()));
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(Integer id) {
+
+        int affectedRows = this.iCategoryRepository.softDeleteCategory(id);
+        System.out.println(affectedRows);
+        if (affectedRows == 0) {
+            throw new NotXException("Xảy ra lỗi khi xóa category", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

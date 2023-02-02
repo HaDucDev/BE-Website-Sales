@@ -48,5 +48,11 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iCategoryService.updateCategory(updateCategoryRequest));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MessageResponse> delete(@PathVariable Integer id) {
+        this.iCategoryService.deleteById(id);
+        return ResponseEntity.ok(new MessageResponse("Category với id = '" + id + "' đã được xóa thành công"));
+    }
+
 
 }
