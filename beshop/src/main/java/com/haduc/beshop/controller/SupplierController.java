@@ -3,12 +3,17 @@ package com.haduc.beshop.controller;
 
 import com.haduc.beshop.model.Supplier;
 import com.haduc.beshop.service.ISupplierService;
+import com.haduc.beshop.util.payload.request.admin.CreateCategoryRequest;
+import com.haduc.beshop.util.payload.request.admin.CreateSupplierRequest;
 import com.haduc.beshop.util.payload.response.admin.GetSupplierResponse;
+import com.haduc.beshop.util.payload.response.admin.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -28,5 +33,12 @@ public class SupplierController {
     @GetMapping("/{id}")
     public ResponseEntity<GetSupplierResponse> getSupplierById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.findBySupplierIdAndIsDeleteFalse(id));
+    }
+
+
+    //@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
+    public ResponseEntity<MessageResponse> createSupplier(@RequestBody @Valid CreateSupplierRequest createSupplierRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.createSupplier(createSupplierRequest));
     }
 }

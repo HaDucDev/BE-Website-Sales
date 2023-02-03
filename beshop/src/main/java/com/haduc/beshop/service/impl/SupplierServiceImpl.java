@@ -1,6 +1,8 @@
 package com.haduc.beshop.service.impl;
 
 
+import com.haduc.beshop.config.AmazonConfigService;
+import com.haduc.beshop.model.Category;
 import com.haduc.beshop.model.Supplier;
 import com.haduc.beshop.repository.ISupplierRepository;
 import com.haduc.beshop.service.ISupplierService;
@@ -24,6 +26,9 @@ public class SupplierServiceImpl implements ISupplierService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private AmazonConfigService amazonConfigService;
+
     @Override
     public List<Supplier> getAllSupplier() {
         return this.iSupplierRepository.findAllByIsDeleteFalse();
@@ -36,7 +41,17 @@ public class SupplierServiceImpl implements ISupplierService {
 
     @Override
     public MessageResponse createSupplier(CreateSupplierRequest createSupplierRequest) {
-        return null;
+        Supplier supplier = new Supplier();
+        supplier.setSupplierName(createSupplierRequest.getSupplierName());
+        if (createSupplierRequest.getSupplierFile() == null || createSupplierRequest.getSupplierFile().isEmpty()==true){
+            supplier.setSupplierImage("https://res.cloudinary.com/dyatpgcxn/image/upload/v1670474470/oavh6rbwonghakquh8fo.jpg");
+        }
+        else {
+            String image=amazonConfigService.uploadFile(createSupplierRequest.getSupplierFile());
+            supplier.setSupplierImage(image);
+        }
+        Supplier saveSupplier= this.iSupplierRepository.save(supplier);
+        return new MessageResponse(String.format("Supplier %s được tạo thành công!", saveSupplier.getSupplierName()));
     }
 
     @Override
