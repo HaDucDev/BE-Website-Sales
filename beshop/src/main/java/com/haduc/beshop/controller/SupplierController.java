@@ -1,23 +1,19 @@
 package com.haduc.beshop.controller;
 
 
-import com.haduc.beshop.model.Category;
 import com.haduc.beshop.model.Supplier;
-import com.haduc.beshop.service.ICategoryService;
 import com.haduc.beshop.service.ISupplierService;
+import com.haduc.beshop.util.payload.response.admin.GetSupplierResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/supplier")
+@RequestMapping("/api/admin/supplier")
 public class SupplierController {
 
     @Autowired
@@ -25,7 +21,12 @@ public class SupplierController {
 
 
     @GetMapping
-    public ResponseEntity<List<Supplier>> getAllCategory() {
+    public ResponseEntity<List<Supplier>> getAllSupplier() {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.getAllSupplier());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GetSupplierResponse> getSupplierById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.findBySupplierIdAndIsDeleteFalse(id));
     }
 }

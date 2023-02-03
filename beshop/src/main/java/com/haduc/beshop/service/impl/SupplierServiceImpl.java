@@ -6,8 +6,10 @@ import com.haduc.beshop.repository.ISupplierRepository;
 import com.haduc.beshop.service.ISupplierService;
 import com.haduc.beshop.util.payload.request.admin.CreateSupplierRequest;
 import com.haduc.beshop.util.payload.request.admin.UpdateSupplierRequest;
+import com.haduc.beshop.util.payload.response.admin.GetCategoryResponse;
 import com.haduc.beshop.util.payload.response.admin.GetSupplierResponse;
 import com.haduc.beshop.util.payload.response.admin.MessageResponse;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,9 @@ public class SupplierServiceImpl implements ISupplierService {
     @Autowired
     private ISupplierRepository iSupplierRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
     public List<Supplier> getAllSupplier() {
         return this.iSupplierRepository.findAllByIsDeleteFalse();
@@ -26,7 +31,7 @@ public class SupplierServiceImpl implements ISupplierService {
 
     @Override
     public GetSupplierResponse findBySupplierIdAndIsDeleteFalse(Integer supplierId) {
-        return null;
+        return this.modelMapper.map(this.iSupplierRepository.findBySupplierIdAndIsDeleteFalse(supplierId), GetSupplierResponse.class);
     }
 
     @Override
