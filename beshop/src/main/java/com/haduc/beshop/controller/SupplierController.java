@@ -3,7 +3,6 @@ package com.haduc.beshop.controller;
 
 import com.haduc.beshop.model.Supplier;
 import com.haduc.beshop.service.ISupplierService;
-import com.haduc.beshop.util.payload.request.admin.CreateCategoryRequest;
 import com.haduc.beshop.util.payload.request.admin.CreateSupplierRequest;
 import com.haduc.beshop.util.payload.response.admin.GetSupplierResponse;
 import com.haduc.beshop.util.payload.response.admin.MessageResponse;
@@ -36,9 +35,8 @@ public class SupplierController {
     }
 
 
-    //@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping
-    public ResponseEntity<MessageResponse> createSupplier(@RequestBody @Valid CreateSupplierRequest createSupplierRequest) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MessageResponse> createSupplier(@Valid CreateSupplierRequest createSupplierRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.createSupplier(createSupplierRequest));
     }
 }
