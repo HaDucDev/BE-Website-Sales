@@ -47,4 +47,10 @@ public class SupplierController {
             ,  @RequestPart("supplierFile") MultipartFile supplierFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.updateSupplier(UpdateSupplierRequest,supplierFile));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MessageResponse> deleteSupplier(@PathVariable Integer id) {
+        this.iSupplierService.deleteById(id);
+        return ResponseEntity.ok(new MessageResponse("Supplier với id = '" + id + "' đã được xóa thành công"));
+    }
 }

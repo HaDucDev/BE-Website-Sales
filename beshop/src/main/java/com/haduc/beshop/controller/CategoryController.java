@@ -49,7 +49,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<MessageResponse> delete(@PathVariable Integer id) {
+    public ResponseEntity<MessageResponse> deleteCategory(@PathVariable Integer id) {
         this.iCategoryService.deleteById(id);
         return ResponseEntity.ok(new MessageResponse("Category với id = '" + id + "' đã được xóa thành công"));
     }
