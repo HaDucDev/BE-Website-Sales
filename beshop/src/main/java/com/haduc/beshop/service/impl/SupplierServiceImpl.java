@@ -60,12 +60,13 @@ public class SupplierServiceImpl implements ISupplierService {
         Supplier supplier =  this.iSupplierRepository.findBySupplierIdAndIsDeleteFalse(updateSupplierRequest.getSupplierId())
                 .orElseThrow(() -> new NotXException("Không tìm thấy supplier này", HttpStatus.NOT_FOUND));
         supplier.setSupplierName(updateSupplierRequest.getSupplierName());
-        if(supplierFile != null || supplierFile.isEmpty()==false){
+
+        if (supplierFile == null || supplierFile.isEmpty()==true){
+            supplier.setSupplierImage(supplier.getSupplierImage());
+        }
+        else {
             String image=amazonConfigService.uploadFile(supplierFile);
             supplier.setSupplierImage(image);
-        }
-        if (supplierFile == null || supplierFile.isEmpty()==true) {
-            supplier.setSupplierImage(supplier.getSupplierImage());
         }
         Supplier saveSupplier= this.iSupplierRepository.save(supplier);
         return new MessageResponse(String.format("Supplier có id là %s được cập nhật thành công!", saveSupplier.getSupplierId().toString()));

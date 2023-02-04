@@ -16,7 +16,7 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Integer> {
 
     List<Supplier> findAllByIsDeleteFalse();
 
-    Optional<Supplier> findBySupplierIdAndIsDeleteFalse(Integer supplierId);
+    Optional<Supplier> findBySupplierIdAndIsDeleteFalse(Integer supplierId);//Optional dẻ dung orElseThrow
 
     // them,sua dung ham co san
 
