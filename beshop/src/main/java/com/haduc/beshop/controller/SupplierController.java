@@ -4,11 +4,11 @@ package com.haduc.beshop.controller;
 import com.haduc.beshop.model.Supplier;
 import com.haduc.beshop.service.ISupplierService;
 import com.haduc.beshop.util.payload.request.admin.CreateSupplierRequest;
+import com.haduc.beshop.util.payload.request.admin.UpdateSupplierRequest;
 import com.haduc.beshop.util.payload.response.admin.GetSupplierResponse;
 import com.haduc.beshop.util.payload.response.admin.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,5 +39,12 @@ public class SupplierController {
     public ResponseEntity<MessageResponse> createSupplier( @Valid @RequestPart("createSupplierRequest") CreateSupplierRequest createSupplierRequest
             ,  @RequestPart("supplierFile") MultipartFile supplierFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.createSupplier(createSupplierRequest,supplierFile));
+    }
+
+
+    @PutMapping
+    public ResponseEntity<MessageResponse> updateSupplier( @Valid @RequestPart("updateSupplierRequest") UpdateSupplierRequest UpdateSupplierRequest
+            ,  @RequestPart("supplierFile") MultipartFile supplierFile) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.updateSupplier(UpdateSupplierRequest,supplierFile));
     }
 }

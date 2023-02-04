@@ -1,12 +1,8 @@
 package com.haduc.beshop.service;
 
-import com.haduc.beshop.model.Category;
 import com.haduc.beshop.model.Supplier;
-import com.haduc.beshop.util.payload.request.admin.CreateCategoryRequest;
 import com.haduc.beshop.util.payload.request.admin.CreateSupplierRequest;
-import com.haduc.beshop.util.payload.request.admin.UpdateCategoryRequest;
 import com.haduc.beshop.util.payload.request.admin.UpdateSupplierRequest;
-import com.haduc.beshop.util.payload.response.admin.GetCategoryResponse;
 import com.haduc.beshop.util.payload.response.admin.GetSupplierResponse;
 import com.haduc.beshop.util.payload.response.admin.MessageResponse;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +20,7 @@ public interface ISupplierService {
 
     MessageResponse createSupplier(CreateSupplierRequest createSupplierRequest, MultipartFile supplierFile);
 
-    MessageResponse updateSupplier(UpdateSupplierRequest updateSupplierRequest);
+    MessageResponse updateSupplier(UpdateSupplierRequest updateSupplierRequest, MultipartFile supplierFile);
 
     void deleteById(Integer id);
 }
