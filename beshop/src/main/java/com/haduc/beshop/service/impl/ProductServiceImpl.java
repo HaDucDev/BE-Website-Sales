@@ -4,9 +4,12 @@ import com.haduc.beshop.model.Product;
 import com.haduc.beshop.repository.IProductRepository;
 import com.haduc.beshop.service.IproductService;
 import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
-import com.haduc.beshop.util.dto.response.admin.GetCategoryResponse;
+import com.haduc.beshop.util.dto.response.admin.GetProductResponse;
 import com.haduc.beshop.util.dto.response.admin.MessageResponse;
+import com.haduc.beshop.util.exception.NotXException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,14 +20,22 @@ public class ProductServiceImpl implements IproductService {
     @Autowired
     private IProductRepository iProductRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
     public List<Product> getAllProduct() {
         return this.iProductRepository.findAllByIsDeleteFalse();
     }
 
     @Override
-    public GetCategoryResponse findByProductIdAndIsDeleteFalse(Integer productId) {
-        return null;
+    public GetProductResponse findByProductIdAndIsDeleteFalse(Integer productId) {
+        Product product= this.iProductRepository.findByProductIdAndIsDeleteFalse(productId)
+                .orElseThrow(()->new NotXException("Không tìm thấy supplier này", HttpStatus.NOT_FOUND));
+        GetProductResponse getProductResponse = this.modelMapper.map(product,GetProductResponse.class);
+        getProductResponse.setIsCategory(product.getCategory().getCategoryName());
+        getProductResponse.setIsSupplier(product.getSupplier().getSupplierName());
+        return getProductResponse;
     }
 
     @Override
