@@ -45,4 +45,11 @@ public class ProductController {
             , @RequestPart("productFile")MultipartFile productFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.updateProduct(updateProductRequest,productFile));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MessageResponse> deleteProduct(@PathVariable Integer id) {
+        this.iproductService.deleteById(id);
+        return ResponseEntity.ok(new MessageResponse("product với id = '" + id + "' đã được xóa thành công"));
+    }
+
 }

@@ -76,12 +76,12 @@ public class SupplierServiceImpl implements ISupplierService {
     @Transactional
     @Override
     public void deleteById(Integer id) {
-
         int affectedRows = this.iSupplierRepository.softDeleteSupplier(id);
         System.out.println(affectedRows);
         if (affectedRows == 0) {
             throw new NotXException("Xảy ra lỗi khi xóa supplier", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
+
+
 }
