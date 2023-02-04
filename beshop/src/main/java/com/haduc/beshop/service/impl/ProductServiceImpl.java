@@ -1,5 +1,6 @@
 package com.haduc.beshop.service.impl;
 
+import com.haduc.beshop.config.AmazonConfigService;
 import com.haduc.beshop.model.Product;
 import com.haduc.beshop.repository.ICategoryRepository;
 import com.haduc.beshop.repository.IProductRepository;
@@ -13,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -31,6 +33,9 @@ public class ProductServiceImpl implements IproductService {
     @Autowired
     private ISupplierRepository iSupplierRepository;
 
+    @Autowired
+    private AmazonConfigService amazonConfigService;
+
     @Override
     public List<Product> getAllProduct() {
         return this.iProductRepository.findAllByIsDeleteFalse();
@@ -47,11 +52,19 @@ public class ProductServiceImpl implements IproductService {
     }
 
     @Override
-    public MessageResponse createProduct(CreateProductRequest createProductRequest) {
+    public MessageResponse createProduct(CreateProductRequest createProductRequest, MultipartFile productFile) {
         Product product= this.modelMapper.map(createProductRequest,Product.class);
         product.setCategory(this.iCategoryRepository.findByCategoryIdAndIsDeleteFalse(createProductRequest.getCategoryId()).get());
         product.setSupplier(this.iSupplierRepository.findBySupplierIdAndIsDeleteFalse(createProductRequest.getSupplierId())
                 .orElseThrow(()-> new NotXException("Không tìm thấy supplier này", HttpStatus.NOT_FOUND)));
+        if (productFile == null || productFile.isEmpty()==true){
+            product.setProductImage("https://res.cloudinary.com/dyatpgcxn/image/upload/v1670474470/oavh6rbwonghakquh8fo.jpg");
+        }
+        else {
+            String image=amazonConfigService.uploadFile(productFile);
+            product.setProductImage(image);
+        }
+
         Product productSave= this.iProductRepository.save(product);
         return new MessageResponse(String.format("Product %s được tạo thành công!", productSave.getProductName()));
     }

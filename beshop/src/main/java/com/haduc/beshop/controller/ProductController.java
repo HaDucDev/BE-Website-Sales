@@ -34,7 +34,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<MessageResponse> createProduct(@Valid @RequestBody CreateProductRequest createProductRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.createProduct(createProductRequest));
+    public ResponseEntity<MessageResponse> createProduct(@Valid @RequestPart("createProductRequest") CreateProductRequest createProductRequest
+            , @RequestPart("productFile")MultipartFile productFile) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.createProduct(createProductRequest,productFile));
     }
 }

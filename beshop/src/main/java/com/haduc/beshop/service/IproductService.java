@@ -4,6 +4,7 @@ import com.haduc.beshop.model.Product;
 import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.response.admin.GetProductResponse;
 import com.haduc.beshop.util.dto.response.admin.MessageResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface IproductService {
 
     GetProductResponse findByProductIdAndIsDeleteFalse(Integer productId);
 
-    MessageResponse createProduct(CreateProductRequest createProductRequest);
+    MessageResponse createProduct(CreateProductRequest createProductRequest, MultipartFile productFile);
 
    // MessageResponse updateProduct(UpdateProductRequest updateProductRequest);
 
