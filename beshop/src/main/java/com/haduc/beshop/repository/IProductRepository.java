@@ -1,7 +1,7 @@
 package com.haduc.beshop.repository;
 
+import com.haduc.beshop.model.Product;
 import com.haduc.beshop.model.Supplier;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,12 +12,12 @@ import java.util.Optional;
 
 
 @Repository
-public interface ISupplierRepository extends JpaRepository<Supplier, Integer> {
+public interface IProductRepository {
 
     //admin
-    List<Supplier> findAllByIsDeleteFalse();
+    List<Product> findAllByIsDeleteFalse();
 
-    Optional<Supplier> findBySupplierIdAndIsDeleteFalse(Integer supplierId);//Optional dẻ dung orElseThrow
+    Optional<Product> findByProductIdAndIsDeleteFalse(Integer supplierId);//Optional dẻ dung orElseThrow
 
     // them,sua dung ham co san
 
