@@ -4,6 +4,7 @@ import com.haduc.beshop.model.Product;
 import com.haduc.beshop.service.IproductService;
 import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.request.admin.CreateSupplierRequest;
+import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
 import com.haduc.beshop.util.dto.response.admin.GetProductResponse;
 import com.haduc.beshop.util.dto.response.admin.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,11 @@ public class ProductController {
     public ResponseEntity<MessageResponse> createProduct(@Valid @RequestPart("createProductRequest") CreateProductRequest createProductRequest
             , @RequestPart("productFile")MultipartFile productFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.createProduct(createProductRequest,productFile));
+    }
+
+    @PutMapping
+    public ResponseEntity<MessageResponse> updateProduct(@Valid @RequestPart("updateProductRequest") UpdateProductRequest updateProductRequest
+            , @RequestPart("productFile")MultipartFile productFile) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.updateProduct(updateProductRequest,productFile));
     }
 }

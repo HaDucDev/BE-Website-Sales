@@ -7,6 +7,7 @@ import com.haduc.beshop.repository.IProductRepository;
 import com.haduc.beshop.repository.ISupplierRepository;
 import com.haduc.beshop.service.IproductService;
 import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
+import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
 import com.haduc.beshop.util.dto.response.admin.GetProductResponse;
 import com.haduc.beshop.util.dto.response.admin.MessageResponse;
 import com.haduc.beshop.util.exception.NotXException;
@@ -67,6 +68,32 @@ public class ProductServiceImpl implements IproductService {
 
         Product productSave= this.iProductRepository.save(product);
         return new MessageResponse(String.format("Product %s được tạo thành công!", productSave.getProductName()));
+    }
+
+    @Override
+    public MessageResponse updateProduct(UpdateProductRequest updateProductRequest, MultipartFile productFile) {
+        Product getProductData = this.iProductRepository.findByProductIdAndIsDeleteFalse(updateProductRequest.getProductId())
+                .orElseThrow(() -> new NotXException("Không tìm thấy product này", HttpStatus.NOT_FOUND));
+        getProductData.setProductName(updateProductRequest.getProductName());
+        getProductData.setQuantity(updateProductRequest.getQuantity());;
+        getProductData.setDiscount(updateProductRequest.getDiscount());
+        getProductData.setUnitPrice(updateProductRequest.getUnitPrice());
+        getProductData.setDescriptionProduct(updateProductRequest.getDescriptionProduct());
+        getProductData.setCategory(this.iCategoryRepository.findByCategoryIdAndIsDeleteFalse(updateProductRequest.getCategoryId())
+                .orElseThrow(()-> new NotXException("Không tìm thấy cate này", HttpStatus.NOT_FOUND)));
+        getProductData.setSupplier(this.iSupplierRepository.findBySupplierIdAndIsDeleteFalse(updateProductRequest.getSupplierId())
+                .orElseThrow(()-> new NotXException("Không tìm thấy supplier này", HttpStatus.NOT_FOUND)));
+
+        if (productFile == null || productFile.isEmpty()==true){
+            getProductData.setProductImage(getProductData.getProductImage());
+        }
+        else {
+            String image=amazonConfigService.uploadFile(productFile);
+            getProductData.setProductImage(image);
+        }
+
+        Product productSave= this.iProductRepository.save(getProductData);
+        return new MessageResponse(String.format("Product %s được sửa thành công!", productSave.getProductName()));
     }
 
     @Override
