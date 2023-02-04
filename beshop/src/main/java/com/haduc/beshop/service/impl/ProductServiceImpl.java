@@ -1,7 +1,9 @@
 package com.haduc.beshop.service.impl;
 
 import com.haduc.beshop.model.Product;
+import com.haduc.beshop.repository.ICategoryRepository;
 import com.haduc.beshop.repository.IProductRepository;
+import com.haduc.beshop.repository.ISupplierRepository;
 import com.haduc.beshop.service.IproductService;
 import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.response.admin.GetProductResponse;
@@ -23,6 +25,12 @@ public class ProductServiceImpl implements IproductService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ICategoryRepository iCategoryRepository;
+
+    @Autowired
+    private ISupplierRepository iSupplierRepository;
+
     @Override
     public List<Product> getAllProduct() {
         return this.iProductRepository.findAllByIsDeleteFalse();
@@ -40,7 +48,12 @@ public class ProductServiceImpl implements IproductService {
 
     @Override
     public MessageResponse createProduct(CreateProductRequest createProductRequest) {
-        return null;
+        Product product= this.modelMapper.map(createProductRequest,Product.class);
+        product.setCategory(this.iCategoryRepository.findByCategoryIdAndIsDeleteFalse(createProductRequest.getCategoryId()).get());
+        product.setSupplier(this.iSupplierRepository.findBySupplierIdAndIsDeleteFalse(createProductRequest.getSupplierId())
+                .orElseThrow(()-> new NotXException("Không tìm thấy supplier này", HttpStatus.NOT_FOUND)));
+        Product productSave= this.iProductRepository.save(product);
+        return new MessageResponse(String.format("Product %s được tạo thành công!", productSave.getProductName()));
     }
 
     @Override
