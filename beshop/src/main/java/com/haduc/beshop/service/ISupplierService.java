@@ -1,10 +1,10 @@
 package com.haduc.beshop.service;
 
 import com.haduc.beshop.model.Supplier;
-import com.haduc.beshop.util.payload.request.admin.CreateSupplierRequest;
-import com.haduc.beshop.util.payload.request.admin.UpdateSupplierRequest;
-import com.haduc.beshop.util.payload.response.admin.GetSupplierResponse;
-import com.haduc.beshop.util.payload.response.admin.MessageResponse;
+import com.haduc.beshop.util.dto.request.admin.CreateSupplierRequest;
+import com.haduc.beshop.util.dto.request.admin.UpdateSupplierRequest;
+import com.haduc.beshop.util.dto.response.admin.GetSupplierResponse;
+import com.haduc.beshop.util.dto.response.admin.MessageResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

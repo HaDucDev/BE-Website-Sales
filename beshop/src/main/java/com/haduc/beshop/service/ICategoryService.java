@@ -1,10 +1,10 @@
 package com.haduc.beshop.service;
 
 import com.haduc.beshop.model.Category;
-import com.haduc.beshop.util.payload.request.admin.CreateCategoryRequest;
-import com.haduc.beshop.util.payload.request.admin.UpdateCategoryRequest;
-import com.haduc.beshop.util.payload.response.admin.GetCategoryResponse;
-import com.haduc.beshop.util.payload.response.admin.MessageResponse;
+import com.haduc.beshop.util.dto.request.admin.CreateCategoryRequest;
+import com.haduc.beshop.util.dto.request.admin.UpdateCategoryRequest;
+import com.haduc.beshop.util.dto.response.admin.GetCategoryResponse;
+import com.haduc.beshop.util.dto.response.admin.MessageResponse;
 
 import java.util.List;
 

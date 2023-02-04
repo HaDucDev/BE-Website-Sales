@@ -1,4 +1,4 @@
-package com.haduc.beshop.util.payload.request.admin;
+package com.haduc.beshop.util.dto.request.admin;
 
 
 import lombok.AllArgsConstructor;
@@ -7,12 +7,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateSupplierRequest {
+public class UpdateSupplierRequest {
+
+    @NotNull(message = "Lỗi id nhà sản xuất")
+    private Integer supplierId;
 
     @NotBlank(message = "Tên nhà sản xuất không được để trống")
     private String supplierName;

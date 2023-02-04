@@ -2,10 +2,10 @@ package com.haduc.beshop.controller;
 
 import com.haduc.beshop.model.Category;
 import com.haduc.beshop.service.ICategoryService;
-import com.haduc.beshop.util.payload.request.admin.CreateCategoryRequest;
-import com.haduc.beshop.util.payload.request.admin.UpdateCategoryRequest;
-import com.haduc.beshop.util.payload.response.admin.GetCategoryResponse;
-import com.haduc.beshop.util.payload.response.admin.MessageResponse;
+import com.haduc.beshop.util.dto.request.admin.CreateCategoryRequest;
+import com.haduc.beshop.util.dto.request.admin.UpdateCategoryRequest;
+import com.haduc.beshop.util.dto.response.admin.GetCategoryResponse;
+import com.haduc.beshop.util.dto.response.admin.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

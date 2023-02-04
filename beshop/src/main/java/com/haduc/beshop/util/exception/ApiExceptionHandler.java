@@ -1,7 +1,7 @@
 package com.haduc.beshop.util.exception;
 
 
-import com.haduc.beshop.util.payload.response.admin.MessageResponse;
+import com.haduc.beshop.util.dto.response.admin.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

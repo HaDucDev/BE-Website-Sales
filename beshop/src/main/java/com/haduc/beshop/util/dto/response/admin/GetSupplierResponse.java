@@ -1,4 +1,4 @@
-package com.haduc.beshop.util.payload.response.admin;
+package com.haduc.beshop.util.dto.response.admin;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

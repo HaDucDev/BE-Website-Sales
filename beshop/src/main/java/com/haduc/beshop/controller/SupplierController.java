@@ -3,10 +3,10 @@ package com.haduc.beshop.controller;
 
 import com.haduc.beshop.model.Supplier;
 import com.haduc.beshop.service.ISupplierService;
-import com.haduc.beshop.util.payload.request.admin.CreateSupplierRequest;
-import com.haduc.beshop.util.payload.request.admin.UpdateSupplierRequest;
-import com.haduc.beshop.util.payload.response.admin.GetSupplierResponse;
-import com.haduc.beshop.util.payload.response.admin.MessageResponse;
+import com.haduc.beshop.util.dto.request.admin.CreateSupplierRequest;
+import com.haduc.beshop.util.dto.request.admin.UpdateSupplierRequest;
+import com.haduc.beshop.util.dto.response.admin.GetSupplierResponse;
+import com.haduc.beshop.util.dto.response.admin.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
