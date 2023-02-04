@@ -22,7 +22,7 @@ public class Cart implements Serializable {
 
 
   @Column(name = "is_delete")
-  private boolean isDelete;
+  private boolean isDelete= Boolean.FALSE;
 
   @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id",referencedColumnName = "user_id", insertable = false, updatable = false, nullable = false)

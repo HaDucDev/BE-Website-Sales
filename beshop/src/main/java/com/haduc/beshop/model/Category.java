@@ -29,7 +29,7 @@ public class Category implements Serializable {
   private String categoryName;
 
   @Column(name = "is_delete")
-  private boolean isDelete;
+  private boolean isDelete= Boolean.FALSE;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
   @JsonIgnore
