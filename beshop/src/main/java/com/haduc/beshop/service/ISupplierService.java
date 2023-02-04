@@ -9,6 +9,7 @@ import com.haduc.beshop.util.payload.request.admin.UpdateSupplierRequest;
 import com.haduc.beshop.util.payload.response.admin.GetCategoryResponse;
 import com.haduc.beshop.util.payload.response.admin.GetSupplierResponse;
 import com.haduc.beshop.util.payload.response.admin.MessageResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public interface ISupplierService {
 
     GetSupplierResponse findBySupplierIdAndIsDeleteFalse(Integer supplierId);
 
-    MessageResponse createSupplier(CreateSupplierRequest createSupplierRequest);
+    MessageResponse createSupplier(CreateSupplierRequest createSupplierRequest, MultipartFile supplierFile);
 
     MessageResponse updateSupplier(UpdateSupplierRequest updateSupplierRequest);
 

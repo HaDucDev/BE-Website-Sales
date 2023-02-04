@@ -12,6 +12,8 @@ import com.haduc.beshop.util.payload.response.admin.MessageResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @Service
@@ -37,14 +39,14 @@ public class SupplierServiceImpl implements ISupplierService {
     }
 
     @Override
-    public MessageResponse createSupplier( CreateSupplierRequest createSupplierRequest) {
+    public MessageResponse createSupplier(CreateSupplierRequest createSupplierRequest, MultipartFile supplierFile) {
         Supplier supplier = new Supplier();
         supplier.setSupplierName(createSupplierRequest.getSupplierName());
-        if (createSupplierRequest.getSupplierFile() == null || createSupplierRequest.getSupplierFile().isEmpty()==true){
+        if (supplierFile == null || supplierFile.isEmpty()==true){
             supplier.setSupplierImage("https://res.cloudinary.com/dyatpgcxn/image/upload/v1670474470/oavh6rbwonghakquh8fo.jpg");
         }
         else {
-            String image=amazonConfigService.uploadFile(createSupplierRequest.getSupplierFile());
+            String image=amazonConfigService.uploadFile(supplierFile);
             supplier.setSupplierImage(image);
         }
         Supplier saveSupplier= this.iSupplierRepository.save(supplier);
