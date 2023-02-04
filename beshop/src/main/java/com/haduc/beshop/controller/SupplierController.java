@@ -35,7 +35,7 @@ public class SupplierController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.findBySupplierIdAndIsDeleteFalse(id));
     }
 
-    @PostMappingD
+    @PostMapping
     public ResponseEntity<MessageResponse> createSupplier( @Valid @RequestPart("createSupplierRequest") CreateSupplierRequest createSupplierRequest
             ,  @RequestPart("supplierFile") MultipartFile supplierFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.createSupplier(createSupplierRequest,supplierFile));

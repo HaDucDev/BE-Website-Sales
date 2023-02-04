@@ -22,5 +22,5 @@ public class UpdateSupplierRequest {
     @NotBlank(message = "Tên nhà sản xuất không được để trống")
     private String supplierName;
 
-    private MultipartFile supplierFile;// file null thì lấy mặc định thôi
+    //private MultipartFile supplierFile;// file null thì lấy mặc định thôi
 }
