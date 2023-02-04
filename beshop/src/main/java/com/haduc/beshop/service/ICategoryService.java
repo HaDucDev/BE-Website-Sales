@@ -12,7 +12,7 @@ public interface ICategoryService {
 
     //admin
 
-    //* lay tat ca san pham con co trong kho
+    //* lay tat ca cate con co trong kho
     List<Category> getAllCategory();
 
     GetCategoryResponse findByCategoryIdAndIsDeleteFalse(Integer categoryId);

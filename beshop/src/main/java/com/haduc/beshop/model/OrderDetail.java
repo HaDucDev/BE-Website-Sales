@@ -24,7 +24,7 @@ public class OrderDetail implements Serializable {
   private Long amount;
 
   @Column(name = "is_delete")
-  private boolean isDelete;
+  private boolean isDelete= Boolean.FALSE;
 
   private String isReview;// trạng thái đánh giá sản phẩm được mua
 

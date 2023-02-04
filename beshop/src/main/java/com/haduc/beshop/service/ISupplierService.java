@@ -13,7 +13,7 @@ public interface ISupplierService {
 
     //admin
 
-    //* lay tat ca san pham con co trong kho
+    //* lay tat ca nha sx con co trong kho
     List<Supplier> getAllSupplier();
 
     GetSupplierResponse findBySupplierIdAndIsDeleteFalse(Integer supplierId);

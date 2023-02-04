@@ -45,10 +45,10 @@ public class Product implements Serializable {
   private String descriptionProduct;
 
   @Column(name = "is_delete")
-  private boolean isDelete;
+  private boolean isDelete= Boolean.FALSE;
 
   @Column
-  private Integer rating;// sao trung binh cua san pham
+  private Integer rating=0;// sao trung binh cua san pham
 
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "category_id")

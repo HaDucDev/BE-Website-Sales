@@ -42,7 +42,7 @@ public class Order implements Serializable {
   private String statusOrder;
 
   @Column(name = "is_delete")
-  private boolean isDelete;
+  private boolean isDelete= Boolean.FALSE;
 
   @Column(name = "shipper_id")
   private Integer shipperId;
