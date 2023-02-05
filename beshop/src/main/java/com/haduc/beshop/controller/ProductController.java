@@ -3,7 +3,6 @@ package com.haduc.beshop.controller;
 import com.haduc.beshop.model.Product;
 import com.haduc.beshop.service.IproductService;
 import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
-import com.haduc.beshop.util.dto.request.admin.CreateSupplierRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
 import com.haduc.beshop.util.dto.response.admin.GetProductResponse;
 import com.haduc.beshop.util.dto.response.admin.MessageResponse;
