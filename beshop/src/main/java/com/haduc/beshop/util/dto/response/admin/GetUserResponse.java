@@ -1,6 +1,5 @@
 package com.haduc.beshop.util.dto.response.admin;
 
-import com.haduc.beshop.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

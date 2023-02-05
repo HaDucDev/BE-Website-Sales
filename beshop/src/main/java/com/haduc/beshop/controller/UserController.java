@@ -4,7 +4,10 @@ import com.haduc.beshop.model.User;
 import com.haduc.beshop.service.IUserService;
 import com.haduc.beshop.util.dto.response.admin.GetProductResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUserResponse;
+import com.haduc.beshop.util.dto.response.admin.GetUsersPaginationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +23,14 @@ public class UserController {
     private IUserService iUserService;
 
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUser() {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iUserService.getAllUser());
+    }
+
+    @GetMapping
+    public ResponseEntity<GetUsersPaginationResponse> findAllUsers(@PageableDefault(sort = "userId") Pageable pageable) {
+        return ResponseEntity.ok(this.iUserService.getAllUserAndIsDeleteFalsePagination(pageable));
     }
 
     @GetMapping("/{id}")

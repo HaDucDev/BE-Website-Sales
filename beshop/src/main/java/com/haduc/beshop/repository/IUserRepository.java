@@ -1,6 +1,8 @@
 package com.haduc.beshop.repository;
 
 import com.haduc.beshop.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +17,8 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
 
     //admin
     List<User> findAllByIsDeleteFalse();
+
+    Page<User> findAllByIsDeleteFalse(Pageable pageable);
 
     Optional<User> findByUserIdAndIsDeleteFalse(Integer userId);//Optional dẻ dung orElseThrow
 
