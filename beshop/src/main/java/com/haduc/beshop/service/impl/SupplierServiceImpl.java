@@ -1,7 +1,8 @@
 package com.haduc.beshop.service.impl;
 
 
-import com.haduc.beshop.config.AmazonConfigService;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.haduc.beshop.model.Supplier;
 import com.haduc.beshop.repository.ISupplierRepository;
 import com.haduc.beshop.service.ISupplierService;
@@ -17,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SupplierServiceImpl implements ISupplierService {
@@ -29,7 +32,7 @@ public class SupplierServiceImpl implements ISupplierService {
     private ModelMapper modelMapper;
 
     @Autowired
-    private AmazonConfigService amazonConfigService;
+    private Cloudinary cloudinary;
 
     @Override
     public List<Supplier> getAllSupplier() {
@@ -49,8 +52,14 @@ public class SupplierServiceImpl implements ISupplierService {
             supplier.setSupplierImage("https://res.cloudinary.com/dyatpgcxn/image/upload/v1670474470/oavh6rbwonghakquh8fo.jpg");
         }
         else {
-            String image=amazonConfigService.uploadFile(supplierFile);
-            supplier.setSupplierImage(image);
+            try {
+                Map p = this.cloudinary.uploader().upload(supplierFile.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                String image= (String) p.get("secure_url");
+                supplier.setSupplierImage(image);
+            }
+            catch (IOException e) {
+                System.out.println("loi post add supplier" + e.getMessage());
+            }
         }
         Supplier saveSupplier= this.iSupplierRepository.save(supplier);
         return new MessageResponse(String.format("Supplier %s được tạo thành công!", saveSupplier.getSupplierName()));
@@ -66,8 +75,14 @@ public class SupplierServiceImpl implements ISupplierService {
             supplier.setSupplierImage(supplier.getSupplierImage());
         }
         else {
-            String image=amazonConfigService.uploadFile(supplierFile);
-            supplier.setSupplierImage(image);
+            try {
+                Map p = this.cloudinary.uploader().upload(supplierFile.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                String image= (String) p.get("secure_url");
+                supplier.setSupplierImage(image);
+            }
+            catch (IOException e) {
+                System.out.println("loi put supplier" + e.getMessage());
+            };
         }
         Supplier saveSupplier= this.iSupplierRepository.save(supplier);
         return new MessageResponse(String.format("Supplier có id là %s được cập nhật thành công!", saveSupplier.getSupplierId().toString()));
