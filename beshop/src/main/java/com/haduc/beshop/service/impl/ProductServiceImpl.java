@@ -49,7 +49,7 @@ public class ProductServiceImpl implements IproductService {
     @Override
     public GetProductResponse findByProductIdAndIsDeleteFalse(Integer productId) {
         Product product= this.iProductRepository.findByProductIdAndIsDeleteFalse(productId)
-                .orElseThrow(()->new NotXException("Không tìm thấy supplier này", HttpStatus.NOT_FOUND));
+                .orElseThrow(()->new NotXException("Không tìm thấy product này", HttpStatus.NOT_FOUND));
         GetProductResponse getProductResponse = this.modelMapper.map(product,GetProductResponse.class);
         getProductResponse.setIsCategory(product.getCategory().getCategoryName());
         getProductResponse.setIsSupplier(product.getSupplier().getSupplierName());
@@ -61,7 +61,7 @@ public class ProductServiceImpl implements IproductService {
         Product product= this.modelMapper.map(createProductRequest,Product.class);
         product.setCategory(this.iCategoryRepository.findByCategoryIdAndIsDeleteFalse(createProductRequest.getCategoryId()).get());
         product.setSupplier(this.iSupplierRepository.findBySupplierIdAndIsDeleteFalse(createProductRequest.getSupplierId())
-                .orElseThrow(()-> new NotXException("Không tìm thấy supplier này", HttpStatus.NOT_FOUND)));
+                .orElseThrow(()-> new NotXException("Không tìm thấy product này", HttpStatus.NOT_FOUND)));
         if (productFile == null || productFile.isEmpty()){
             product.setProductImage("https://res.cloudinary.com/dyatpgcxn/image/upload/v1670474470/oavh6rbwonghakquh8fo.jpg");
         }
