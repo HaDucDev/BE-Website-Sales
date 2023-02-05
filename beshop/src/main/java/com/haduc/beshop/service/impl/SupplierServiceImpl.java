@@ -75,14 +75,13 @@ public class SupplierServiceImpl implements ISupplierService {
             supplier.setSupplierImage(supplier.getSupplierImage());
         }
         else {
-
             try {
                 Map p = this.cloudinary.uploader().upload(supplierFile.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
                 String image= (String) p.get("secure_url");
                 supplier.setSupplierImage(image);
             }
             catch (IOException e) {
-                System.out.println("loi post add supplier" + e.getMessage());
+                System.out.println("loi put supplier" + e.getMessage());
             };
         }
         Supplier saveSupplier= this.iSupplierRepository.save(supplier);

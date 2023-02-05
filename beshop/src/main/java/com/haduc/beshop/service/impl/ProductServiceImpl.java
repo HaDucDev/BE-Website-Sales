@@ -1,6 +1,7 @@
 package com.haduc.beshop.service.impl;
 
-import com.haduc.beshop.config.AmazonConfigService;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.haduc.beshop.model.Product;
 import com.haduc.beshop.repository.ICategoryRepository;
 import com.haduc.beshop.repository.IProductRepository;
@@ -18,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductServiceImpl implements IproductService {
@@ -36,7 +39,7 @@ public class ProductServiceImpl implements IproductService {
     private ISupplierRepository iSupplierRepository;
 
     @Autowired
-    private AmazonConfigService amazonConfigService;
+    private Cloudinary cloudinary;
 
     @Override
     public List<Product> getAllProduct() {
@@ -59,12 +62,18 @@ public class ProductServiceImpl implements IproductService {
         product.setCategory(this.iCategoryRepository.findByCategoryIdAndIsDeleteFalse(createProductRequest.getCategoryId()).get());
         product.setSupplier(this.iSupplierRepository.findBySupplierIdAndIsDeleteFalse(createProductRequest.getSupplierId())
                 .orElseThrow(()-> new NotXException("Không tìm thấy supplier này", HttpStatus.NOT_FOUND)));
-        if (productFile == null || productFile.isEmpty()==true){
+        if (productFile == null || productFile.isEmpty()){
             product.setProductImage("https://res.cloudinary.com/dyatpgcxn/image/upload/v1670474470/oavh6rbwonghakquh8fo.jpg");
         }
         else {
-            String image=amazonConfigService.uploadFile(productFile);
-            product.setProductImage(image);
+            try {
+                Map p = this.cloudinary.uploader().upload(productFile.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                String image= (String) p.get("secure_url");
+                product.setProductImage(image);
+            }
+            catch (IOException e) {
+                System.out.println("loi post add supplier" + e.getMessage());
+            }
         }
 
         Product productSave= this.iProductRepository.save(product);
@@ -76,7 +85,7 @@ public class ProductServiceImpl implements IproductService {
         Product getProductData = this.iProductRepository.findByProductIdAndIsDeleteFalse(updateProductRequest.getProductId())
                 .orElseThrow(() -> new NotXException("Không tìm thấy product này", HttpStatus.NOT_FOUND));
         getProductData.setProductName(updateProductRequest.getProductName());
-        getProductData.setQuantity(updateProductRequest.getQuantity());;
+        getProductData.setQuantity(updateProductRequest.getQuantity());
         getProductData.setDiscount(updateProductRequest.getDiscount());
         getProductData.setUnitPrice(updateProductRequest.getUnitPrice());
         getProductData.setDescriptionProduct(updateProductRequest.getDescriptionProduct());
@@ -89,8 +98,15 @@ public class ProductServiceImpl implements IproductService {
             getProductData.setProductImage(getProductData.getProductImage());
         }
         else {
-            String image=amazonConfigService.uploadFile(productFile);
-            getProductData.setProductImage(image);
+
+            try {
+                Map p = this.cloudinary.uploader().upload(productFile.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                String image= (String) p.get("secure_url");
+                getProductData.setProductImage(image);
+            }
+            catch (IOException e) {
+                System.out.println("loi post update product" + e.getMessage());
+            }
         }
 
         Product productSave= this.iProductRepository.save(getProductData);
