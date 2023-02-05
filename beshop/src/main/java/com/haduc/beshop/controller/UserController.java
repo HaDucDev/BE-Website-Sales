@@ -6,7 +6,9 @@ import com.haduc.beshop.util.dto.response.admin.GetProductResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUserResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUsersPaginationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +31,10 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<GetUsersPaginationResponse> findAllUsers(@PageableDefault(sort = "userId") Pageable pageable) {
-        return ResponseEntity.ok(this.iUserService.getAllUserAndIsDeleteFalsePagination(pageable));
+    public ResponseEntity<GetUsersPaginationResponse> findAllUsers
+            (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "6") int size, @PageableDefault(sort = "userId") Sort sort) {
+        Pageable paging = PageRequest.of(number, size,sort);
+        return ResponseEntity.ok(this.iUserService.getAllUserAndIsDeleteFalsePagination(paging));
     }
 
     @GetMapping("/{id}")
