@@ -1,6 +1,6 @@
 package com.haduc.beshop.repository;
 
-import com.haduc.beshop.model.Category;
+import com.haduc.beshop.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,17 +11,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ICategoryRepository extends JpaRepository<Category, Integer> {
+public interface IUserRepository extends JpaRepository<User, Integer> {
 
     //admin
-    List<Category> findAllByIsDeleteFalse();
+    List<User> findAllByIsDeleteFalse();
 
-    Optional<Category> findByCategoryIdAndIsDeleteFalse(Integer categoryId);
+    Optional<User> findByUserIdAndIsDeleteFalse(Integer userId);//Optional dẻ dung orElseThrow
 
     // them,sua dung ham co san
 
     // xoa mem
     @Modifying
-    @Query("UPDATE Category t SET t.isDelete = true WHERE t.categoryId = :id AND t.isDelete = false")
-    int softDeleteCategory(@Param("id") Integer id);
+    @Query("UPDATE User t SET t.isDelete = true WHERE t.userId = :id AND t.isDelete = false")
+    int softDeleteUser(@Param("id") Integer id);
+
 }
