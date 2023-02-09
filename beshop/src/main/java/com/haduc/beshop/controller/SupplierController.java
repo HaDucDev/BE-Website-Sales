@@ -9,6 +9,7 @@ import com.haduc.beshop.util.dto.response.admin.GetSupplierResponse;
 import com.haduc.beshop.util.dto.response.admin.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,9 +36,9 @@ public class SupplierController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.findBySupplierIdAndIsDeleteFalse(id));
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MessageResponse> createSupplier( @Valid @RequestPart("createSupplierRequest") CreateSupplierRequest createSupplierRequest
-            ,  @RequestPart("supplierFile") MultipartFile supplierFile) {
+            ,  @RequestPart(value = "supplierFile",required = false) MultipartFile supplierFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.createSupplier(createSupplierRequest,supplierFile));
     }
 
