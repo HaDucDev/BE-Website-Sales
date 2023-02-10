@@ -43,9 +43,9 @@ public class SupplierController {
     }
 
 
-    @PutMapping
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MessageResponse> updateSupplier( @Valid @RequestPart("updateSupplierRequest") UpdateSupplierRequest UpdateSupplierRequest
-            ,  @RequestPart("supplierFile") MultipartFile supplierFile) {
+            ,  @RequestPart(value = "supplierFile",required = false) MultipartFile supplierFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.updateSupplier(UpdateSupplierRequest,supplierFile));
     }
 

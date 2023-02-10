@@ -35,13 +35,13 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<MessageResponse> createProduct(@Valid @RequestPart("createProductRequest") CreateProductRequest createProductRequest
-            , @RequestPart("productFile")MultipartFile productFile) {
+            , @RequestPart(value = "productFile",required = false)MultipartFile productFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.createProduct(createProductRequest,productFile));
     }
 
     @PutMapping
     public ResponseEntity<MessageResponse> updateProduct(@Valid @RequestPart("updateProductRequest") UpdateProductRequest updateProductRequest
-            , @RequestPart("productFile")MultipartFile productFile) {
+            , @RequestPart(value = "productFile",required = false)MultipartFile productFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.updateProduct(updateProductRequest,productFile));
     }
 
