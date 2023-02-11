@@ -4,9 +4,14 @@ import com.haduc.beshop.model.Product;
 import com.haduc.beshop.service.IproductService;
 import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
-import com.haduc.beshop.util.dto.response.admin.GetProductResponse;
+import com.haduc.beshop.util.dto.response.admin.GetProductDetailResponse;
 import com.haduc.beshop.util.dto.response.admin.MessageResponse;
+import com.haduc.beshop.util.dto.response.user.GetProductsPaginationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +34,8 @@ public class ProductController {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iproductService.getAllProduct());
     }
 
-    @GetMapping("/admin/{id}")
-    public ResponseEntity<GetProductResponse> getProductById(@PathVariable Integer id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<GetProductDetailResponse> getProductById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.findByProductIdAndIsDeleteFalse(id));
     }
 
@@ -52,7 +57,13 @@ public class ProductController {
         return ResponseEntity.ok(new MessageResponse("product với id = '" + id + "' đã được xóa thành công"));
     }
 
-    // user
+    // ================================user
+    @GetMapping
+    public ResponseEntity<GetProductsPaginationResponse> getAllHomeProduct
+    (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "6") int size, @PageableDefault(sort = "userId") Sort sort){
+        Pageable paging = PageRequest.of(number, size,sort);
+        return ResponseEntity.ok(this.iproductService.getAllProductAndIsDeleteFalsePagination(paging));
+    }
 
 
 }

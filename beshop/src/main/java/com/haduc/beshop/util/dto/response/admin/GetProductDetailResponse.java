@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetProductResponse {
+public class GetProductDetailResponse {// getById-admin
 
 
     private String productName;

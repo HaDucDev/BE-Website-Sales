@@ -2,7 +2,6 @@ package com.haduc.beshop.controller;
 
 import com.haduc.beshop.model.User;
 import com.haduc.beshop.service.IUserService;
-import com.haduc.beshop.util.dto.response.admin.GetProductResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUserResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUsersPaginationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
