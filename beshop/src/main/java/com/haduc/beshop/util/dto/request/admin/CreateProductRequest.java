@@ -37,10 +37,9 @@ public class CreateProductRequest {
     private String descriptionProduct;
 
     //private Integer rating=0;// sao trung binh cua san pham
-
-    @NotNull(message = "Chưa chọn loại hàng")
+    @Min(value = 1, message = "Chưa chọn loại hàng")
     private Integer categoryId;
 
-    @NotNull(message = "Chưa chọn hãng")
+    @Min(value = 1, message = "Chưa chọn hãng")
     private Integer supplierId;
 }

@@ -18,7 +18,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/admin/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
@@ -30,14 +30,14 @@ public class UserController {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iUserService.getAllUser());
     }
 
-    @GetMapping
+    @GetMapping("/admin")
     public ResponseEntity<GetUsersPaginationResponse> findAllUsers
             (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "6") int size, @PageableDefault(sort = "userId") Sort sort) {
         Pageable paging = PageRequest.of(number, size,sort);
         return ResponseEntity.ok(this.iUserService.getAllUserAndIsDeleteFalsePagination(paging));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<GetUserResponse> getUserById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iUserService.findByUserIdAndIsDeleteFalse(id));
     }

@@ -19,7 +19,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/admin/supplier")
+@RequestMapping("/api/supplier")
 public class SupplierController {
 
     @Autowired
@@ -31,25 +31,25 @@ public class SupplierController {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.getAllSupplier());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<GetSupplierResponse> getSupplierById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.findBySupplierIdAndIsDeleteFalse(id));
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/admin",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MessageResponse> createSupplier( @Valid @RequestPart("createSupplierRequest") CreateSupplierRequest createSupplierRequest
             ,  @RequestPart(value = "supplierFile",required = false) MultipartFile supplierFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.createSupplier(createSupplierRequest,supplierFile));
     }
 
 
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/admin",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MessageResponse> updateSupplier( @Valid @RequestPart("updateSupplierRequest") UpdateSupplierRequest UpdateSupplierRequest
             ,  @RequestPart(value = "supplierFile",required = false) MultipartFile supplierFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.updateSupplier(UpdateSupplierRequest,supplierFile));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<MessageResponse> deleteSupplier(@PathVariable Integer id) {
         this.iSupplierService.deleteById(id);
         return ResponseEntity.ok(new MessageResponse("Supplier với id = '" + id + "' đã được xóa thành công"));

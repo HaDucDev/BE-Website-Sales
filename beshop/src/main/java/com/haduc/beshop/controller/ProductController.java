@@ -17,38 +17,42 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)// phep các bat ki api nao goi
 @RestController
-@RequestMapping("/api/admin/product")
+@RequestMapping("/api/product")
 public class ProductController {
 
     @Autowired
     private IproductService iproductService;
 
-    @GetMapping
+    //admin
+    @GetMapping("/admin")
     public ResponseEntity<List<Product>> getAllProduct() {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iproductService.getAllProduct());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<GetProductResponse> getProductById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.findByProductIdAndIsDeleteFalse(id));
     }
 
-    @PostMapping
+    @PostMapping("/admin")
     public ResponseEntity<MessageResponse> createProduct(@Valid @RequestPart("createProductRequest") CreateProductRequest createProductRequest
             , @RequestPart(value = "productFile",required = false)MultipartFile productFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.createProduct(createProductRequest,productFile));
     }
 
-    @PutMapping
+    @PutMapping("/admin")
     public ResponseEntity<MessageResponse> updateProduct(@Valid @RequestPart("updateProductRequest") UpdateProductRequest updateProductRequest
             , @RequestPart(value = "productFile",required = false)MultipartFile productFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.updateProduct(updateProductRequest,productFile));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<MessageResponse> deleteProduct(@PathVariable Integer id) {
         this.iproductService.deleteById(id);
         return ResponseEntity.ok(new MessageResponse("product với id = '" + id + "' đã được xóa thành công"));
     }
+
+    // user
+
 
 }
