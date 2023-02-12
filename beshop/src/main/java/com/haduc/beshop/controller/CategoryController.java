@@ -16,7 +16,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/admin/category")
+@RequestMapping("/api/category")
 public class CategoryController {
 
 
@@ -31,24 +31,24 @@ public class CategoryController {
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<GetCategoryResponse> getCategoryById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iCategoryService.findByCategoryIdAndIsDeleteFalse(id));
     }
 
 
-    @PostMapping
+    @PostMapping("/admin")
     public ResponseEntity<MessageResponse> createCategory(@RequestBody @Valid CreateCategoryRequest createCategoryRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iCategoryService.createCategory(createCategoryRequest));
     }
 
 
-    @PutMapping
+    @PutMapping("/admin")
     public ResponseEntity<MessageResponse> updateCategory(@RequestBody @Valid UpdateCategoryRequest updateCategoryRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iCategoryService.updateCategory(updateCategoryRequest));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<MessageResponse> deleteCategory(@PathVariable Integer id) {
         this.iCategoryService.deleteById(id);
         return ResponseEntity.ok(new MessageResponse("Category với id = '" + id + "' đã được xóa thành công"));

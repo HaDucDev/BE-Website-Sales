@@ -13,6 +13,7 @@ import java.util.Optional;
 @Repository
 public interface ICategoryRepository extends JpaRepository<Category, Integer> {
 
+    //admin
     List<Category> findAllByIsDeleteFalse();
 
     Optional<Category> findByCategoryIdAndIsDeleteFalse(Integer categoryId);
