@@ -1,6 +1,5 @@
 package com.haduc.beshop.service.impl;
 
-
 import com.haduc.beshop.model.User;
 import com.haduc.beshop.repository.IUserRepository;
 import com.haduc.beshop.service.IAccountService;
@@ -12,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,17 +27,13 @@ public class AccountServiceImpl implements IAccountService {
     @Override
     public LoginResponse login(LoginRequest request)  {
 
-        System.out.println("ok1");
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    request.getUsername(), request.getPassword()
-            ));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         }catch (BadCredentialsException e) {
             throw new NotXException("Tên đăng nhập hoặc mật khẩu không đúng", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        User user = this.iUserRepository.findByUsername(request.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy username: "));
-        System.out.println("ok1");
+        User user = this.iUserRepository.findByUsername(request.getUsername()).orElseThrow(() -> new NotXException("không tìm thấy người dùng này", HttpStatus.NOT_FOUND));
         return new LoginResponse( user.getUserId(), user.getUsername(),
                 user.getRole().getName().name(), user.getRole().getId());
     }
