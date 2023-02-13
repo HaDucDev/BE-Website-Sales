@@ -1,6 +1,7 @@
 package com.haduc.beshop.config.springSecurity;
 
 
+import com.haduc.beshop.config.jwt.AuthenticationTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 @EnableWebSecurity
@@ -41,6 +43,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
+    @Autowired
+    private AuthenticationTokenFilter authenticationJwtTokenFilter;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {//phan quyen
         http.cors().configurationSource(request -> corsConfiguration())
@@ -48,6 +53,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     CorsConfiguration corsConfiguration() {
