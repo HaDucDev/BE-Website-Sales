@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class LoginResponse {
 
-    //private String jwt;
+    private String jwtToken;
     private Integer userId;
     private String username;
     private String roleName;
