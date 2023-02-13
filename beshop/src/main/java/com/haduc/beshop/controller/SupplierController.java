@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,25 +31,25 @@ public class SupplierController {
     public ResponseEntity<List<Supplier>> getAllSupplier() {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.getAllSupplier());
     }
-
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/admin/{id}")
     public ResponseEntity<GetSupplierResponse> getSupplierById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.findBySupplierIdAndIsDeleteFalse(id));
     }
-
+    @Secured({"ROLE_ADMIN"})
     @PostMapping(value = "/admin",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MessageResponse> createSupplier( @Valid @RequestPart("createSupplierRequest") CreateSupplierRequest createSupplierRequest
             ,  @RequestPart(value = "supplierFile",required = false) MultipartFile supplierFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.createSupplier(createSupplierRequest,supplierFile));
     }
 
-
+    @Secured({"ROLE_ADMIN"})
     @PutMapping(value = "/admin",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MessageResponse> updateSupplier( @Valid @RequestPart("updateSupplierRequest") UpdateSupplierRequest UpdateSupplierRequest
             ,  @RequestPart(value = "supplierFile",required = false) MultipartFile supplierFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iSupplierService.updateSupplier(UpdateSupplierRequest,supplierFile));
     }
-
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/admin/{id}")
     public ResponseEntity<MessageResponse> deleteSupplier(@PathVariable Integer id) {
         this.iSupplierService.deleteById(id);

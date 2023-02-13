@@ -20,8 +20,9 @@ import org.springframework.web.cors.CorsConfiguration;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         prePostEnabled = true,
-        securedEnabled = true,
-        jsr250Enabled = true)
+        //jsr250Enabled = true,
+        securedEnabled = true
+        )
 @Configuration
 @Order(1000)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {

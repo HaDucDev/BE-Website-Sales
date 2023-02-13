@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,28 +30,30 @@ public class ProductController {
     private IproductService iproductService;
 
     //admin
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/admin")
     public ResponseEntity<List<Product>> getAllProduct() {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iproductService.getAllProduct());
     }
 
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/{id}")
     public ResponseEntity<GetProductDetailResponse> getProductById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.findByProductIdAndIsDeleteFalse(id));
     }
-
+    @Secured({"ROLE_ADMIN"})
     @PostMapping("/admin")
     public ResponseEntity<MessageResponse> createProduct(@Valid @RequestPart("createProductRequest") CreateProductRequest createProductRequest
             , @RequestPart(value = "productFile",required = false)MultipartFile productFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.createProduct(createProductRequest,productFile));
     }
-
+    @Secured({"ROLE_ADMIN"})
     @PutMapping("/admin")
     public ResponseEntity<MessageResponse> updateProduct(@Valid @RequestPart("updateProductRequest") UpdateProductRequest updateProductRequest
             , @RequestPart(value = "productFile",required = false)MultipartFile productFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.updateProduct(updateProductRequest,productFile));
     }
-
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/admin/{id}")
     public ResponseEntity<MessageResponse> deleteProduct(@PathVariable Integer id) {
         this.iproductService.deleteById(id);

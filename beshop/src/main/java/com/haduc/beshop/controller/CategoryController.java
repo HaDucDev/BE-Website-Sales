@@ -9,6 +9,7 @@ import com.haduc.beshop.util.dto.response.admin.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,23 +32,24 @@ public class CategoryController {
     }
 
 
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/admin/{id}")
     public ResponseEntity<GetCategoryResponse> getCategoryById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iCategoryService.findByCategoryIdAndIsDeleteFalse(id));
     }
 
-
+    @Secured({"ROLE_ADMIN"})
     @PostMapping("/admin")
     public ResponseEntity<MessageResponse> createCategory(@RequestBody @Valid CreateCategoryRequest createCategoryRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iCategoryService.createCategory(createCategoryRequest));
     }
 
-
+    @Secured({"ROLE_ADMIN"})
     @PutMapping("/admin")
     public ResponseEntity<MessageResponse> updateCategory(@RequestBody @Valid UpdateCategoryRequest updateCategoryRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iCategoryService.updateCategory(updateCategoryRequest));
     }
-
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/admin/{id}")
     public ResponseEntity<MessageResponse> deleteCategory(@PathVariable Integer id) {
         this.iCategoryService.deleteById(id);
