@@ -82,7 +82,7 @@ public class SupplierServiceImpl implements ISupplierService {
             }
             catch (IOException e) {
                 System.out.println("loi put supplier" + e.getMessage());
-            };
+            }
         }
         Supplier saveSupplier= this.iSupplierRepository.save(supplier);
         return new MessageResponse(String.format("Supplier có id là %s được cập nhật thành công!", saveSupplier.getSupplierId().toString()));

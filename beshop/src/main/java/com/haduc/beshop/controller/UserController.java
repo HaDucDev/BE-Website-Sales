@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUser() {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iUserService.getAllUser());
     }
-
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/admin")
     public ResponseEntity<GetUsersPaginationResponse> findAllUsers
             (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "6") int size, @PageableDefault(sort = "userId") Sort sort) {
