@@ -15,6 +15,9 @@ import java.util.Optional;
 @Repository
 public interface IUserRepository extends JpaRepository<User, Integer> {
 
+    //common
+    Optional<User> findByUsername(String username);// use java 8
+
     //admin
     List<User> findAllByIsDeleteFalse();
 
