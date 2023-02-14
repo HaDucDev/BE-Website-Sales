@@ -11,6 +11,7 @@ import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
 import com.haduc.beshop.util.dto.response.admin.GetProductAdminResponse;
 import com.haduc.beshop.util.dto.response.admin.MessageResponse;
+import com.haduc.beshop.util.dto.response.user.GetProductDetailResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductsPaginationResponse;
 import com.haduc.beshop.util.exception.NotXException;
 import org.modelmapper.ModelMapper;
@@ -139,15 +140,14 @@ public class ProductServiceImpl implements IproductService {
         return getUsersPaginationResponse;
     }
 
-    //chi tiet san pham
-//    @Override
-//    public Get findByProductIdAndIsDeleteFalse(Integer productId) {
-//        Product product= this.iProductRepository.findByProductIdAndIsDeleteFalse(productId)
-//                .orElseThrow(()->new NotXException("Không tìm thấy product này", HttpStatus.NOT_FOUND));
-//        GetProductDetailResponse getProductDetailResponse = this.modelMapper.map(product, GetProductDetailResponse.class);
-//        getProductDetailResponse.setIsCategory(product.getCategory().getCategoryName());
-//        getProductDetailResponse.setIsSupplier(product.getSupplier().getSupplierName());
-//        return getProductDetailResponse;
-//    }
+    @Override//chi tiet san pham nguoi dung
+    public GetProductDetailResponse findByProductDetalAndIsDeleteFalse(Integer productId) {
+                Product product= this.iProductRepository.findByProductIdAndIsDeleteFalse(productId)
+                .orElseThrow(()->new NotXException("Không tìm thấy product này", HttpStatus.NOT_FOUND));
+        GetProductDetailResponse getProductDetailResponse = this.modelMapper.map(product, GetProductDetailResponse.class);
+        getProductDetailResponse.setIsCategory(product.getCategory().getCategoryName());
+        getProductDetailResponse.setIsSupplier(product.getSupplier().getSupplierName());
+        return getProductDetailResponse;
+    }
 
 }

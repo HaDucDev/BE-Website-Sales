@@ -26,4 +26,6 @@ public class GetProductDetailResponse {
     private String isCategory;
 
     private String isSupplier;
+
+    private Integer rating=0;// sao trung binh cua san pham
 }
