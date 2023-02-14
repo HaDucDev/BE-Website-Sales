@@ -5,6 +5,7 @@ import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
 import com.haduc.beshop.util.dto.response.admin.GetProductAdminResponse;
 import com.haduc.beshop.util.dto.response.admin.MessageResponse;
+import com.haduc.beshop.util.dto.response.user.GetProductDetailResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductsPaginationResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,4 +29,6 @@ public interface IproductService {
 
     //user
     GetProductsPaginationResponse getAllProductAndIsDeleteFalsePagination(Pageable pageable);
+
+    GetProductDetailResponse findByProductDetalAndIsDeleteFalse(Integer productId);// chi tiet san pham
 }
