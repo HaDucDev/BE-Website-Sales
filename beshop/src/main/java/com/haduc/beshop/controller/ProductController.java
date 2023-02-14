@@ -4,8 +4,10 @@ import com.haduc.beshop.model.Product;
 import com.haduc.beshop.service.IproductService;
 import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
-import com.haduc.beshop.util.dto.response.admin.GetProductDetailResponse;
+import com.haduc.beshop.util.dto.response.admin.GetProductAdminResponse;
 import com.haduc.beshop.util.dto.response.admin.MessageResponse;
+import com.haduc.beshop.util.dto.response.user.GetProductDetailResponse;
+import com.haduc.beshop.util.dto.response.user.GetProductResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductsPaginationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -30,15 +32,15 @@ public class ProductController {
     private IproductService iproductService;
 
     //admin
-    @Secured({"ROLE_ADMIN"})
+    //@Secured({"ROLE_ADMIN"})
     @GetMapping("/admin")
     public ResponseEntity<List<Product>> getAllProduct() {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iproductService.getAllProduct());
     }
 
-    @Secured({"ROLE_ADMIN"})
-    @GetMapping("/{id}")
-    public ResponseEntity<GetProductDetailResponse> getProductById(@PathVariable Integer id) {
+    //@Secured({"ROLE_ADMIN"})
+    @GetMapping("admin/{id}")
+    public ResponseEntity<GetProductAdminResponse> getProductById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.findByProductIdAndIsDeleteFalse(id));
     }
     @Secured({"ROLE_ADMIN"})
@@ -47,13 +49,13 @@ public class ProductController {
             , @RequestPart(value = "productFile",required = false)MultipartFile productFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.createProduct(createProductRequest,productFile));
     }
-    @Secured({"ROLE_ADMIN"})
+    //@Secured({"ROLE_ADMIN"})
     @PutMapping("/admin")
     public ResponseEntity<MessageResponse> updateProduct(@Valid @RequestPart("updateProductRequest") UpdateProductRequest updateProductRequest
             , @RequestPart(value = "productFile",required = false)MultipartFile productFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.updateProduct(updateProductRequest,productFile));
     }
-    @Secured({"ROLE_ADMIN"})
+    //@Secured({"ROLE_ADMIN"})
     @DeleteMapping("/admin/{id}")
     public ResponseEntity<MessageResponse> deleteProduct(@PathVariable Integer id) {
         this.iproductService.deleteById(id);
@@ -66,6 +68,11 @@ public class ProductController {
     (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "6") int size, @PageableDefault(sort = "userId") Sort sort){
         Pageable paging = PageRequest.of(number, size,sort);
         return ResponseEntity.ok(this.iproductService.getAllProductAndIsDeleteFalsePagination(paging));
+    }
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<GetProductDetailResponse> getProductDetailById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.findByProductDetalAndIsDeleteFalse(id));
     }
 
 
