@@ -4,7 +4,7 @@ import com.haduc.beshop.model.Product;
 import com.haduc.beshop.service.IproductService;
 import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
-import com.haduc.beshop.util.dto.response.admin.GetProductDetailResponse;
+import com.haduc.beshop.util.dto.response.admin.GetProductAdminResponse;
 import com.haduc.beshop.util.dto.response.admin.MessageResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductsPaginationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class ProductController {
 
     @Secured({"ROLE_ADMIN"})
     @GetMapping("/{id}")
-    public ResponseEntity<GetProductDetailResponse> getProductById(@PathVariable Integer id) {
+    public ResponseEntity<GetProductAdminResponse> getProductById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.findByProductIdAndIsDeleteFalse(id));
     }
     @Secured({"ROLE_ADMIN"})
