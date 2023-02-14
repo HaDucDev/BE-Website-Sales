@@ -37,7 +37,7 @@ public class ProductController {
     }
 
     @Secured({"ROLE_ADMIN"})
-    @GetMapping("/{id}")
+    @GetMapping("admin/{id}")
     public ResponseEntity<GetProductAdminResponse> getProductById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.findByProductIdAndIsDeleteFalse(id));
     }
