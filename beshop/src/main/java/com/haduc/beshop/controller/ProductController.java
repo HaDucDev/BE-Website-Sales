@@ -65,7 +65,7 @@ public class ProductController {
     // ================================user
     @GetMapping
     public ResponseEntity<GetProductsPaginationResponse> getAllHomeProduct
-    (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "6") int size, @PageableDefault(sort = "userId") Sort sort){
+    (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "8") int size, @PageableDefault(sort = "userId") Sort sort){
         Pageable paging = PageRequest.of(number, size,sort);
         return ResponseEntity.ok(this.iproductService.getAllProductAndIsDeleteFalsePagination(paging));
     }
