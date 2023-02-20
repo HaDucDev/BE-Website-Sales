@@ -5,10 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +21,6 @@ public class LoginRequest {
 
 
     @NotBlank(message = "Mật khẩu không được để trống")
-    @Min(value = 4, message = "Chiều dài mật khẩu phải lớn hơn 4 kí tự")
+    @Size(min = 3, max=20, message = "Chiều dài mật khẩu phải lớn hơn 4 kí tự, tối đa 20 kí tự")
     private String password;
 }

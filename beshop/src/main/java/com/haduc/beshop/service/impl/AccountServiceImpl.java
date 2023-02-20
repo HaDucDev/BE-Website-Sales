@@ -47,6 +47,6 @@ public class AccountServiceImpl implements IAccountService {
         User user = this.iUserRepository.findByUsername(request.getUsername()).orElseThrow(() -> new NotXException("không tìm thấy người dùng này", HttpStatus.NOT_FOUND));
 
         return new LoginResponse(jwt, user.getUserId(), user.getUsername(),
-                user.getRole().getName().name(), user.getRole().getId());
+                user.getRole().getName().name(), user.getRole().getId(),user.getAvatar());
     }
 }
