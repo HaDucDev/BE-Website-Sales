@@ -15,6 +15,7 @@ import com.haduc.beshop.util.exception.NotXException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -34,12 +35,13 @@ public class CartServiceImpl implements ICartService {
     private IProductRepository iProductRepository;
 
 
+    @Transactional
     @Override
     public MessageResponse addProductToCart(CartRequest cartRequest) {
 
         // tim kiem xem san pham va nguoi dung ton tai ko
-        User user =this.iUserRepository.findByUserIdAndIsDeleteFalse(cartRequest.getUserId()).orElseThrow(()-> new  NotXException("Id người dùng lỗi", HttpStatus.NOT_FOUND));
-        Product product= this.iProductRepository.findByProductIdAndIsDeleteFalse(cartRequest.getProductId()).orElseThrow(()-> new  NotXException("Id sản phẩm lỗi", HttpStatus.NOT_FOUND));
+        //User user =this.iUserRepository.findByUserIdAndIsDeleteFalse(cartRequest.getUserId()).orElseThrow(()-> new  NotXException("Id người dùng lỗi", HttpStatus.NOT_FOUND));
+        //Product product= this.iProductRepository.findByProductIdAndIsDeleteFalse(cartRequest.getProductId()).orElseThrow(()-> new  NotXException("Id sản phẩm lỗi", HttpStatus.NOT_FOUND));
 
         CartIDKey cartIDKey= new CartIDKey(cartRequest.getUserId(), cartRequest.getProductId());
 
@@ -50,8 +52,8 @@ public class CartServiceImpl implements ICartService {
             Cart cartNew = new Cart();
             cartNew.setId(cartIDKey);
             cartNew.setQuantity(cartRequest.getQuantity());
-            cartNew.setUser(user);
-            cartNew.setProduct(product);
+            cartNew.setUser(this.iUserRepository.findByUserIdAndIsDeleteFalse(cartRequest.getUserId()).orElseThrow(()-> new  NotXException("Id người dùng lỗi", HttpStatus.NOT_FOUND)));
+            cartNew.setProduct(this.iProductRepository.findByProductIdAndIsDeleteFalse(cartRequest.getProductId()).orElseThrow(()-> new  NotXException("Id sản phẩm lỗi", HttpStatus.NOT_FOUND)));
             Cart saveCart =  this.iCartRepository.save(cartNew);
             return new MessageResponse(String.format("Sản phẩm có id là %s được thêm vào giỏ thành công!", saveCart.getId().getProductId().toString()));
         }
@@ -68,4 +70,6 @@ public class CartServiceImpl implements ICartService {
         Cart saveCartSecond =  this.iCartRepository.save(oldCart);
         return new MessageResponse(String.format("Sản phẩm có id là %s được thêm vào giỏ thành công!",saveCartSecond.getId().getProductId().toString()));
     }
+
+   
 }
