@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,6 +35,11 @@ public class CartServiceImpl implements ICartService {
     @Autowired
     private IProductRepository iProductRepository;
 
+
+    @Override
+    public List<Cart> getAllProductFromCartByUserId(Integer userId) {
+        return this.iCartRepository.findById_UserIdAndIsDeleteFalse(userId);
+    }
 
     @Transactional
     @Override

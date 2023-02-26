@@ -9,13 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface ICartRepository extends JpaRepository<Cart,CartIDKey> {
 
-    //tim san pham trong gio
-    //Optional<Cart> findById_ProductIdAndId_UserIdAndIsDeleteFalse(Integer productId, Integer userId);
+    //tim san pham trong gio cua nguoi dung
+    List<Cart> findById_UserIdAndIsDeleteFalse(Integer userId);
 
     //xoa san pham khoi cart
     @Modifying
