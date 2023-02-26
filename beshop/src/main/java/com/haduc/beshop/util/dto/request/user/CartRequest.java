@@ -1,4 +1,4 @@
-package com.haduc.beshop.util.dto.response.admin;
+package com.haduc.beshop.util.dto.request.user;
 
 
 import lombok.AllArgsConstructor;
@@ -10,8 +10,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageResponse {
+public class CartRequest {
 
-    private String message;
-
+    private Integer userId;
+    private Integer productId;
+    private Integer quantity;
 }
