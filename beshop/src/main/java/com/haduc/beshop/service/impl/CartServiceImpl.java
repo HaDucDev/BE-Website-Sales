@@ -71,5 +71,13 @@ public class CartServiceImpl implements ICartService {
         return new MessageResponse(String.format("Sản phẩm có id là %s được thêm vào giỏ thành công!",saveCartSecond.getId().getProductId().toString()));
     }
 
-   
+    @Transactional
+    @Override
+    public void deleteById(CartIDKey id) {
+        int affectedRows = this.iCartRepository.deleteProductFromCart(id);
+        System.out.println(affectedRows);
+        if (affectedRows == 0) {
+            throw new NotXException("Xảy ra lỗi khi xóa sản phẩm khỏi giỏ hàng", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
