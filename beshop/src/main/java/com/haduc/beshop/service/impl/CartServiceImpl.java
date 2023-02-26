@@ -43,8 +43,10 @@ public class CartServiceImpl implements ICartService {
 
 
     @Override
-    public Long countById_UserIdAndIsDeleteFalse(Integer userId) {
-        return this.iCartRepository.countById_UserIdAndIsDeleteFalse(userId);
+    public Integer countById_UserIdAndIsDeleteFalse(Integer userId) {
+        Long count = this.iCartRepository.countById_UserIdAndIsDeleteFalse(userId);
+        Integer convertCount = Integer.valueOf(count.toString());
+        return convertCount;
     }
 
     @Transactional

@@ -11,7 +11,7 @@ public interface ICartService {
 
     List<Cart> getAllProductFromCartByUserId(Integer userId);//lay san pham chua xoa mem trong gio nguoi dung
 
-    Long countById_UserIdAndIsDeleteFalse(Integer userId);
+    Integer countById_UserIdAndIsDeleteFalse(Integer userId);
     MessageResponse addProductToCart(CartRequest cartRequest);
 
     void deleteById(CartIDKey id);
