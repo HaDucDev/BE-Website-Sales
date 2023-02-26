@@ -37,14 +37,14 @@ public class CartServiceImpl implements ICartService {
     @Override
     public MessageResponse addProductToCart(CartRequest cartRequest) {
 
+        // tim kiem xem san pham va nguoi dung ton tai ko
+        User user =this.iUserRepository.findByUserIdAndIsDeleteFalse(cartRequest.getUserId()).orElseThrow(()-> new  NotXException("Id người dùng lỗi", HttpStatus.NOT_FOUND));
+        Product product= this.iProductRepository.findByProductIdAndIsDeleteFalse(cartRequest.getProductId()).orElseThrow(()-> new  NotXException("Id sản phẩm lỗi", HttpStatus.NOT_FOUND));
+
         CartIDKey cartIDKey= new CartIDKey(cartRequest.getUserId(), cartRequest.getProductId());
 
         //kiem tra xme san pham them da co trong gio chua
         Optional<Cart> cart = this.iCartRepository.findById(cartIDKey);
-
-        // tim kiem xem san pham va nguoi dung ton tai ko
-        User user =this.iUserRepository.findByUserIdAndIsDeleteFalse(cartRequest.getUserId()).orElseThrow(()-> new  NotXException("Id người dùng lỗi", HttpStatus.NOT_FOUND));
-        Product product= this.iProductRepository.findByProductIdAndIsDeleteFalse(cartRequest.getProductId()).orElseThrow(()-> new  NotXException("Id sản phẩm lỗi", HttpStatus.NOT_FOUND));
 
         if (!cart.isPresent()) {// neu la null - khong co trong gio
             Cart cartNew = new Cart();
@@ -62,9 +62,9 @@ public class CartServiceImpl implements ICartService {
             oldCart.setQuantity(cartRequest.getQuantity());
             oldCart.setDelete(false);
         }
-        else oldCart.setQuantity(cart.get().getQuantity() + cartRequest.getQuantity());
-        oldCart.setUser(user);
-        oldCart.setProduct(product);
+        else {
+            oldCart.setQuantity(cart.get().getQuantity() + cartRequest.getQuantity());
+        }
         Cart saveCartSecond =  this.iCartRepository.save(oldCart);
         return new MessageResponse(String.format("Sản phẩm có id là %s được thêm vào giỏ thành công!",saveCartSecond.getId().getProductId().toString()));
     }
