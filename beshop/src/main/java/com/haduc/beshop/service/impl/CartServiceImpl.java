@@ -41,6 +41,12 @@ public class CartServiceImpl implements ICartService {
         return this.iCartRepository.findById_UserIdAndIsDeleteFalse(userId);
     }
 
+
+    @Override
+    public Long countById_UserIdAndIsDeleteFalse(Integer userId) {
+        return this.iCartRepository.countById_UserIdAndIsDeleteFalse(userId);
+    }
+
     @Transactional
     @Override
     public MessageResponse addProductToCart(CartRequest cartRequest) {

@@ -25,6 +25,13 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iCartService.getAllProductFromCartByUserId(id));
     }
 
+    @GetMapping("/count-cart/{userId}")
+    public ResponseEntity<?> countProductCategory(@PathVariable Integer userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iCartService.countById_UserIdAndIsDeleteFalse(userId));
+    }
+
+
+
     @PostMapping
     public ResponseEntity<?> addProductToCart(@RequestBody CartRequest cartRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iCartService.addProductToCart(cartRequest));

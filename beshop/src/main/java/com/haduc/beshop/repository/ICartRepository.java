@@ -17,6 +17,9 @@ public interface ICartRepository extends JpaRepository<Cart,CartIDKey> {
     //tim san pham trong gio cua nguoi dung
     List<Cart> findById_UserIdAndIsDeleteFalse(Integer userId);
 
+    //dem so loai san pham co trong gio
+    Long countById_UserIdAndIsDeleteFalse(Integer userId);
+
     //xoa san pham khoi cart
     @Modifying
     @Query("UPDATE Cart c SET c.isDelete = true WHERE c.id = :id AND c.isDelete = false")
