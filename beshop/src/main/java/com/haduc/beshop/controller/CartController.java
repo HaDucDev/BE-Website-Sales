@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -31,9 +32,8 @@ public class CartController {
     }
 
 
-
     @PostMapping
-    public ResponseEntity<?> addProductToCart(@RequestBody CartRequest cartRequest) {
+    public ResponseEntity<?> addProductToCart(@Valid @RequestBody CartRequest cartRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iCartService.addProductToCart(cartRequest));
     }
 
@@ -42,4 +42,6 @@ public class CartController {
         this.iCartService.deleteById(cartIDKey);
         return ResponseEntity.ok(new MessageResponse("product với id = '" + cartIDKey.getProductId() + "' đã được xóa thành công khỏi giỏ hàng"));
     }
+
+
 }
