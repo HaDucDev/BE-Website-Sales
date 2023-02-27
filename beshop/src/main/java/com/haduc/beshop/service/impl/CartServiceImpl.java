@@ -64,12 +64,13 @@ public class CartServiceImpl implements ICartService {
 
         Product product = this.iProductRepository.findByProductIdAndIsDeleteFalse(cartRequest.getProductId()).orElseThrow(()-> new  NotXException("Id sản phẩm lỗi", HttpStatus.NOT_FOUND));
 
+        if(cartRequest.getQuantity() > product.getQuantity()){
+            throw new NotXException("Só sản phẩm đặt mua không được lớn hơn số lượng sản phẩm đang có", HttpStatus.BAD_REQUEST);
+        }
+
         if (!cart.isPresent()) {// neu la null - khong co trong gio
             Cart cartNew = new Cart();
             cartNew.setId(cartIDKey);
-            if(cartRequest.getQuantity() > product.getQuantity()){
-               throw new NotXException("Só sản phẩm đặt mua không được lớn hơn số lượng sản phẩm đang có", HttpStatus.BAD_REQUEST);
-            }
             cartNew.setQuantity(cartRequest.getQuantity());
             cartNew.setUser(this.iUserRepository.findByUserIdAndIsDeleteFalse(cartRequest.getUserId()).orElseThrow(()-> new  NotXException("Id người dùng lỗi", HttpStatus.NOT_FOUND)));
             cartNew.setProduct(product);
