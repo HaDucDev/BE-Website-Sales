@@ -80,12 +80,17 @@ public class CartServiceImpl implements ICartService {
 
         // neu san pham co trong gio. can xet san pham nay da mua hay chua. Mua roi thi iDelete la false
         Cart oldCart = cart.get();
-        if (oldCart.isDelete()) {
+        if (oldCart.isDelete()) {// trang thai true da bi xoa mem
             oldCart.setQuantity(cartRequest.getQuantity());
             oldCart.setDelete(false);
         }
         else {
-            oldCart.setQuantity(cart.get().getQuantity() + cartRequest.getQuantity());
+            if(cartRequest.getOperator().equals("add")){
+                oldCart.setQuantity(cart.get().getQuantity() + cartRequest.getQuantity());
+            }
+            if(cartRequest.getOperator().equals("sub")){
+                oldCart.setQuantity(cart.get().getQuantity() - cartRequest.getQuantity());
+            }
         }
         Cart saveCartSecond =  this.iCartRepository.save(oldCart);
         return new MessageResponse(String.format("Sản phẩm có id là %s được thêm vào giỏ thành công!",saveCartSecond.getId().getProductId().toString()));
