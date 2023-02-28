@@ -7,7 +7,7 @@ import com.haduc.beshop.util.exception.NotXException;
 import com.haduc.beshop.util.dto.request.admin.CreateCategoryRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateCategoryRequest;
 import com.haduc.beshop.util.dto.response.admin.GetCategoryResponse;
-import com.haduc.beshop.util.dto.response.admin.MessageResponse;
+import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

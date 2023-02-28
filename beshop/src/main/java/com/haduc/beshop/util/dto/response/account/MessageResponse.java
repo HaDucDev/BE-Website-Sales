@@ -1,4 +1,4 @@
-package com.haduc.beshop.util.dto.response.admin;
+package com.haduc.beshop.util.dto.response.account;
 
 
 import lombok.AllArgsConstructor;

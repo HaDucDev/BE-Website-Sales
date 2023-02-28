@@ -5,9 +5,8 @@ import com.haduc.beshop.service.IproductService;
 import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
 import com.haduc.beshop.util.dto.response.admin.GetProductAdminResponse;
-import com.haduc.beshop.util.dto.response.admin.MessageResponse;
+import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductDetailResponse;
-import com.haduc.beshop.util.dto.response.user.GetProductResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductsPaginationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -65,7 +64,7 @@ public class ProductController {
     // ================================user
     @GetMapping
     public ResponseEntity<GetProductsPaginationResponse> getAllHomeProduct
-    (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "6") int size, @PageableDefault(sort = "userId") Sort sort){
+    (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "8") int size, @PageableDefault(sort = "userId") Sort sort){
         Pageable paging = PageRequest.of(number, size,sort);
         return ResponseEntity.ok(this.iproductService.getAllProductAndIsDeleteFalsePagination(paging));
     }
@@ -74,6 +73,7 @@ public class ProductController {
     public ResponseEntity<GetProductDetailResponse> getProductDetailById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.findByProductDetalAndIsDeleteFalse(id));
     }
+
 
 
 }

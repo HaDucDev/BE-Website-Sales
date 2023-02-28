@@ -10,7 +10,7 @@ import com.haduc.beshop.util.exception.NotXException;
 import com.haduc.beshop.util.dto.request.admin.CreateSupplierRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateSupplierRequest;
 import com.haduc.beshop.util.dto.response.admin.GetSupplierResponse;
-import com.haduc.beshop.util.dto.response.admin.MessageResponse;
+import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

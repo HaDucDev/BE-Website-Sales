@@ -4,7 +4,7 @@ import com.haduc.beshop.model.Supplier;
 import com.haduc.beshop.util.dto.request.admin.CreateSupplierRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateSupplierRequest;
 import com.haduc.beshop.util.dto.response.admin.GetSupplierResponse;
-import com.haduc.beshop.util.dto.response.admin.MessageResponse;
+import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
