@@ -12,6 +12,7 @@ import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
 import com.haduc.beshop.util.dto.response.admin.GetProductAdminResponse;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductDetailResponse;
+import com.haduc.beshop.util.dto.response.user.GetProductResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductsPaginationResponse;
 import com.haduc.beshop.util.exception.NotXException;
 import org.modelmapper.ModelMapper;
@@ -135,7 +136,7 @@ public class ProductServiceImpl implements IproductService {
 
         GetProductsPaginationResponse getUsersPaginationResponse = this.modelMapper.map(productPage,GetProductsPaginationResponse.class);// lay 4 thuoc duoi ko co content
         // convert tung phan tu trong list.
-        getUsersPaginationResponse.setContent(productPage.getContent().stream().map(product -> this.modelMapper.map(product, com.haduc.beshop.util.dto.response.user.GetProductResponse.class)).collect(Collectors.toList()));
+        getUsersPaginationResponse.setContent(productPage.getContent().stream().map(product -> this.modelMapper.map(product, GetProductResponse.class)).collect(Collectors.toList()));
 
         return getUsersPaginationResponse;
     }
