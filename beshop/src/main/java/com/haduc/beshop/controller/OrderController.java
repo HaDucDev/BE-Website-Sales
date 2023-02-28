@@ -21,8 +21,7 @@ public class OrderController {
 
 
     @PostMapping("/order-confirmation")
-    public ResponseEntity<?> getAllProduct(@Valid @RequestBody OrderConfirmationRequest orderConfirmationRequest) {
-
+    public ResponseEntity<?> getOrderConfirmation(@Valid @RequestBody OrderConfirmationRequest orderConfirmationRequest) {
         List<ProductOrderConfirmationRequest> list = orderConfirmationRequest.getProductIdBuyList();
         for( ProductOrderConfirmationRequest i: list){
             if(i.getQuantity()==0){
