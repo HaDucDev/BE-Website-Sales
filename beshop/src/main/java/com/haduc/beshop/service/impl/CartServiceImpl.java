@@ -10,6 +10,7 @@ import com.haduc.beshop.repository.IProductRepository;
 import com.haduc.beshop.repository.IUserRepository;
 import com.haduc.beshop.service.ICartService;
 import com.haduc.beshop.util.dto.request.user.CartRequest;
+import com.haduc.beshop.util.dto.request.user.CheckAndUpdateProductBuyRequest;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.exception.NotXException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,7 @@ public class CartServiceImpl implements ICartService {
 
         Product product = this.iProductRepository.findByProductIdAndIsDeleteFalse(cartRequest.getProductId()).orElseThrow(()-> new  NotXException("Id sản phẩm lỗi", HttpStatus.NOT_FOUND));
 
-        if(cartRequest.getQuantity() > product.getQuantity()){
+        if(cartRequest.getQuantity() > product.getQuantity()){// dung o trang chi tiet don hang
             throw new NotXException("Só sản phẩm đặt mua không được lớn hơn số lượng sản phẩm đang có", HttpStatus.BAD_REQUEST);
         }
 
@@ -104,5 +105,18 @@ public class CartServiceImpl implements ICartService {
         if (affectedRows == 0) {
             throw new NotXException("Xảy ra lỗi khi xóa sản phẩm khỏi giỏ hàng", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public boolean checkAndUpdateProductBuy(CheckAndUpdateProductBuyRequest checkAndUpdateProductBuyRequest) {
+        Product product = this.iProductRepository.findByProductIdAndIsDeleteFalse(checkAndUpdateProductBuyRequest.getProductId()).orElseThrow(()-> new NotXException("Sản phẩm này không tìm thấy", HttpStatus.INTERNAL_SERVER_ERROR));
+        if(checkAndUpdateProductBuyRequest.getQuantity() <= product.getQuantity()){
+
+            CartIDKey cartIDKey = new CartIDKey(checkAndUpdateProductBuyRequest.getUserId(),checkAndUpdateProductBuyRequest.getProductId());
+            Cart cart = this.iCartRepository.findByIdAndIsDeleteFalse(cartIDKey);
+            cart.setQuantity(checkAndUpdateProductBuyRequest.getQuantity());
+            return true;
+        }
+        else throw new NotXException("Còn " + product.getQuantity() +" sản phẩm",HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

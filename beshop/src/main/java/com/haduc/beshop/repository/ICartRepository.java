@@ -25,4 +25,6 @@ public interface ICartRepository extends JpaRepository<Cart,CartIDKey> {
     @Query("UPDATE Cart c SET c.isDelete = true WHERE c.id = :id AND c.isDelete = false")
     int deleteProductFromCart(@Param("id") CartIDKey cartIDKey);
 
+    Cart findByIdAndIsDeleteFalse(CartIDKey id);
+
 }
