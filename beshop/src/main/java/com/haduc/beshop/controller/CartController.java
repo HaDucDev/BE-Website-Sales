@@ -4,6 +4,7 @@ import com.haduc.beshop.model.Cart;
 import com.haduc.beshop.model.CartIDKey;
 import com.haduc.beshop.service.ICartService;
 import com.haduc.beshop.util.dto.request.user.CartRequest;
+import com.haduc.beshop.util.dto.request.user.CheckAndUpdateProductBuyRequest;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,11 @@ public class CartController {
     public ResponseEntity<MessageResponse> deleteProductFromCart(@RequestBody CartIDKey cartIDKey) {
         this.iCartService.deleteById(cartIDKey);
         return ResponseEntity.ok(new MessageResponse("product với id = '" + cartIDKey.getProductId() + "' đã được xóa thành công khỏi giỏ hàng"));
+    }
+
+    @PostMapping("/check")
+    public ResponseEntity<?> checkAndUpdateProductBuy( @Valid @RequestBody CheckAndUpdateProductBuyRequest checkAndUpdateProductBuyRequest){// tra ve true false
+        return ResponseEntity.status(HttpStatus.OK).body(this.iCartService.checkAndUpdateProductBuy(checkAndUpdateProductBuyRequest));
     }
 
 
