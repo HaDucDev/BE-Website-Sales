@@ -111,7 +111,7 @@ public class CartServiceImpl implements ICartService {
     public boolean checkAndUpdateProductBuy(CheckAndUpdateProductBuyRequest checkAndUpdateProductBuyRequest) {
         Product product = this.iProductRepository.findByProductIdAndIsDeleteFalse(checkAndUpdateProductBuyRequest.getProductId()).orElseThrow(()-> new NotXException("Sản phẩm này không tìm thấy", HttpStatus.INTERNAL_SERVER_ERROR));
         if(checkAndUpdateProductBuyRequest.getQuantity() <= product.getQuantity()){
-
+            
             CartIDKey cartIDKey = new CartIDKey(checkAndUpdateProductBuyRequest.getUserId(),checkAndUpdateProductBuyRequest.getProductId());
             Cart cart = this.iCartRepository.findByIdAndIsDeleteFalse(cartIDKey);
             cart.setQuantity(checkAndUpdateProductBuyRequest.getQuantity());

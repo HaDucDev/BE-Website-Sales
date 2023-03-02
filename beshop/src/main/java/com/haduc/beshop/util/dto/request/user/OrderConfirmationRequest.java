@@ -16,5 +16,5 @@ import java.util.List;
 public class OrderConfirmationRequest {
 
     @NotEmpty(message = "Bạn chưa chọn sản phẩm nào để đặt hàng cả")
-    private List<ProductOrderConfirmationRequest> productIdBuyList;
+    private List<Integer> productIdBuyList;
 }
