@@ -2,6 +2,7 @@ package com.haduc.beshop.config;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.haduc.beshop.config.paymentMomo.MomoConfig;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -29,5 +30,10 @@ public class UtilsConfig {
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
         return modelMapper;
+    }
+
+    @Bean
+    public MomoConfig momoConfig(){
+        return new MomoConfig();
     }
 }
