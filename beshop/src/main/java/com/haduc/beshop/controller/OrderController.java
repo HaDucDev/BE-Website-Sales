@@ -35,8 +35,8 @@ public class OrderController {
     }
 
     // thanh toan bang tien mat
-    @PostMapping("/create-offline")
-    public ResponseEntity<?> createOrderVsOffline(@RequestBody CreateOrderResquest createOrderResquest) {
+    @PostMapping("/create-offline-or-link-payment-online")
+    public ResponseEntity<?> createOrderVsOffline(@RequestBody CreateOrderResquest createOrderResquest) throws Exception {
         return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.createOrderVsOfflineOrLinkTransferPayment(createOrderResquest));
     }
 

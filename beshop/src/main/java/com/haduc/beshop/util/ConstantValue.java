@@ -9,6 +9,6 @@ public class ConstantValue {
 
     public static final String STATUS_ORDER_NO_TT = "Chưa thanh toán";
 
-    public static final String STATUS_ORDER_YES_TT_MOMO_GG = "Đang thanh toán với momo";
+    public static final String STATUS_ORDER_YES_TT_MOMO_GG = "Đang chờ thanh toán với momo";
     public static final String STATUS_ORDER_YES_TT_MOMO_SUCCES = "Đã thanh toán với momo";
 }
