@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -92,6 +93,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     // tao don hang
+    @Transactional
     @Override
     public MessageResponse createOrderVsOfflineOrLinkTransferPayment(CreateOrderResquest createOrderResquest) {
 
@@ -133,6 +135,7 @@ public class OrderServiceImpl implements IOrderService {
                 orderDetail.setQuantity(item.getQuantity());
                 orderDetail.setAmount(Long.valueOf(totalSellingPrice(item.getProduct(),item.getQuantity())));
                 this.iOrderDetailRepository.save(orderDetail);
+                this.iCartRepository.deleteProductFromCart(item.getId());
                 if(cartBuyList.isEmpty()){
                     return;
                 }
