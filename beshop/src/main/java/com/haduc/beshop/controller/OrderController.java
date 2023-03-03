@@ -3,6 +3,7 @@ package com.haduc.beshop.controller;
 
 
 import com.haduc.beshop.service.IOrderService;
+import com.haduc.beshop.util.dto.request.user.CreateOrderResquest;
 import com.haduc.beshop.util.dto.request.user.OrderConfirmationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,8 +36,8 @@ public class OrderController {
 
     // thanh toan bang tien mat
     @PostMapping("/create-offline")
-    public ResponseEntity<?> createOrderVsOffline(@PathVariable Integer userId) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.loadOrderComfirm(userId));
+    public ResponseEntity<?> createOrderVsOffline(@RequestBody CreateOrderResquest createOrderResquest) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.createOrderVsOfflineOrLinkTransferPayment(createOrderResquest));
     }
 
 }

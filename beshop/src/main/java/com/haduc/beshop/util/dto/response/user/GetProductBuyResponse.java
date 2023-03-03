@@ -1,7 +1,5 @@
 package com.haduc.beshop.util.dto.response.user;
 
-import com.haduc.beshop.model.Category;
-import com.haduc.beshop.model.Supplier;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

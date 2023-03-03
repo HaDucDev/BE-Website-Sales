@@ -24,6 +24,10 @@ public class Order implements Serializable {
   @Column(name = "orders_id", nullable = false)
   private Integer ordersId;
 
+  @Column(name = "receipt_user")
+  @Nationalized
+  private String receiptUser;
+
   @Nationalized
   private String address;
 
