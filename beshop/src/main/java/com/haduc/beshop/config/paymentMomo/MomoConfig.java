@@ -47,7 +47,7 @@ public class MomoConfig {
             if (response.getStatus() != 200) {
                 System.out.println("execute error");
             }
-            System.out.println("123456789987654321: "+ response.getData());
+            System.out.println("123456789987654321: " + response.getData());
             //CaptureMoMoResponse captureMoMoResponse = AbstractProcess.getGson().fromJson(response.getData(), CaptureMoMoResponse.class);
             CaptureMoMoResponse captureMoMoResponse = getGson().fromJson(response.getData(), CaptureMoMoResponse.class);
             errorMoMoProcess(captureMoMoResponse.getErrorCode());// trang thai ko co loi la 0
@@ -59,9 +59,7 @@ public class MomoConfig {
 
     }
 
-    public CaptureMoMoRequest createPaymentCreationRequest(String orderId, String requestId, String amount, String
-            orderInfo,
-                                                           String returnUrl, String notifyUrl, String extraData) {
+    public CaptureMoMoRequest createPaymentCreationRequest(String orderId, String requestId, String amount, String orderInfo, String returnUrl, String notifyUrl, String extraData) {
 
         try {
             String requestRawData = new StringBuilder()
@@ -74,7 +72,8 @@ public class MomoConfig {
                     .append(Parameter.RETURN_URL).append("=").append(returnUrl).append("&")
                     .append(Parameter.NOTIFY_URL).append("=").append(notifyUrl).append("&")
                     .append(Parameter.EXTRA_DATA).append("=").append(extraData)
-                    .toString();;// chuoi momo tra ve khi giao dich thanh cong. PayUrl - link sang QR thanh toan
+                    .toString();
+            ;// chuoi momo tra ve khi giao dich thanh cong. PayUrl - link sang QR thanh toan
 
             String signRequest = Encoder.signHmacSHA256(requestRawData, "3ByWLLOo708Ptyc5Q5CoWnngNSM4vMEy");// secretKey
 

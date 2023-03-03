@@ -103,7 +103,7 @@ public class OrderServiceImpl implements IOrderService {
     // tao don hang
     @Transactional
     @Override
-    public CaptureMoMoResponse createOrderVsOfflineOrLinkTransferPayment(CreateOrderResquest createOrderResquest) throws Exception {
+    public MessageResponse createOrderVsOfflineOrLinkTransferPayment(CreateOrderResquest createOrderResquest) throws Exception {
 
         Order order = new Order();
         order.setReceiptUser(createOrderResquest.getReceiptUser());
@@ -144,7 +144,7 @@ public class OrderServiceImpl implements IOrderService {
         }
         if (createOrderResquest.getMethodPayment().equals("tien_mat")) {
             order.setNote(ConstantValue.STATUS_ORDER_NO_TT);
-            //return new MessageResponse("Bạn đã tạo đơn hàng thành công với id đơn hàng là:" + order1.getOrdersId());
+            return new MessageResponse("Bạn đã tạo đơn hàng thành công với id đơn hàng là:" + order1.getOrdersId());
         }
         if (createOrderResquest.getMethodPayment().equals("tn_momo")) {
             order.setNote(ConstantValue.STATUS_ORDER_YES_TT_MOMO_GG);
@@ -162,7 +162,7 @@ public class OrderServiceImpl implements IOrderService {
                 String extraData = "6";
                 CaptureMoMoResponse captureMoMoResponse = this.momoConfig.process(orderId, requestId, total, orderInfo, returnURL, notifyURL, extraData);
                 String url = captureMoMoResponse.getPayUrl();
-                return captureMoMoResponse;
+                return new MessageResponse(url);
             }
         }
         return null;

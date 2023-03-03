@@ -4,7 +4,6 @@ import com.haduc.beshop.util.dto.request.user.CreateOrderResquest;
 import com.haduc.beshop.util.dto.request.user.OrderConfirmationRequest;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.user.GetLoadOrderComfirmResponse;
-import com.mservice.allinone.models.CaptureMoMoResponse;
 
 public interface IOrderService {
 
@@ -12,7 +11,7 @@ public interface IOrderService {
 
     GetLoadOrderComfirmResponse loadOrderComfirm(Integer userId);
 
-    CaptureMoMoResponse createOrderVsOfflineOrLinkTransferPayment(CreateOrderResquest createOrderResquest) throws Exception;
+    MessageResponse createOrderVsOfflineOrLinkTransferPayment(CreateOrderResquest createOrderResquest) throws Exception;
 
 
 
