@@ -1,14 +1,8 @@
 package com.haduc.beshop.service.impl;
 
 
-import com.haduc.beshop.model.Cart;
-import com.haduc.beshop.model.Order;
-import com.haduc.beshop.model.Product;
-import com.haduc.beshop.model.User;
-import com.haduc.beshop.repository.ICartRepository;
-import com.haduc.beshop.repository.IOrderRepository;
-import com.haduc.beshop.repository.IProductRepository;
-import com.haduc.beshop.repository.IUserRepository;
+import com.haduc.beshop.model.*;
+import com.haduc.beshop.repository.*;
 import com.haduc.beshop.service.IOrderService;
 import com.haduc.beshop.util.ConstantValue;
 import com.haduc.beshop.util.dto.request.user.CreateOrderResquest;
@@ -43,6 +37,9 @@ public class OrderServiceImpl implements IOrderService {
 
     @Autowired
     private IOrderRepository iOrderRepository;
+
+    @Autowired
+    private IOrderDetailRepository iOrderDetailRepository;
 
     @Override
     public boolean checkProductOrderConfirmation(OrderConfirmationRequest orderConfirmationRequest) {
@@ -125,9 +122,22 @@ public class OrderServiceImpl implements IOrderService {
         // tong tien
         Integer totalOrder = cartBuyList.stream()
                 .reduce(0, (initTotal, item)-> initTotal + (totalSellingPrice(item.getProduct(), item.getQuantity())), Integer::sum);
-        
+
         order.setTotalAmount(Long.valueOf(totalOrder));// chuyên sang do dat la Long
         Order order1= this.iOrderRepository.save(order);
-        return new MessageResponse("Bạn đã tạo đơn hàng thành công");
+
+        if(!cartBuyList.isEmpty()){
+            cartBuyList.forEach((item)->{
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setId(new OrderDetailIDKey(order1.getOrdersId(),item.getId().getProductId()));
+                orderDetail.setQuantity(item.getQuantity());
+                orderDetail.setAmount(Long.valueOf(totalSellingPrice(item.getProduct(),item.getQuantity())));
+                this.iOrderDetailRepository.save(orderDetail);
+                if(cartBuyList.isEmpty()){
+                    return;
+                }
+            });
+        }
+        return new MessageResponse("Bạn đã tạo đơn hàng thành công với id đơn hàng là:" + order1.getOrdersId());
     }
 }
