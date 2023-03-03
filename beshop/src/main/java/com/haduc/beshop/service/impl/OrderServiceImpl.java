@@ -121,20 +121,13 @@ public class OrderServiceImpl implements IOrderService {
 
         List<Cart> cartList = this.iCartRepository.findById_UserIdAndIsDeleteFalse(createOrderResquest.getUserId());
         System.out.println("mang ban dau co   "+ cartList.size());
-        List<Cart> cartBuyList = cartList.stream().filter((item)-> createOrderResquest.getBuyProducts().contains(item.getId())).collect(Collectors.toList());
+        List<Cart> cartBuyList = cartList.stream().filter((item)-> createOrderResquest.getBuyProducts().contains(item.getId().getProductId())).collect(Collectors.toList());
         // tong tien
-        if(cartBuyList.isEmpty()){
-            System.out.println("mang nay rong cmnr");
-        }
         Integer totalOrder = cartBuyList.stream()
                 .reduce(0, (initTotal, item)-> initTotal + (totalSellingPrice(item.getProduct(), item.getQuantity())), Integer::sum);
-        System.out.println("den day 1"+ totalOrder);
-        //System.out.println("den day 1"+ totalSellingPrice(cartBuyList.get(0).getProduct(), cartBuyList.get(0).getQuantity()));
-
+        
         order.setTotalAmount(Long.valueOf(totalOrder));// chuyên sang do dat la Long
-
         Order order1= this.iOrderRepository.save(order);
-
         return new MessageResponse("Bạn đã tạo đơn hàng thành công");
     }
 }
