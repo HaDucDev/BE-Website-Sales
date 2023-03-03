@@ -20,11 +20,23 @@ public class OrderController {
 
     @Autowired
     private IOrderService iOrderService;
-    @PostMapping("/order-confirmation")
+    @PostMapping("/order-confirmation")//kiem tra validate
     public ResponseEntity<?> checkProductOrderConfirmation(@Valid @RequestBody OrderConfirmationRequest orderConfirmationRequest) {
         System.out.println(" Mang Du Lieu");
         orderConfirmationRequest.getProductIdBuyList().forEach((i)-> System.out.println(i));
         return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.checkProductOrderConfirmation(orderConfirmationRequest));
+    }
+
+
+    @GetMapping("/order-confirmation/{userId}")//load don hang
+    public ResponseEntity<?> loadOrderComfirm(@PathVariable Integer userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.loadOrderComfirm(userId));
+    }
+
+    // thanh toan bang tien mat
+    @PostMapping("/create-offline")
+    public ResponseEntity<?> createOrderVsOffline(@PathVariable Integer userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.loadOrderComfirm(userId));
     }
 
 }

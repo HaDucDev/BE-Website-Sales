@@ -34,7 +34,7 @@ public class Order implements Serializable {
   private Long totalAmount;
 
   @Nationalized
-  private String note;
+  private String note;// thanh toan hay chua
 
 
   @Column(name = "status_order")
