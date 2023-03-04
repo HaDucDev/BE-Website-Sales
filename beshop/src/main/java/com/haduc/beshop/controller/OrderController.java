@@ -1,6 +1,8 @@
 package com.haduc.beshop.controller;
 
 
+import com.haduc.beshop.model.Cart;
+import com.haduc.beshop.model.Order;
 import com.haduc.beshop.service.IOrderService;
 import com.haduc.beshop.util.dto.request.user.CreateOrderResquest;
 import com.haduc.beshop.util.dto.request.user.MomoIPNRequest;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -46,5 +49,11 @@ public class OrderController {
     @PostMapping(path = "/result-payment-online-momo", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public void handleMomoIPN(MomoIPNRequest request){
         this.iOrderService.handleOrderAfterPaymentMoMo(request);
+    }
+
+    //lay tât ca don hang của nguoi dung
+    @GetMapping("/all-order/{userId}")
+    public ResponseEntity<List<Order>> getAllOrderByIdOfUser(@PathVariable Integer userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.findAllByUser_UserId(userId));
     }
 }

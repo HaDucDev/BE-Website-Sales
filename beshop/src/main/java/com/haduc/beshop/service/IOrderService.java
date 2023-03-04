@@ -7,6 +7,8 @@ import com.haduc.beshop.util.dto.request.user.OrderConfirmationRequest;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.user.GetLoadOrderComfirmResponse;
 
+import java.util.List;
+
 public interface IOrderService {
 
     boolean checkProductOrderConfirmation (OrderConfirmationRequest orderConfirmationRequest);//validate
@@ -17,5 +19,7 @@ public interface IOrderService {
 
 
     void handleOrderAfterPaymentMoMo(MomoIPNRequest request);
+
+    List<Order> findAllByUser_UserId(Integer id);
 
 }

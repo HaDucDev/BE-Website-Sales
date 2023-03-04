@@ -197,4 +197,9 @@ public class OrderServiceImpl implements IOrderService {
             System.out.println("Bạn đã gặp lỗi error-status" + request.getErrorCode() + " - nội dung: " + errorMessage);
         }
     }
+
+    @Override
+    public List<Order> findAllByUser_UserId(Integer id) {
+        return this.iOrderRepository.findAllByUser_UserId(id);
+    }
 }
