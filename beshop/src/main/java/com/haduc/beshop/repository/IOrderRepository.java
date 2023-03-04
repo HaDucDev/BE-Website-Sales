@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface IOrderRepository extends JpaRepository<Order,Integer> {
 
-    Optional<Order> findByOrdersId(Integer id);
+    Optional<Order> findById(Integer id);
 
 }
