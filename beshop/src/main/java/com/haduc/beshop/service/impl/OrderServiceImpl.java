@@ -159,7 +159,7 @@ public class OrderServiceImpl implements IOrderService {
                 String total = totalOrder.toString();
                 String orderInfo = "Thanh toán đơn hàng";
                 String returnURL = "https://ngrok.com/tos";
-                String notifyURL = "https://bc31-171-240-243-88.ap.ngrok.io/api/order/result-payment-online-momo";
+                String notifyURL = "https://faf2-171-240-243-88.ap.ngrok.io/api/order/result-payment-online-momo";
                 String extraData = "6";
                 CaptureMoMoResponse captureMoMoResponse = this.momoConfig.process(orderId, requestId, total, orderInfo, returnURL, notifyURL, extraData);
                 String url = captureMoMoResponse.getPayUrl();
@@ -171,22 +171,36 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public void handleOrderAfterPaymentMoMo(MomoIPNRequest request) {
-        if (request.getErrorCode() == 0) {
-            // Đơn hàng đã thanh toán thành công
-            // Xử lý tương ứng với trạng thái này ở đây
-            System.out.println("Bạn đã thanh toán thành công với đơn hàng có id" + request.getOrderId());
-            String idOrderMoMoSend = request.getOrderId();
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String username = authentication.getName();
-            String[] idOrderMoMoSendAray = idOrderMoMoSend.split(username);
-            String getOrderId = idOrderMoMoSendAray[idOrderMoMoSendAray.length-1];// lay so cuoi la id
+        String idOrderMoMoSend = request.getOrderId();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        System.out.println("lay ra   " + username);
+        User userCheck = this.iUserRepository.findByUsername(username).orElseThrow(() -> new NotXException("Không tìm thấy người dùng này", HttpStatus.NOT_FOUND));
+        if (userCheck != null) {
 
-            //
-        } else {
-            // Đơn hàng không thanh toán thành công
-            String errorMessage = request.getMessage();
-            System.out.println("error-status" + request.getErrorCode());
-            System.out.println("Bạn đã gặp lỗi" + errorMessage);
+            String[] idOrderMoMoSendAray = idOrderMoMoSend.split(username);
+            System.out.println("id don hang gui den" + idOrderMoMoSendAray.length);
+            String getOrderId = idOrderMoMoSendAray[idOrderMoMoSendAray.length - 1];// lay so cuoi la id
+            System.out.println("id don hang can sua" + getOrderId);
+            Order order = this.iOrderRepository.findByOrdersId(Integer.parseInt(getOrderId)).orElseThrow(() -> new NotXException("Không tìm thấy đơn hàng này", HttpStatus.NOT_FOUND));
+            if (request.getErrorCode() == 0) {
+                // Đơn hàng đã thanh toán thành công
+                // Xử lý tương ứng với trạng thái này ở đây
+                System.out.println("Bạn đã thanh toán thành công với đơn hàng có id" + request.getOrderId());
+                if (order.getPhoneNumber().equals(ConstantValue.STATUS_ORDER_YES_TT_MOMO_GG)) {
+                    order.setNote(ConstantValue.STATUS_ORDER_YES_TT_MOMO_SUCCES);
+                }
+                //
+            } else {
+                // Đơn hàng không thanh toán thành công
+                String errorMessage = request.getMessage();
+                if (order.getPhoneNumber().equals(ConstantValue.STATUS_ORDER_YES_TT_MOMO_GG)) {
+                    order.setNote(ConstantValue.STATUS_ORDER_FAIL_TT_MOMO_GG);
+                }
+                System.out.println("error-status" + request.getErrorCode());
+                System.out.println("Bạn đã gặp lỗi" + errorMessage);
+            }
         }
+
     }
 }

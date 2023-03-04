@@ -45,8 +45,8 @@ public class Order implements Serializable {
   @Nationalized
   private String statusOrder;
 
-  @Column(name = "is_delete")
-  private boolean isDelete= Boolean.FALSE;
+//  @Column(name = "is_delete")
+//  private boolean isDelete= Boolean.FALSE;
 
   @Column(name = "shipper_id")
   private Integer shipperId;
