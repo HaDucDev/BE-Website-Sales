@@ -55,6 +55,10 @@ public class Order implements Serializable {
   @Temporal(TemporalType.TIMESTAMP)
   private Date createdDate;// ngay tao don hang
 
+  @Column(name = "received_date")
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date receivedDate;// ngay nhan don hang
+
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
   @JsonIgnore
   private Set<OrderDetail> orderDetailEntities;
