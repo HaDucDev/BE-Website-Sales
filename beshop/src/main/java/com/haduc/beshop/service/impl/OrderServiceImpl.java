@@ -8,6 +8,7 @@ import com.haduc.beshop.service.IOrderService;
 import com.haduc.beshop.util.ConstantValue;
 import com.haduc.beshop.util.FunctionCommon;
 import com.haduc.beshop.util.dto.request.user.CreateOrderResquest;
+import com.haduc.beshop.util.dto.request.user.MomoIPNRequest;
 import com.haduc.beshop.util.dto.request.user.OrderConfirmationRequest;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.user.GetLoadOrderComfirmResponse;
@@ -120,24 +121,24 @@ public class OrderServiceImpl implements IOrderService {
         //list san pahm dat mua
 
         List<Cart> cartList = this.iCartRepository.findById_UserIdAndIsDeleteFalse(createOrderResquest.getUserId());
-        System.out.println("mang ban dau co   "+ cartList.size());
-        List<Cart> cartBuyList = cartList.stream().filter((item)-> createOrderResquest.getBuyProducts().contains(item.getId().getProductId())).collect(Collectors.toList());
+        System.out.println("mang ban dau co   " + cartList.size());
+        List<Cart> cartBuyList = cartList.stream().filter((item) -> createOrderResquest.getBuyProducts().contains(item.getId().getProductId())).collect(Collectors.toList());
         // tong tien
         Integer totalOrder = cartBuyList.stream()
-                .reduce(0, (initTotal, item)-> initTotal + (totalSellingPrice(item.getProduct(), item.getQuantity())), Integer::sum);
+                .reduce(0, (initTotal, item) -> initTotal + (totalSellingPrice(item.getProduct(), item.getQuantity())), Integer::sum);
 
         order.setTotalAmount(Long.valueOf(totalOrder));// chuyên sang do dat la Long
-        Order order1= this.iOrderRepository.save(order);
+        Order order1 = this.iOrderRepository.save(order);
 
-        if(!cartBuyList.isEmpty()){
-            cartBuyList.forEach((item)->{
+        if (!cartBuyList.isEmpty()) {
+            cartBuyList.forEach((item) -> {
                 OrderDetail orderDetail = new OrderDetail();
-                orderDetail.setId(new OrderDetailIDKey(order1.getOrdersId(),item.getId().getProductId()));
+                orderDetail.setId(new OrderDetailIDKey(order1.getOrdersId(), item.getId().getProductId()));
                 orderDetail.setQuantity(item.getQuantity());
-                orderDetail.setAmount(Long.valueOf(totalSellingPrice(item.getProduct(),item.getQuantity())));
+                orderDetail.setAmount(Long.valueOf(totalSellingPrice(item.getProduct(), item.getQuantity())));
                 this.iOrderDetailRepository.save(orderDetail);
-                this.iCartRepository.deleteProductFromCart(item.getId());
-                if(cartBuyList.isEmpty()){
+                //this.iCartRepository.deleteProductFromCart(item.getId());
+                if (cartBuyList.isEmpty()) {
                     return;
                 }
             });
@@ -150,10 +151,10 @@ public class OrderServiceImpl implements IOrderService {
             order.setNote(ConstantValue.STATUS_ORDER_YES_TT_MOMO_GG);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();
-            System.out.println("lay ra   "+ username);
-            User userCheck = this.iUserRepository.findByUsername(username).orElseThrow(()-> new NotXException("Không tìm thấy người dùng này", HttpStatus.NOT_FOUND));
-            if (userCheck !=null){
-                String orderId = FunctionCommon.getRandomNumber(5) + userCheck.getUsername() + System.currentTimeMillis() ;
+            System.out.println("lay ra   " + username);
+            User userCheck = this.iUserRepository.findByUsername(username).orElseThrow(() -> new NotXException("Không tìm thấy người dùng này", HttpStatus.NOT_FOUND));
+            if (userCheck != null) {
+                String orderId = FunctionCommon.getRandomNumber(5) + userCheck.getUsername() + System.currentTimeMillis() + userCheck.getUsername() + order1.getOrdersId();
                 String requestId = FunctionCommon.getRandomNumber(4) + userCheck.getUserId().toString() + System.currentTimeMillis();
                 String total = totalOrder.toString();
                 String orderInfo = "Thanh toán đơn hàng";
@@ -166,5 +167,26 @@ public class OrderServiceImpl implements IOrderService {
             }
         }
         return null;
+    }
+
+    @Override
+    public void handleOrderAfterPaymentMoMo(MomoIPNRequest request) {
+        if (request.getErrorCode() == 0) {
+            // Đơn hàng đã thanh toán thành công
+            // Xử lý tương ứng với trạng thái này ở đây
+            System.out.println("Bạn đã thanh toán thành công với đơn hàng có id" + request.getOrderId());
+            String idOrderMoMoSend = request.getOrderId();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            String[] idOrderMoMoSendAray = idOrderMoMoSend.split(username);
+            String getOrderId = idOrderMoMoSendAray[idOrderMoMoSendAray.length-1];// lay so cuoi la id
+
+            //
+        } else {
+            // Đơn hàng không thanh toán thành công
+            String errorMessage = request.getMessage();
+            System.out.println("error-status" + request.getErrorCode());
+            System.out.println("Bạn đã gặp lỗi" + errorMessage);
+        }
     }
 }

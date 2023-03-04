@@ -48,7 +48,6 @@ public class MomoConfig {
                 System.out.println("execute error");
             }
             System.out.println("123456789987654321: " + response.getData());
-            //CaptureMoMoResponse captureMoMoResponse = AbstractProcess.getGson().fromJson(response.getData(), CaptureMoMoResponse.class);
             CaptureMoMoResponse captureMoMoResponse = getGson().fromJson(response.getData(), CaptureMoMoResponse.class);
             errorMoMoProcess(captureMoMoResponse.getErrorCode());// trang thai ko co loi la 0
 

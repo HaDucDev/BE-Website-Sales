@@ -45,16 +45,6 @@ public class OrderController {
     // neu link thanh toan online sau khi thuc hien thi momo se trả ve du lieu o day
     @PostMapping(path = "/result-payment-online-momo", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public void handleMomoIPN(MomoIPNRequest request){
-        if ("0".equals(request.getErrorCode())) {
-            // Đơn hàng đã thanh toán thành công
-            // Xử lý tương ứng với trạng thái này ở đây
-            System.out.println("Bạn đã thanh toán thành công");
-        } else {
-            // Đơn hàng không thanh toán thành công
-            String errorMessage = request.getMessage();
-            System.out.println("error-status"+ request.getErrorCode());
-            // Xử lý tương ứng với mã lỗi và thông điệp lỗi ở đây
-            System.out.println("Bạn đã gặp lỗi"+ errorMessage);
-        }
+        this.iOrderService.handleOrderAfterPaymentMoMo(request);
     }
 }
