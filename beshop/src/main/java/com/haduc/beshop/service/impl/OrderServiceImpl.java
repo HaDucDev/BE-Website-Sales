@@ -157,8 +157,8 @@ public class OrderServiceImpl implements IOrderService {
                 String requestId = FunctionCommon.getRandomNumber(4) + userCheck.getUserId().toString() + System.currentTimeMillis();
                 String total = totalOrder.toString();
                 String orderInfo = "Thanh toán đơn hàng";
-                String returnURL = "http://localhost:8080/test/api/momo";
-                String notifyURL = "http://localhost:8080/test/api/momo";
+                String returnURL = "https://ngrok.com/tos";
+                String notifyURL = "https://bc31-171-240-243-88.ap.ngrok.io/api/order/result-payment-online-momo";
                 String extraData = "6";
                 CaptureMoMoResponse captureMoMoResponse = this.momoConfig.process(orderId, requestId, total, orderInfo, returnURL, notifyURL, extraData);
                 String url = captureMoMoResponse.getPayUrl();
