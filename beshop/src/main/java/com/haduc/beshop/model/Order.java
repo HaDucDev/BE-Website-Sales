@@ -24,6 +24,10 @@ public class Order implements Serializable {
   @Column(name = "orders_id", nullable = false)
   private Integer ordersId;
 
+  @Column(name = "receipt_user")
+  @Nationalized
+  private String receiptUser;
+
   @Nationalized
   private String address;
 
@@ -34,15 +38,15 @@ public class Order implements Serializable {
   private Long totalAmount;
 
   @Nationalized
-  private String note;
+  private String note;// thanh toan hay chua
 
 
   @Column(name = "status_order")
   @Nationalized
   private String statusOrder;
 
-  @Column(name = "is_delete")
-  private boolean isDelete= Boolean.FALSE;
+//  @Column(name = "is_delete")
+//  private boolean isDelete= Boolean.FALSE;
 
   @Column(name = "shipper_id")
   private Integer shipperId;
@@ -50,6 +54,10 @@ public class Order implements Serializable {
   @Column(name = "created_date")
   @Temporal(TemporalType.TIMESTAMP)
   private Date createdDate;// ngay tao don hang
+
+  @Column(name = "received_date")
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date receivedDate;// ngay nhan don hang
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
   @JsonIgnore
