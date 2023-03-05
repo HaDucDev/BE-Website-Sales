@@ -34,6 +34,17 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
 //    int softDeleteUser(@Param("id") Integer id);
 
     //lay tat ca user theo mot role nao do
-    List<User> findByRole_Name(ERole name);
+    List<User> findByRole_NameAndAssignment(ERole name, Integer assignment);
+
+    //cap nhat cot phan cong cua bang
+    @Modifying
+    @Query("UPDATE User t SET t.assignment = :assignment")
+    int updateColumnAssignment(@Param("assignment") Integer assignment);
+
+
+    //cap nhat cot phan cong cua bang
+    @Modifying
+    @Query("UPDATE User t SET t.assignment = :assignment WHERE t.userId = :userId")
+    int updateAfterAssignment(@Param("assignment") Integer assignment, @Param("userId") Integer userId);
 
 }

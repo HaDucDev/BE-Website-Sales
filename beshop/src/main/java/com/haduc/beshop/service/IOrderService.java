@@ -1,6 +1,7 @@
 package com.haduc.beshop.service;
 
 import com.haduc.beshop.model.Order;
+import com.haduc.beshop.util.dto.request.admin.AssignmentShipperRequest;
 import com.haduc.beshop.util.dto.request.user.CreateOrderResquest;
 import com.haduc.beshop.util.dto.request.user.MomoIPNRequest;
 import com.haduc.beshop.util.dto.request.user.OrderConfirmationRequest;
@@ -26,5 +27,8 @@ public interface IOrderService {
 
     //===============================================> ADMIN
     List<Order> findAllOrderByCreatedDateDesc();
+
+    //phan chia don hang shipper
+    MessageResponse assignmentOrderForShipper(AssignmentShipperRequest assignmentShipperRequest);
 
 }

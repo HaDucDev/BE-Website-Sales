@@ -7,12 +7,14 @@ import com.haduc.beshop.repository.*;
 import com.haduc.beshop.service.IOrderService;
 import com.haduc.beshop.util.ConstantValue;
 import com.haduc.beshop.util.FunctionCommon;
+import com.haduc.beshop.util.dto.request.admin.AssignmentShipperRequest;
 import com.haduc.beshop.util.dto.request.user.CreateOrderResquest;
 import com.haduc.beshop.util.dto.request.user.MomoIPNRequest;
 import com.haduc.beshop.util.dto.request.user.OrderConfirmationRequest;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.user.GetLoadOrderComfirmResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductBuyResponse;
+import com.haduc.beshop.util.enum_role.ERole;
 import com.haduc.beshop.util.exception.NotXException;
 import com.mservice.allinone.models.CaptureMoMoResponse;
 import org.modelmapper.ModelMapper;
@@ -220,5 +222,41 @@ public class OrderServiceImpl implements IOrderService {
     public List<Order> findAllOrderByCreatedDateDesc() {
         Sort sort = JpaSort.unsafe(Sort.Direction.DESC, "createdDate");
         return this.iOrderRepository.findAll(sort);
+    }
+
+    @Transactional
+    @Override
+    public MessageResponse assignmentOrderForShipper(AssignmentShipperRequest  assignmentShipperRequest) {
+
+        List<User> shipperList = this.iUserRepository.findByRole_NameAndAssignment(ERole.valueOf(String.valueOf(ERole.ROLE_SHIPPER)), 0);
+        if(shipperList.isEmpty()){// neu rong
+            int affectedRows = this.iUserRepository.updateColumnAssignment(0);
+            System.out.println(affectedRows);
+            if (affectedRows == 0) {
+                throw new NotXException("Xảy ra lỗi khi cập nhật bảng phân công", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            List<User> againShipperList = this.iUserRepository.findByRole_NameAndAssignment(ERole.valueOf(String.valueOf(ERole.ROLE_SHIPPER)), 0);
+            // lay id shipper ngau nhien (userID)
+
+            int randomIndex = (int) (Math.random() * againShipperList.size());
+
+            User userIdSelected = againShipperList.get(randomIndex);
+
+            //lay id user de cap nhat don hang
+            this.iOrderRepository.softUpdateAssignmentOrder(userIdSelected.getUserId(),assignmentShipperRequest.getOrdersId());
+            // cap nhat trang thai shipper (tai khoan) da phan cong
+            this.iUserRepository.updateAfterAssignment(1,userIdSelected.getUserId());
+            return new MessageResponse("Bạn đã tạo phân thành công shipper :" + userIdSelected.getUserId() + "cho don hang" + assignmentShipperRequest.getOrdersId());
+        }
+        if(!shipperList.isEmpty()){// rong rong
+            int randomIndexNew= (int) (Math.random() * shipperList.size());
+            User userIdSelectedNew = shipperList.get(randomIndexNew);
+            //lay id user de cap nhat don hang
+            this.iOrderRepository.softUpdateAssignmentOrder(userIdSelectedNew.getUserId(),assignmentShipperRequest.getOrdersId());
+            // cap nhat trang thai shipper (tai khoan) da phan cong
+            this.iUserRepository.updateAfterAssignment(1,userIdSelectedNew.getUserId());
+            return new MessageResponse("Bạn đã tạo phân thành công shipper :" + userIdSelectedNew.getUserId() + "cho don hang" + assignmentShipperRequest.getOrdersId());
+        }
+        throw  new NotXException("Phân công bị lỗi", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
