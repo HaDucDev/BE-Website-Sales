@@ -13,13 +13,14 @@ public interface IOrderService {
 
     boolean checkProductOrderConfirmation (OrderConfirmationRequest orderConfirmationRequest);//validate
 
-    GetLoadOrderComfirmResponse loadOrderComfirm(Integer userId);
+    GetLoadOrderComfirmResponse loadOrderComfirm(Integer userId);// data trang xac nhan
 
-    MessageResponse createOrderVsOfflineOrLinkTransferPayment(CreateOrderResquest createOrderResquest) throws Exception;
+    MessageResponse createOrderVsOfflineOrLinkTransferPayment(CreateOrderResquest createOrderResquest) throws Exception;// tao dan hang
 
 
     void handleOrderAfterPaymentMoMo(MomoIPNRequest request);
 
-    List<Order> findAllByUser_UserId(Integer id);
+    List<Order> findAllByUser_UserId(Integer id);// lay don hang cua nguoi dung
+    void deleteById(Integer id);
 
 }

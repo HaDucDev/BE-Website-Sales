@@ -1,12 +1,12 @@
 package com.haduc.beshop.controller;
 
 
-import com.haduc.beshop.model.Cart;
 import com.haduc.beshop.model.Order;
 import com.haduc.beshop.service.IOrderService;
 import com.haduc.beshop.util.dto.request.user.CreateOrderResquest;
 import com.haduc.beshop.util.dto.request.user.MomoIPNRequest;
 import com.haduc.beshop.util.dto.request.user.OrderConfirmationRequest;
+import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +23,7 @@ import java.util.List;
 public class OrderController {
 
 
+    //USER
     @Autowired
     private IOrderService iOrderService;
 
@@ -56,4 +57,12 @@ public class OrderController {
     public ResponseEntity<List<Order>> getAllOrderByIdOfUser(@PathVariable Integer userId) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.findAllByUser_UserId(userId));
     }
+
+    // cap nhat giao, nhan, huy don hang
+    @DeleteMapping("/{ordersId}")
+    public ResponseEntity<MessageResponse> deleteProductFromCart(@PathVariable Integer ordersId) {
+       this.iOrderService.deleteById(ordersId);
+       return ResponseEntity.ok(new MessageResponse("Đơn hàng có id = '" +  ordersId + "' đã được hủy"));
+    }
+
 }

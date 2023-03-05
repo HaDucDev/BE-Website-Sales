@@ -15,4 +15,5 @@ public interface IOrderDetailRepository extends JpaRepository<OrderDetail, Order
 
     //lay tat chi tiet tiet don theo id
     List<OrderDetail> findAllById_OrdersId(Integer id);
+
 }

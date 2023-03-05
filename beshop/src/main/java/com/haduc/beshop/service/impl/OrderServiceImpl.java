@@ -202,4 +202,14 @@ public class OrderServiceImpl implements IOrderService {
     public List<Order> findAllByUser_UserId(Integer id) {
         return this.iOrderRepository.findAllByUser_UserId(id);
     }
+
+    @Transactional
+    @Override
+    public void deleteById(Integer id) {
+        int affectedRows = this.iOrderRepository.softUpdateStatusOrder(id, ConstantValue.STATUS_ORDER_CANCELLED);
+        System.out.println(affectedRows);
+        if (affectedRows == 0) {
+            throw new NotXException("Xảy ra lỗi khi hủy đơn hàng", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
