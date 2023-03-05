@@ -2,11 +2,15 @@ package com.haduc.beshop.controller;
 
 
 import com.haduc.beshop.model.Order;
+import com.haduc.beshop.repository.IUserRepository;
 import com.haduc.beshop.service.IOrderService;
+import com.haduc.beshop.util.ConstantValue;
+import com.haduc.beshop.util.dto.request.admin.AssignmentShipperRequest;
 import com.haduc.beshop.util.dto.request.user.CreateOrderResquest;
 import com.haduc.beshop.util.dto.request.user.MomoIPNRequest;
 import com.haduc.beshop.util.dto.request.user.OrderConfirmationRequest;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
+import com.haduc.beshop.util.enum_role.ERole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -70,6 +74,16 @@ public class OrderController {
     @GetMapping("/admin/all-order")
     public ResponseEntity<List<Order>> getAllOrder() {
         return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.findAllOrderByCreatedDateDesc());
+    }
+
+    //assignment: admin phan chia don hang
+
+    @Autowired
+    private IUserRepository iUserRepository;
+    @GetMapping ("/assignment/shipper")
+    public ResponseEntity<?> assignmentOrderForShipper(){
+        //return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.createOrderVsOfflineOrLinkTransferPayment(createOrderResquest));
+        return   ResponseEntity.status(HttpStatus.OK).body(this.iUserRepository.findByRole_Name(ERole.valueOf(String.valueOf(ERole.ROLE_SHIPPER))));
     }
 
 }
