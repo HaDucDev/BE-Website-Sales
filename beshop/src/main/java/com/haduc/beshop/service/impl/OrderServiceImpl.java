@@ -17,6 +17,8 @@ import com.haduc.beshop.util.exception.NotXException;
 import com.mservice.allinone.models.CaptureMoMoResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -211,5 +213,12 @@ public class OrderServiceImpl implements IOrderService {
         if (affectedRows == 0) {
             throw new NotXException("Xảy ra lỗi khi hủy đơn hàng", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    //==========================================> ADMIN
+    @Override
+    public List<Order> findAllOrderByCreatedDateDesc() {
+        Sort sort = JpaSort.unsafe(Sort.Direction.DESC, "createdDate");
+        return this.iOrderRepository.findAll(sort);
     }
 }

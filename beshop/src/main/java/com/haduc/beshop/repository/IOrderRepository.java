@@ -2,6 +2,7 @@ package com.haduc.beshop.repository;
 
 
 import com.haduc.beshop.model.Order;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,5 +23,8 @@ public interface IOrderRepository extends JpaRepository<Order,Integer> {
     @Modifying
     @Query("UPDATE Order t SET t.statusOrder =:message  WHERE t.ordersId = :id ")
     int softUpdateStatusOrder(@Param("id") Integer id, @Param("message") String message);
+
+    //===================================> ADMIN
+    List<Order> findAll(Sort sort);
 
 }

@@ -65,4 +65,11 @@ public class OrderController {
        return ResponseEntity.ok(new MessageResponse("Đơn hàng có id = '" +  ordersId + "' đã được hủy"));
     }
 
+    //=====================================================================>
+    //Admin
+    @GetMapping("/admin/all-order")
+    public ResponseEntity<List<Order>> getAllOrder() {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.findAllOrderByCreatedDateDesc());
+    }
+
 }
