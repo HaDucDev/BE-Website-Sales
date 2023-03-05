@@ -50,6 +50,9 @@ public class User implements Serializable {
   @JsonIgnore
   private String tokenResetPass;
 
+  @Column(name = "assignment", columnDefinition = "integer default 0")// gia tri mac dinh la 0 Integer.
+  private Integer assignment;// shipper da duoc phan cong giao hang
+
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
   @JsonIgnore
   private Set<Cart> cart;
