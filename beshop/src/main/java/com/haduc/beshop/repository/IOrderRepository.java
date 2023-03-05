@@ -29,7 +29,7 @@ public interface IOrderRepository extends JpaRepository<Order,Integer> {
 
     // cap nhat shipper duoc phan cong giao hang
     @Modifying
-    @Query("UPDATE Order t SET t.shipperId =:shipperId  WHERE t.ordersId = :id ")
-    int softUpdateAssignmentOrder( @Param("shipperId") Integer shipperId, @Param("id") Integer id);
+    @Query("UPDATE Order t SET t.shipperId =:shipperId , t.statusOrder=:status  WHERE t.ordersId = :id ")
+    int softUpdateAssignmentOrder( @Param("shipperId") Integer shipperId, @Param("status") String status, @Param("id") Integer id);
 
 }

@@ -224,6 +224,10 @@ public class OrderServiceImpl implements IOrderService {
         return this.iOrderRepository.findAll(sort);
     }
 
+    int randomSize(int a){
+        return (int) (Math.random()*a);
+    }
+
     @Transactional
     @Override
     public MessageResponse assignmentOrderForShipper(AssignmentShipperRequest  assignmentShipperRequest) {
@@ -237,13 +241,11 @@ public class OrderServiceImpl implements IOrderService {
             }
             List<User> againShipperList = this.iUserRepository.findByRole_NameAndAssignment(ERole.valueOf(String.valueOf(ERole.ROLE_SHIPPER)), 0);
             // lay id shipper ngau nhien (userID)
-
-            int randomIndex = (int) (Math.random() * againShipperList.size());
-
-            User userIdSelected = againShipperList.get(randomIndex);
+            int random = randomSize(againShipperList.size());
+            User userIdSelected = againShipperList.get(random);
 
             //lay id user de cap nhat don hang
-            this.iOrderRepository.softUpdateAssignmentOrder(userIdSelected.getUserId(),assignmentShipperRequest.getOrdersId());
+            this.iOrderRepository.softUpdateAssignmentOrder(userIdSelected.getUserId(),ConstantValue.STATUS_ORDER_APPROVED,assignmentShipperRequest.getOrdersId());
             // cap nhat trang thai shipper (tai khoan) da phan cong
             this.iUserRepository.updateAfterAssignment(1,userIdSelected.getUserId());
             return new MessageResponse("Bạn đã tạo phân thành công shipper :" + userIdSelected.getUserId() + "cho don hang" + assignmentShipperRequest.getOrdersId());
@@ -252,7 +254,7 @@ public class OrderServiceImpl implements IOrderService {
             int randomIndexNew= (int) (Math.random() * shipperList.size());
             User userIdSelectedNew = shipperList.get(randomIndexNew);
             //lay id user de cap nhat don hang
-            this.iOrderRepository.softUpdateAssignmentOrder(userIdSelectedNew.getUserId(),assignmentShipperRequest.getOrdersId());
+            this.iOrderRepository.softUpdateAssignmentOrder(userIdSelectedNew.getUserId(),ConstantValue.STATUS_ORDER_APPROVED,assignmentShipperRequest.getOrdersId());
             // cap nhat trang thai shipper (tai khoan) da phan cong
             this.iUserRepository.updateAfterAssignment(1,userIdSelectedNew.getUserId());
             return new MessageResponse("Bạn đã tạo phân thành công shipper :" + userIdSelectedNew.getUserId() + "cho don hang" + assignmentShipperRequest.getOrdersId());
