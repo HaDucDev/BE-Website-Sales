@@ -8,6 +8,7 @@ import com.haduc.beshop.service.IOrderService;
 import com.haduc.beshop.util.ConstantValue;
 import com.haduc.beshop.util.FunctionCommon;
 import com.haduc.beshop.util.dto.request.admin.AssignmentShipperRequest;
+import com.haduc.beshop.util.dto.request.shipper.ConfirmOrderRequest;
 import com.haduc.beshop.util.dto.request.user.CreateOrderResquest;
 import com.haduc.beshop.util.dto.request.user.MomoIPNRequest;
 import com.haduc.beshop.util.dto.request.user.OrderConfirmationRequest;
@@ -265,5 +266,18 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public List<Order> findAllByShipperId(Integer id) {
         return this.iOrderRepository.findAllByShipperId(id);
+    }
+
+    @Transactional
+    @Override
+    public MessageResponse softUpdateCompleteOrder(ConfirmOrderRequest confirmOrderRequest) {
+        System.out.println("ok roi chu text "+confirmOrderRequest.getOrderId() + " "+ confirmOrderRequest.getShipperId());
+        int affectedRows = this.iOrderRepository.softUpdateCompleteOrder(confirmOrderRequest.getOrderId(),
+                new Date(System.currentTimeMillis()),ConstantValue.STATUS_ORDER_DELIVERED,confirmOrderRequest.getShipperId());
+        System.out.println(affectedRows);
+        if (affectedRows == 0) {
+            throw new NotXException("Xảy ra lỗi khi hủy đơn hàng", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new MessageResponse("Dơn hàng"+ confirmOrderRequest.getOrderId() +" được giao thành công" );
     }
 }

@@ -7,6 +7,7 @@ import com.haduc.beshop.service.IOrderService;
 import com.haduc.beshop.service.IUserService;
 import com.haduc.beshop.util.ConstantValue;
 import com.haduc.beshop.util.dto.request.admin.AssignmentShipperRequest;
+import com.haduc.beshop.util.dto.request.shipper.ConfirmOrderRequest;
 import com.haduc.beshop.util.dto.request.user.CreateOrderResquest;
 import com.haduc.beshop.util.dto.request.user.MomoIPNRequest;
 import com.haduc.beshop.util.dto.request.user.OrderConfirmationRequest;
@@ -92,5 +93,9 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.findAllByShipperId(shipperId));
     }
 
+    @PutMapping("/shipper/received")
+    public ResponseEntity<MessageResponse> shipperConfirmReceivedOrder(@RequestBody ConfirmOrderRequest  confirmOrderRequest) {
+       return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.softUpdateCompleteOrder(confirmOrderRequest));
+    }
 
 }

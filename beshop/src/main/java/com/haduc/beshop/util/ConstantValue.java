@@ -4,7 +4,7 @@ public class ConstantValue {
 
     public static final String STATUS_ORDER_NOT_APPROVED = "Đang chờ";
     public static final String STATUS_ORDER_APPROVED = "Đang giao";
-    public static final String STATUS_ORDER_DELIVERED = "Đã giao hàng";
+    public static final String STATUS_ORDER_DELIVERED = "Đã giao";
     public static final String STATUS_ORDER_CANCELLED = "Đã hủy";
 
     public static final String STATUS_ORDER_NO_TT = "Chưa thanh toán";
