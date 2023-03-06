@@ -2,7 +2,6 @@ package com.haduc.beshop.controller;
 
 
 import com.haduc.beshop.service.IReviewsService;
-import com.haduc.beshop.util.dto.request.user.CartRequest;
 import com.haduc.beshop.util.dto.request.user.ReviewsRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,4 +23,8 @@ public class ReviewsController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iReviewsService.addReviewsToProduct(reviewsRequest));
     }
 
+    @GetMapping("/all-review/{productId}")
+    public ResponseEntity<?> getAllOrderByIdOfUser(@PathVariable Integer productId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iReviewsService.findById_ProductId(productId));
+    }
 }

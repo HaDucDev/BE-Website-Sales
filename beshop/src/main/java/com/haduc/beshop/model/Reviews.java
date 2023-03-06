@@ -1,5 +1,6 @@
 package com.haduc.beshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,14 +34,15 @@ public class Reviews implements Serializable {
   @Column(name = "is_delete")
   private Boolean delete = Boolean.FALSE;
 
+  @JsonIgnore
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "orders_id", referencedColumnName = "orders_id", insertable = false, updatable = false, nullable = false)
   private Order order;// comment nay thuoc don hang nao day.
-
+  @JsonIgnore
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn (name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false, nullable = false)
   private Product product;
-
+  @JsonIgnore
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "user_id",referencedColumnName = "user_id", insertable = false, updatable = false, nullable = false)
   private User user;

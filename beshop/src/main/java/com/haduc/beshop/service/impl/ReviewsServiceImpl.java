@@ -71,4 +71,9 @@ public class ReviewsServiceImpl implements IReviewsService {
         throw new NotXException("Sản phẩm đã được đánh giá rồi", HttpStatus.BAD_REQUEST);
 
     }
+
+    @Override
+    public List<Reviews> findById_ProductId(Integer productId) {
+        return this.iReviewsRepository.findById_ProductId(productId);
+    }
 }
