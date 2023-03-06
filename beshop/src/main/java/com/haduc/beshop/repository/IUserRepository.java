@@ -1,6 +1,7 @@
 package com.haduc.beshop.repository;
 
 import com.haduc.beshop.model.User;
+import com.haduc.beshop.util.enum_role.ERole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,8 +29,26 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
     // them,sua dung ham co san
 
     // xoa mem
+//    @Modifying
+//    @Query("UPDATE User t SET t.isDelete = true WHERE t.userId = :id AND t.isDelete = false")
+//    int softDeleteUser(@Param("id") Integer id);
+
+    //lay tat ca user theo mot role nao do
+    List<User> findByRole_NameAndAssignment(ERole name, Integer assignment);
+
+    //cap nhat cot phan cong cua bang
     @Modifying
-    @Query("UPDATE User t SET t.isDelete = true WHERE t.userId = :id AND t.isDelete = false")
-    int softDeleteUser(@Param("id") Integer id);
+    @Query("UPDATE User t SET t.assignment = :assignment")
+    int updateColumnAssignment(@Param("assignment") Integer assignment);
+
+
+    //cap nhat cot phan cong cua bang
+    @Modifying
+    @Query("UPDATE User t SET t.assignment = :assignment WHERE t.userId = :userId")
+    int updateAfterAssignment(@Param("assignment") Integer assignment, @Param("userId") Integer userId);
+
+    //shipper khong nhan don - chuyen sang shipper khac
+    //lay tat ca shipper tru shipper co id
+    List<User> findByRole_NameAndAssignmentAndUserIdNot(ERole name, Integer assignment, Integer userId);
 
 }

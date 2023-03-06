@@ -2,11 +2,18 @@ package com.haduc.beshop.controller;
 
 
 import com.haduc.beshop.model.Order;
+import com.haduc.beshop.repository.IUserRepository;
 import com.haduc.beshop.service.IOrderService;
+import com.haduc.beshop.service.IUserService;
+import com.haduc.beshop.util.ConstantValue;
+import com.haduc.beshop.util.dto.request.admin.AssignmentShipperRequest;
+import com.haduc.beshop.util.dto.request.shipper.ConfirmOrderRequest;
+import com.haduc.beshop.util.dto.request.shipper.RemovedOrderRequest;
 import com.haduc.beshop.util.dto.request.user.CreateOrderResquest;
 import com.haduc.beshop.util.dto.request.user.MomoIPNRequest;
 import com.haduc.beshop.util.dto.request.user.OrderConfirmationRequest;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
+import com.haduc.beshop.util.enum_role.ERole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -58,11 +65,47 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.findAllByUser_UserId(userId));
     }
 
-    // cap nhat giao, nhan, huy don hang
+    // cap nhat giao, nhan, huy don hang dung chung admin, user
     @DeleteMapping("/{ordersId}")
-    public ResponseEntity<MessageResponse> deleteProductFromCart(@PathVariable Integer ordersId) {
+    public ResponseEntity<MessageResponse> deleteOrderFormListOrderAdminAndUser(@PathVariable Integer ordersId) {
        this.iOrderService.deleteById(ordersId);
        return ResponseEntity.ok(new MessageResponse("Đơn hàng có id = '" +  ordersId + "' đã được hủy"));
     }
+
+    //=====================================================================>
+    //Admin
+    @GetMapping("/admin/all-order")
+    public ResponseEntity<List<Order>> getAllOrder() {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.findAllOrderByCreatedDateDesc());
+    }
+
+    //assignment: admin phan chia don hang
+    @PostMapping("/assignment/shipper")
+    public ResponseEntity<?> assignmentOrderForShipper(@RequestBody AssignmentShipperRequest assignmentShipperRequest){
+        return   ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.assignmentOrderForShipper(assignmentShipperRequest));
+    }
+
+
+    //==========================================================================>
+    //SHIPPER
+    // lay tat ca down hang ma shipper duoc giao
+    @GetMapping("/shipper/all-order/{shipperId}")
+    public ResponseEntity<List<Order>> getAllOrderByShipper(@PathVariable Integer shipperId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.findAllByShipperId(shipperId));
+    }
+
+    //xac da gioa hang
+    @PutMapping("/shipper/received")
+    public ResponseEntity<MessageResponse> shipperConfirmReceivedOrder(@RequestBody ConfirmOrderRequest  confirmOrderRequest) {
+       return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.softUpdateCompleteOrder(confirmOrderRequest));
+    }
+
+    //khong nhan giao chuyen sang shipper khac
+    @PutMapping("/shipper/removed")
+    public ResponseEntity<MessageResponse> shipperRemoveOrder(@RequestBody RemovedOrderRequest removedOrderRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.softUpdateshipperWhenRemoveOrder(removedOrderRequest));
+    }
+
+
 
 }

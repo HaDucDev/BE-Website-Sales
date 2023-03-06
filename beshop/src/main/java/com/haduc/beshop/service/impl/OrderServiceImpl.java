@@ -7,16 +7,22 @@ import com.haduc.beshop.repository.*;
 import com.haduc.beshop.service.IOrderService;
 import com.haduc.beshop.util.ConstantValue;
 import com.haduc.beshop.util.FunctionCommon;
+import com.haduc.beshop.util.dto.request.admin.AssignmentShipperRequest;
+import com.haduc.beshop.util.dto.request.shipper.ConfirmOrderRequest;
+import com.haduc.beshop.util.dto.request.shipper.RemovedOrderRequest;
 import com.haduc.beshop.util.dto.request.user.CreateOrderResquest;
 import com.haduc.beshop.util.dto.request.user.MomoIPNRequest;
 import com.haduc.beshop.util.dto.request.user.OrderConfirmationRequest;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.user.GetLoadOrderComfirmResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductBuyResponse;
+import com.haduc.beshop.util.enum_role.ERole;
 import com.haduc.beshop.util.exception.NotXException;
 import com.mservice.allinone.models.CaptureMoMoResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -211,5 +217,107 @@ public class OrderServiceImpl implements IOrderService {
         if (affectedRows == 0) {
             throw new NotXException("Xảy ra lỗi khi hủy đơn hàng", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    //==========================================> ADMIN
+    @Override
+    public List<Order> findAllOrderByCreatedDateDesc() {
+        Sort sort = JpaSort.unsafe(Sort.Direction.DESC, "createdDate");
+        return this.iOrderRepository.findAll(sort);
+    }
+
+    int randomSize(int a){
+        return (int) (Math.random()*a);
+    }
+
+    @Transactional
+    @Override
+    public MessageResponse assignmentOrderForShipper(AssignmentShipperRequest  assignmentShipperRequest) {
+
+        List<User> shipperList = this.iUserRepository.findByRole_NameAndAssignment(ERole.valueOf(String.valueOf(ERole.ROLE_SHIPPER)), 0);
+        if(shipperList.isEmpty()){// neu rong
+            int affectedRows = this.iUserRepository.updateColumnAssignment(0);
+            System.out.println(affectedRows);
+            if (affectedRows == 0) {
+                throw new NotXException("Xảy ra lỗi khi cập nhật bảng phân công", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            List<User> againShipperList = this.iUserRepository.findByRole_NameAndAssignment(ERole.valueOf(String.valueOf(ERole.ROLE_SHIPPER)), 0);
+            // lay id shipper ngau nhien (userID)
+            int random = randomSize(againShipperList.size());
+            User userIdSelected = againShipperList.get(random);
+
+            //lay id user de cap nhat don hang
+            this.iOrderRepository.softUpdateAssignmentOrder(userIdSelected.getUserId(),ConstantValue.STATUS_ORDER_APPROVED,assignmentShipperRequest.getOrdersId());
+            // cap nhat trang thai shipper (tai khoan) da phan cong
+            this.iUserRepository.updateAfterAssignment(1,userIdSelected.getUserId());
+            return new MessageResponse("Bạn đã tạo phân thành công shipper :" + userIdSelected.getUserId() + "cho don hang" + assignmentShipperRequest.getOrdersId());
+        }
+        if(!shipperList.isEmpty()){// rong rong
+            int randomIndexNew= (int) (Math.random() * shipperList.size());
+            User userIdSelectedNew = shipperList.get(randomIndexNew);
+            //lay id user de cap nhat don hang
+            this.iOrderRepository.softUpdateAssignmentOrder(userIdSelectedNew.getUserId(),ConstantValue.STATUS_ORDER_APPROVED,assignmentShipperRequest.getOrdersId());
+            // cap nhat trang thai shipper (tai khoan) da phan cong
+            this.iUserRepository.updateAfterAssignment(1,userIdSelectedNew.getUserId());
+            return new MessageResponse("Bạn đã tạo phân thành công shipper :" + userIdSelectedNew.getUserId() + "cho don hang" + assignmentShipperRequest.getOrdersId());
+        }
+        throw  new NotXException("Phân công bị lỗi", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public List<Order> findAllByShipperId(Integer id) {
+        return this.iOrderRepository.findAllByShipperId(id);
+    }
+
+    @Transactional
+    @Override
+    public MessageResponse softUpdateCompleteOrder(ConfirmOrderRequest confirmOrderRequest) {
+        System.out.println("ok roi chu text "+confirmOrderRequest.getOrderId() + " "+ confirmOrderRequest.getShipperId());
+        int affectedRows = this.iOrderRepository.softUpdateCompleteOrder(confirmOrderRequest.getOrderId(),
+                new Date(System.currentTimeMillis()),ConstantValue.STATUS_ORDER_DELIVERED,confirmOrderRequest.getShipperId());
+        System.out.println(affectedRows);
+        if (affectedRows == 0) {
+            throw new NotXException("Xảy ra lỗi khi hủy đơn hàng", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new MessageResponse("Dơn hàng"+ confirmOrderRequest.getOrderId() +" được giao thành công" );
+    }
+
+    @Transactional
+    @Override
+    public MessageResponse softUpdateshipperWhenRemoveOrder(RemovedOrderRequest removedOrderRequest) {
+        // lay tat shipper tru shipper vua gui den
+        List<User> shippers = this.iUserRepository.findByRole_NameAndAssignmentAndUserIdNot(ERole.valueOf(String.valueOf(ERole.ROLE_SHIPPER)), 0,removedOrderRequest.getShipperId());
+
+        boolean testSizeZero = shippers.isEmpty();
+        if(testSizeZero){// neu rong
+            int affectedRows = this.iUserRepository.updateColumnAssignment(0);
+            System.out.println(affectedRows);
+            if (affectedRows == 0) {
+                throw new NotXException("Xảy ra lỗi khi cập nhật bảng phân công", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            List<User> againShipperList = this.iUserRepository.findByRole_NameAndAssignmentAndUserIdNot(ERole.valueOf(String.valueOf(ERole.ROLE_SHIPPER)), 0,removedOrderRequest.getShipperId());
+            // lay id shipper ngau nhien (userID)
+            int random = randomSize(againShipperList.size());
+            User userIdSelected = againShipperList.get(random);
+
+            //lay id user de cap nhat don hang
+            this.iOrderRepository.softUpdateAssignmentOrder(userIdSelected.getUserId(),ConstantValue.STATUS_ORDER_APPROVED,removedOrderRequest.getOrderId());
+            // cap nhat trang thai shipper (tai khoan) da phan cong
+            this.iUserRepository.updateAfterAssignment(1,userIdSelected.getUserId());
+            //cap nhat lai trang thai shipper (tai khoan) vua huy nhan don
+            this.iUserRepository.updateAfterAssignment(0,removedOrderRequest.getShipperId());
+            return new MessageResponse("Bạn đã không nhận đơn hàng :"+ removedOrderRequest.getOrderId());
+        }
+        if(testSizeZero==false){
+            int random = randomSize(shippers.size());
+            User userIdSelectedNew = shippers.get(random);
+            this.iOrderRepository.softUpdateAssignmentOrder(userIdSelectedNew.getUserId(),ConstantValue.STATUS_ORDER_APPROVED,removedOrderRequest.getOrderId());
+            // cap nhat trang thai shipper (tai khoan) da phan cong
+            this.iUserRepository.updateAfterAssignment(1,userIdSelectedNew.getUserId());
+            //cap nhat lai trang thai shipper (tai khoan) vua huy nhan don
+            this.iUserRepository.updateAfterAssignment(0,removedOrderRequest.getShipperId());
+            return new MessageResponse("Bạn đã không nhận đơn hàng :"+ removedOrderRequest.getOrderId());
+        }
+        throw  new NotXException("Không nhận đơn bị lỗi", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
