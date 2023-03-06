@@ -63,9 +63,9 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.findAllByUser_UserId(userId));
     }
 
-    // cap nhat giao, nhan, huy don hang
+    // cap nhat giao, nhan, huy don hang dung chung admin, user
     @DeleteMapping("/{ordersId}")
-    public ResponseEntity<MessageResponse> deleteProductFromCart(@PathVariable Integer ordersId) {
+    public ResponseEntity<MessageResponse> deleteOrderFormListOrderAdminAndUser(@PathVariable Integer ordersId) {
        this.iOrderService.deleteById(ordersId);
        return ResponseEntity.ok(new MessageResponse("Đơn hàng có id = '" +  ordersId + "' đã được hủy"));
     }
@@ -78,10 +78,19 @@ public class OrderController {
     }
 
     //assignment: admin phan chia don hang
-
     @PostMapping("/assignment/shipper")
     public ResponseEntity<?> assignmentOrderForShipper(@RequestBody AssignmentShipperRequest assignmentShipperRequest){
         return   ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.assignmentOrderForShipper(assignmentShipperRequest));
     }
+
+
+    //==========================================================================>
+    //SHIPPER
+    // lay tat ca down hang ma shipper duoc giao
+    @GetMapping("/shipper/all-order/{shipperId}")
+    public ResponseEntity<List<Order>> getAllOrderByShipper(@PathVariable Integer shipperId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.findAllByShipperId(shipperId));
+    }
+
 
 }

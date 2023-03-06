@@ -32,4 +32,8 @@ public interface IOrderRepository extends JpaRepository<Order,Integer> {
     @Query("UPDATE Order t SET t.shipperId =:shipperId , t.statusOrder=:status  WHERE t.ordersId = :id ")
     int softUpdateAssignmentOrder( @Param("shipperId") Integer shipperId, @Param("status") String status, @Param("id") Integer id);
 
+
+    //======================================> SHIPPER
+    List<Order> findAllByShipperId(Integer id);
+
 }

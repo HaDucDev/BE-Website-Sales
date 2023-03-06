@@ -261,4 +261,9 @@ public class OrderServiceImpl implements IOrderService {
         }
         throw  new NotXException("Phân công bị lỗi", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public List<Order> findAllByShipperId(Integer id) {
+        return this.iOrderRepository.findAllByShipperId(id);
+    }
 }

@@ -31,4 +31,8 @@ public interface IOrderService {
     //phan chia don hang shipper
     MessageResponse assignmentOrderForShipper(AssignmentShipperRequest assignmentShipperRequest);
 
+
+    //================================================>SHIPPER
+    List<Order> findAllByShipperId(Integer id);
+
 }

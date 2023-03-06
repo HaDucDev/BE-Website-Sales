@@ -41,4 +41,5 @@ public class UserController {
     public ResponseEntity<GetUserResponse> getUserById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iUserService.findByUserIdAndIsDeleteFalse(id));
     }
+
 }
