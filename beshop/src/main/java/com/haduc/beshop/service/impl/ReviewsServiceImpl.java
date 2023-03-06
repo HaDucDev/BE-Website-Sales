@@ -1,10 +1,7 @@
 package com.haduc.beshop.service.impl;
 
 import com.haduc.beshop.model.*;
-import com.haduc.beshop.repository.IOrderRepository;
-import com.haduc.beshop.repository.IProductRepository;
-import com.haduc.beshop.repository.IReviewsRepository;
-import com.haduc.beshop.repository.IUserRepository;
+import com.haduc.beshop.repository.*;
 import com.haduc.beshop.service.IReviewsService;
 import com.haduc.beshop.util.ConstantValue;
 import com.haduc.beshop.util.dto.request.user.ReviewsRequest;
@@ -31,6 +28,9 @@ public class ReviewsServiceImpl implements IReviewsService {
     @Autowired
     private IOrderRepository iOrderRepository;
 
+    @Autowired
+    private IOrderDetailRepository iOrderDetailRepository;
+
     @Override
     public MessageResponse addReviewsToProduct(ReviewsRequest reviewsRequest) {
 
@@ -41,7 +41,7 @@ public class ReviewsServiceImpl implements IReviewsService {
         User user = this.iUserRepository.findByUserIdAndIsDeleteFalse(reviewsRequest.getUserId()).orElseThrow(()-> new  NotXException("Id người dùng lỗi", HttpStatus.NOT_FOUND));
         Order order= this.iOrderRepository.findByIdAndStatusOrder(reviewsRequest.getOrdersId(), ConstantValue.STATUS_ORDER_DELIVERED).orElseThrow(()-> new  NotXException("Id order lỗi", HttpStatus.NOT_FOUND));
 
-        if(!reviews.isPresent()){
+        if(!reviews.isPresent()){// chua coment thi dc coment, co roi ma post vo la loi
             Reviews reviews1 = new Reviews();
             reviews1.setId(reviewsIdKey);
             reviews1.setComments(reviewsRequest.getComment());
@@ -50,8 +50,12 @@ public class ReviewsServiceImpl implements IReviewsService {
             reviews1.setProduct(product);
             reviews1.setUser(user);
             reviews1.setOrder(order);
-
             Reviews reviewsSave = this.iReviewsRepository.save(reviews1);
+
+            //cap nhat khong cho comment khi da danh gia
+            OrderDetailIDKey  orderDetailIDKey = new OrderDetailIDKey(reviewsRequest.getOrdersId(), reviewsRequest.getProductId());
+            // sửa lại đánh giá của sản phẩm khi comment thành công.
+            this.iOrderDetailRepository.updateDisableReviewOrderDetail(ConstantValue.STATUS_ORDER_DETAIL_YES,orderDetailIDKey);
 
             return new MessageResponse(String.format("Sản phẩm có id là %s được đánh giá thành công!", reviewsSave.getId().getProductId()));
         }
