@@ -281,7 +281,8 @@ public class OrderServiceImpl implements IOrderService {
         }
         return new MessageResponse("Dơn hàng"+ confirmOrderRequest.getOrderId() +" được giao thành công" );
     }
-    
+
+    @Transactional
     @Override
     public MessageResponse softUpdateshipperWhenRemoveOrder(RemovedOrderRequest removedOrderRequest) {
         // lay tat shipper tru shipper vua gui den
