@@ -41,6 +41,6 @@ public interface IOrderRepository extends JpaRepository<Order,Integer> {
     @Query("UPDATE Order t SET t.statusOrder = :message, t.receivedDate= :receivedDate  WHERE t.ordersId = :id and t.shipperId= :shipperId")
     int softUpdateCompleteOrder(@Param("id") Integer id , @Param("receivedDate") Date receivedDate, @Param("message") String message, @Param("shipperId") Integer shipperId);
 
-    // tim don hang de binh luan
-    Optional<Order> findByIdAndStatusOrder(Integer id, String statusOrder);
+     //tim don hang de binh luan -truy van nay sai
+    //Optional<Order> findByIdAndStatusOrderEquals(Integer id, String statusOrder);
 }

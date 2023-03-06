@@ -15,12 +15,8 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class ReviewsRequest {
 
-    @NotBlank(message = "userId không được để trống")
     private Integer userId;
-    @NotBlank(message = "productId không được để trống")
     private Integer productId;
-
-    @NotBlank(message = "ordersId không được để trống")
     private Integer ordersId;
 
     @NotBlank(message = "nội dung đánh giá không được để trống")

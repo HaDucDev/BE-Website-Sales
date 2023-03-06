@@ -47,8 +47,8 @@ public class Product implements Serializable {
   @Column(name = "is_delete")
   private boolean isDelete= Boolean.FALSE;
 
-  @Column
-  private Integer rating=0;// sao trung binh cua san pham
+  @Column( columnDefinition = "double default 0.0")
+  private Double rating;// sao trung binh cua san pham
 
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "category_id")

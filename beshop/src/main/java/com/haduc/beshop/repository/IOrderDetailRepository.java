@@ -21,9 +21,8 @@ public interface IOrderDetailRepository extends JpaRepository<OrderDetail, Order
     List<OrderDetail> findAllById_OrdersId(Integer id);
 
     //cap nhat isreview để không cho nó hiển thị đánh giá khi đã đánh giá rồi
-    @Transactional
     @Modifying
-    @Query("UPDATE OrderDetail t SET t.isReview= :isreview  WHERE t.id= :id ")
+    @Query("UPDATE OrderDetail t SET t.isReview= :isReview  WHERE t.id= :id ")
     int updateDisableReviewOrderDetail(@Param("isReview") String isReview, @Param("id") OrderDetailIDKey id);
 
 }
