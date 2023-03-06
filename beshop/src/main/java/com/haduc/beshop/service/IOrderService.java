@@ -3,6 +3,7 @@ package com.haduc.beshop.service;
 import com.haduc.beshop.model.Order;
 import com.haduc.beshop.util.dto.request.admin.AssignmentShipperRequest;
 import com.haduc.beshop.util.dto.request.shipper.ConfirmOrderRequest;
+import com.haduc.beshop.util.dto.request.shipper.RemovedOrderRequest;
 import com.haduc.beshop.util.dto.request.user.CreateOrderResquest;
 import com.haduc.beshop.util.dto.request.user.MomoIPNRequest;
 import com.haduc.beshop.util.dto.request.user.OrderConfirmationRequest;
@@ -37,5 +38,7 @@ public interface IOrderService {
     List<Order> findAllByShipperId(Integer id);
 
     MessageResponse softUpdateCompleteOrder(ConfirmOrderRequest confirmOrderRequest);
+
+    MessageResponse softUpdateshipperWhenRemoveOrder(RemovedOrderRequest removedOrderRequest);
 
 }

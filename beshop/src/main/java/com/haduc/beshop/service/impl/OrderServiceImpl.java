@@ -9,6 +9,7 @@ import com.haduc.beshop.util.ConstantValue;
 import com.haduc.beshop.util.FunctionCommon;
 import com.haduc.beshop.util.dto.request.admin.AssignmentShipperRequest;
 import com.haduc.beshop.util.dto.request.shipper.ConfirmOrderRequest;
+import com.haduc.beshop.util.dto.request.shipper.RemovedOrderRequest;
 import com.haduc.beshop.util.dto.request.user.CreateOrderResquest;
 import com.haduc.beshop.util.dto.request.user.MomoIPNRequest;
 import com.haduc.beshop.util.dto.request.user.OrderConfirmationRequest;
@@ -279,5 +280,43 @@ public class OrderServiceImpl implements IOrderService {
             throw new NotXException("Xảy ra lỗi khi hủy đơn hàng", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new MessageResponse("Dơn hàng"+ confirmOrderRequest.getOrderId() +" được giao thành công" );
+    }
+    
+    @Override
+    public MessageResponse softUpdateshipperWhenRemoveOrder(RemovedOrderRequest removedOrderRequest) {
+        // lay tat shipper tru shipper vua gui den
+        List<User> shippers = this.iUserRepository.findByRole_NameAndAssignmentAndUserIdNot(ERole.valueOf(String.valueOf(ERole.ROLE_SHIPPER)), 0,removedOrderRequest.getShipperId());
+
+        boolean testSizeZero = shippers.isEmpty();
+        if(testSizeZero){// neu rong
+            int affectedRows = this.iUserRepository.updateColumnAssignment(0);
+            System.out.println(affectedRows);
+            if (affectedRows == 0) {
+                throw new NotXException("Xảy ra lỗi khi cập nhật bảng phân công", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            List<User> againShipperList = this.iUserRepository.findByRole_NameAndAssignmentAndUserIdNot(ERole.valueOf(String.valueOf(ERole.ROLE_SHIPPER)), 0,removedOrderRequest.getShipperId());
+            // lay id shipper ngau nhien (userID)
+            int random = randomSize(againShipperList.size());
+            User userIdSelected = againShipperList.get(random);
+
+            //lay id user de cap nhat don hang
+            this.iOrderRepository.softUpdateAssignmentOrder(userIdSelected.getUserId(),ConstantValue.STATUS_ORDER_APPROVED,removedOrderRequest.getOrderId());
+            // cap nhat trang thai shipper (tai khoan) da phan cong
+            this.iUserRepository.updateAfterAssignment(1,userIdSelected.getUserId());
+            //cap nhat lai trang thai shipper (tai khoan) vua huy nhan don
+            this.iUserRepository.updateAfterAssignment(0,removedOrderRequest.getShipperId());
+            return new MessageResponse("Bạn đã không nhận đơn hàng :"+ removedOrderRequest.getOrderId());
+        }
+        if(testSizeZero==false){
+            int random = randomSize(shippers.size());
+            User userIdSelectedNew = shippers.get(random);
+            this.iOrderRepository.softUpdateAssignmentOrder(userIdSelectedNew.getUserId(),ConstantValue.STATUS_ORDER_APPROVED,removedOrderRequest.getOrderId());
+            // cap nhat trang thai shipper (tai khoan) da phan cong
+            this.iUserRepository.updateAfterAssignment(1,userIdSelectedNew.getUserId());
+            //cap nhat lai trang thai shipper (tai khoan) vua huy nhan don
+            this.iUserRepository.updateAfterAssignment(0,removedOrderRequest.getShipperId());
+            return new MessageResponse("Bạn đã không nhận đơn hàng :"+ removedOrderRequest.getOrderId());
+        }
+        throw  new NotXException("Không nhận đơn bị lỗi", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

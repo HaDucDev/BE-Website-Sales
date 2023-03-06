@@ -47,4 +47,8 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
     @Query("UPDATE User t SET t.assignment = :assignment WHERE t.userId = :userId")
     int updateAfterAssignment(@Param("assignment") Integer assignment, @Param("userId") Integer userId);
 
+    //shipper khong nhan don - chuyen sang shipper khac
+    //lay tat ca shipper tru shipper co id
+    List<User> findByRole_NameAndAssignmentAndUserIdNot(ERole name, Integer assignment, Integer userId);
+
 }
