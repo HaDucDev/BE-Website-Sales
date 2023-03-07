@@ -42,7 +42,7 @@ public class Reviews implements Serializable {
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn (name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false, nullable = false)
   private Product product;
-  @JsonIgnore
+
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "user_id",referencedColumnName = "user_id", insertable = false, updatable = false, nullable = false)
   private User user;
