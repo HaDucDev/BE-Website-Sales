@@ -21,7 +21,7 @@ public class StatisticalController {
     private IStatisticalService iStatisticalService;
 
     @GetMapping("/product-revenue-chart")
-    public ResponseEntity<?> getFacultyUserPieChartData() {
-        return ResponseEntity.status(HttpStatus.OK).body(this.iStatisticalService.getFacultyUserPieChartData());
+    public ResponseEntity<?> getRevenueStatisticsData() {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iStatisticalService.getRevenueStatisticsData());
     }
 }

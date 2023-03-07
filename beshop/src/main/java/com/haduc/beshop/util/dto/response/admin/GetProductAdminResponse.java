@@ -23,7 +23,7 @@ public class GetProductAdminResponse {
     private Integer unitPrice;
     private String descriptionProduct;
     private boolean isDelete= Boolean.FALSE;
-    private Integer rating=0;// sao trung binh cua san pham
+    private Double rating;// sao trung binh cua san pham
     private Category category;
     private Supplier supplier;
 }

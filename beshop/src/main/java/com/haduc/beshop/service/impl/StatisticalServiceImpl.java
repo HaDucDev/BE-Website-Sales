@@ -14,7 +14,7 @@ public class StatisticalServiceImpl implements IStatisticalService {
     @Autowired
     private IProductRepository iProductRepository;
     @Override
-    public List<ColumnChartDataResponse> getFacultyUserPieChartData() {
+    public List<ColumnChartDataResponse> getRevenueStatisticsData() {
         return this.iProductRepository.getRevenueStatistics();
     }
 }

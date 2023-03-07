@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IStatisticalService {
 
-    List<ColumnChartDataResponse> getFacultyUserPieChartData();
+    List<ColumnChartDataResponse> getRevenueStatisticsData();
 
 }
 
