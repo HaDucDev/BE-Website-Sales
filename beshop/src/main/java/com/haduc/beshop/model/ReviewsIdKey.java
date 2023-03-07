@@ -16,8 +16,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @Embeddable
 public class ReviewsIdKey implements Serializable {
-  @Column(name = "order_id")
-  private Integer orderId;
+  @Column(name = "orders_id")
+  private Integer ordersId;
 
   @Column(name = "product_id")
   private Integer productId;
@@ -30,12 +30,12 @@ public class ReviewsIdKey implements Serializable {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ReviewsIdKey that = (ReviewsIdKey) o;
-    return Objects.equals(orderId, that.orderId) && Objects.equals(productId, that.productId) && Objects.equals(userId,
+    return Objects.equals(ordersId, that.ordersId) && Objects.equals(productId, that.productId) && Objects.equals(userId,
         that.userId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(orderId, productId, userId);
+    return Objects.hash(ordersId, productId, userId);
   }
 }

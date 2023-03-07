@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,4 +31,9 @@ public interface IProductRepository extends JpaRepository<Product, Integer> {
 
     //user
     Page<Product> findAllByIsDeleteFalse(Pageable pageable);
+
+    //cap nhat so star sau khi binh luan
+    @Modifying
+    @Query("UPDATE Product t SET t.rating = :rating WHERE t.productId = :id AND t.isDelete = false")
+    int updateStartProduct(@Param("rating") Double rating,@Param("id") Integer id);
 }
