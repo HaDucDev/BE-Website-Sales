@@ -11,6 +11,7 @@ import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
 import com.haduc.beshop.util.dto.response.admin.GetProductAdminResponse;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
+import com.haduc.beshop.util.dto.response.user.GetManysupplierBuyCategory;
 import com.haduc.beshop.util.dto.response.user.GetProductDetailResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductsPaginationResponse;
@@ -159,6 +160,12 @@ public class ProductServiceImpl implements IproductService {
         // convert tung phan tu trong list.
         getUsersPaginationResponse.setContent(productPage.getContent().stream().map(product -> this.modelMapper.map(product, GetProductResponse.class)).collect(Collectors.toList()));
         return getUsersPaginationResponse;
+    }
+
+    //get supplier menu
+    @Override
+    public List<GetManysupplierBuyCategory> getProductByCategoryManySupplier(Integer categoryId) {
+        return this.iProductRepository.getProductByCategoryManySupplier(categoryId);
     }
 
 }

@@ -5,9 +5,11 @@ import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
 import com.haduc.beshop.util.dto.response.admin.GetProductAdminResponse;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
+import com.haduc.beshop.util.dto.response.user.GetManysupplierBuyCategory;
 import com.haduc.beshop.util.dto.response.user.GetProductDetailResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductsPaginationResponse;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -34,5 +36,7 @@ public interface IproductService {
 
     //ham de dung tim kiem va filter api chung
     GetProductsPaginationResponse getAllProductSearchFilterPagination(Integer categoryId, Integer supplierId, String text,Pageable pageable);
+
+    List<GetManysupplierBuyCategory> getProductByCategoryManySupplier(Integer categoryId);
 
 }

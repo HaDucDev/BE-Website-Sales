@@ -93,5 +93,11 @@ public class ProductController {
         return ResponseEntity.ok(this.iproductService.getAllProductSearchFilterPagination(categoryId, supplierId, textSearch, paging));
     }
 
+    @GetMapping("/filter-menu/{categoryId}")
+    public ResponseEntity<?> getFilterSupplierFromCategory(@PathVariable Integer categoryId)
+    {
+        return ResponseEntity.ok(this.iproductService.getProductByCategoryManySupplier(categoryId));
+    }
+
 
 }

@@ -2,6 +2,7 @@ package com.haduc.beshop.repository;
 
 import com.haduc.beshop.model.Product;
 import com.haduc.beshop.util.dto.response.admin.ColumnChartDataResponse;
+import com.haduc.beshop.util.dto.response.user.GetManysupplierBuyCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -52,5 +53,13 @@ public interface IProductRepository extends JpaRepository<Product, Integer> {
             "AND (:text IS NULL OR p.productName LIKE %:text%)")
     Page<Product> searchFilterProducts(@Param("categoryId") Integer categoryId, @Param("supplierId") Integer supplierId, @Param("text") String text, Pageable pageable);
 
+    //lay xem loai san pham co bao nhieu hang ban. vi du may tinh co HP, MSI
+
+    @Query("SELECT DISTINCT new com.haduc.beshop.util.dto.response.user.GetManysupplierBuyCategory(s.supplierId, s.supplierName) " +
+            "FROM Product p " +
+            "JOIN Category c ON p.category.categoryId = c.categoryId " +
+            "JOIN Supplier s ON p.supplier.supplierId = s.supplierId " +
+            "WHERE c.categoryId = :categoryId")
+    List<GetManysupplierBuyCategory> getProductByCategoryManySupplier(@Param("categoryId") Integer categoryId);
 
 }
