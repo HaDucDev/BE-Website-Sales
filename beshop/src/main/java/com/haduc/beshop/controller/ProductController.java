@@ -80,6 +80,12 @@ public class ProductController {
     (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "8") int size,@RequestParam(required = false) String textSearch,
      @RequestParam(required = false) Integer categoryId, @RequestParam(required = false) Integer supplierId, @PageableDefault(sort = "unitPrice") Sort sort)
     {
+        if(categoryId== Integer.valueOf(-1)){
+            categoryId = null;
+        }
+        if(supplierId== Integer.valueOf(-1)){
+            supplierId = null;
+        }
         System.out.println("category la"+categoryId);
         System.out.println("category la"+supplierId);
         System.out.println("category la"+textSearch);
