@@ -31,4 +31,8 @@ public interface IproductService {
     GetProductsPaginationResponse getAllProductAndIsDeleteFalsePagination(Pageable pageable);
 
     GetProductDetailResponse findByProductDetalAndIsDeleteFalse(Integer productId);// chi tiet san pham
+
+    //ham de dung tim kiem va filter api chung
+    GetProductsPaginationResponse getAllProductSearchFilterPagination(Integer categoryId, Integer supplierId, String text,Pageable pageable);
+
 }

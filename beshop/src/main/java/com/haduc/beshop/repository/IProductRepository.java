@@ -47,9 +47,10 @@ public interface IProductRepository extends JpaRepository<Product, Integer> {
     List<ColumnChartDataResponse> getRevenueStatistics();
 
      // search -filter
-     Page<Product> findAllByIsDeleteFalseAndCategory_CategoryIdAndSupplier_SupplierIdAndProductNameLike(Integer categoryId, Integer supplierId,
-                                                                                                        String text,Pageable pageable);
-    Page<Product> findAllByIsDeleteFalseAndCategory_CategoryIdAndProductNameLike(Integer categoryId, String text,Pageable pageable);
-    Page<Product> findAllByIsDeleteFalseAndSupplier_SupplierIdAndProductNameLike(Integer supplierId, String text,Pageable pageable);
+    @Query("SELECT p FROM Product p WHERE p.isDelete = false AND (:categoryId IS NULL OR p.category.categoryId = :categoryId) " +
+            "AND (:supplierId IS NULL OR p.supplier.supplierId = :supplierId)  " +
+            "AND (:text IS NULL OR p.productName LIKE %:text%)")
+    Page<Product> searchFilterProducts(@Param("categoryId") Integer categoryId, @Param("supplierId") Integer supplierId, @Param("text") String text, Pageable pageable);
+
 
 }
