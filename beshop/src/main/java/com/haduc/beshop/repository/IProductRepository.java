@@ -45,4 +45,11 @@ public interface IProductRepository extends JpaRepository<Product, Integer> {
                 " JOIN Order o ON  od.order.ordersId = o.ordersId" +
             " GROUP BY p.productId ")
     List<ColumnChartDataResponse> getRevenueStatistics();
+
+     // search -filter
+     Page<Product> findAllByIsDeleteFalseAndCategory_CategoryIdAndSupplier_SupplierIdAndProductNameLike(Integer categoryId, Integer supplierId,
+                                                                                                        String text,Pageable pageable);
+    Page<Product> findAllByIsDeleteFalseAndCategory_CategoryIdAndProductNameLike(Integer categoryId, String text,Pageable pageable);
+    Page<Product> findAllByIsDeleteFalseAndSupplier_SupplierIdAndProductNameLike(Integer supplierId, String text,Pageable pageable);
+
 }
