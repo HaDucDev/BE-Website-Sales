@@ -64,7 +64,7 @@ public class ProductController {
     // ================================user
     @GetMapping
     public ResponseEntity<GetProductsPaginationResponse> getAllHomeProduct
-    (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "8") int size, @PageableDefault(sort = "userId") Sort sort){
+    (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "8") int size, @PageableDefault(sort = "productId") Sort sort){
         Pageable paging = PageRequest.of(number, size,sort);
         return ResponseEntity.ok(this.iproductService.getAllProductAndIsDeleteFalsePagination(paging));
     }
@@ -74,6 +74,30 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.findByProductDetalAndIsDeleteFalse(id));
     }
 
+    //======================================> guest người ghe qua xem trang web có the lam khong can dang nhap
+    @GetMapping("/search-filter")
+    public ResponseEntity<GetProductsPaginationResponse> getAllHomeProductSearchAndFilter
+    (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "8") int size,@RequestParam(required = false) String textSearch,
+     @RequestParam(required = false) Integer categoryId, @RequestParam(required = false) Integer supplierId, @PageableDefault(sort = "unitPrice") Sort sort)
+    {
+        if(categoryId== Integer.valueOf(-1)){
+            categoryId = null;
+        }
+        if(supplierId== Integer.valueOf(-1)){
+            supplierId = null;
+        }
+        System.out.println("category la"+categoryId);
+        System.out.println("category la"+supplierId);
+        System.out.println("category la"+textSearch);
+        Pageable paging = PageRequest.of(number, size,sort);
+        return ResponseEntity.ok(this.iproductService.getAllProductSearchFilterPagination(categoryId, supplierId, textSearch, paging));
+    }
+
+    @GetMapping("/filter-menu/{categoryId}")
+    public ResponseEntity<?> getFilterSupplierFromCategory(@PathVariable Integer categoryId)
+    {
+        return ResponseEntity.ok(this.iproductService.getProductByCategoryManySupplier(categoryId));
+    }
 
 
 }

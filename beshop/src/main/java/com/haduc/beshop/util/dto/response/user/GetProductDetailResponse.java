@@ -27,5 +27,5 @@ public class GetProductDetailResponse {
 
     private String isSupplier;
 
-    private Integer rating=0;// sao trung binh cua san pham
+    private Double rating;// sao trung binh cua san pham
 }

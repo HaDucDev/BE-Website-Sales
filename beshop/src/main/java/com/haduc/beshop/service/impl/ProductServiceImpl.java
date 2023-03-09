@@ -11,6 +11,7 @@ import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
 import com.haduc.beshop.util.dto.response.admin.GetProductAdminResponse;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
+import com.haduc.beshop.util.dto.response.user.GetManysupplierBuyCategory;
 import com.haduc.beshop.util.dto.response.user.GetProductDetailResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductsPaginationResponse;
@@ -149,6 +150,22 @@ public class ProductServiceImpl implements IproductService {
         getProductDetailResponse.setIsCategory(product.getCategory().getCategoryName());
         getProductDetailResponse.setIsSupplier(product.getSupplier().getSupplierName());
         return getProductDetailResponse;
+    }
+
+    // guest search filter
+    @Override
+    public GetProductsPaginationResponse getAllProductSearchFilterPagination(Integer categoryId, Integer supplierId, String text,Pageable pageable) {
+        Page<Product> productPage= this.iProductRepository.searchFilterProducts(categoryId, supplierId, text, pageable);
+        GetProductsPaginationResponse getUsersPaginationResponse = this.modelMapper.map(productPage,GetProductsPaginationResponse.class);// lay 4 thuoc duoi ko co content
+        // convert tung phan tu trong list.
+        getUsersPaginationResponse.setContent(productPage.getContent().stream().map(product -> this.modelMapper.map(product, GetProductResponse.class)).collect(Collectors.toList()));
+        return getUsersPaginationResponse;
+    }
+
+    //get supplier menu
+    @Override
+    public List<GetManysupplierBuyCategory> getProductByCategoryManySupplier(Integer categoryId) {
+        return this.iProductRepository.getProductByCategoryManySupplier(categoryId);
     }
 
 }
