@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,6 +64,9 @@ public class UserServiceImpl implements IUserService {
         return getUserResponse;
     }
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public MessageResponse createUser(CreateUserRequest createUserRequest) {
         User user = new User();
@@ -76,11 +80,11 @@ public class UserServiceImpl implements IUserService {
 
         //tao mat khau ngau nhien
         String pass = FunctionCommon.getRandomNumber(8);
-        user.setPassword(pass);
+        user.setPassword(passwordEncoder.encode(pass));//ma hoa roi luu
         User user1= this.iUserRepository.save(user);
         //luu nguoi dung thanh cong ms gui mail
-        this.sendMail.sendMailWithText("Đăng ký tài khoản", "Đây là password của bạn: " + user1.getPassword(), user1.getEmail());
-        return new MessageResponse(String.format("User %s được sửa thành công!", user1.getFullName()));
+        this.sendMail.sendMailWithText("Đăng ký tài khoản", "Đây là password của bạn: " + pass, user1.getEmail());//user1.getEmail() la mail gui den
+        return new MessageResponse(String.format("User %s được lưu thành công!", user1.getFullName()));
     }
 
 
