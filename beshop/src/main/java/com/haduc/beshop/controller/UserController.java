@@ -29,7 +29,7 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUser() {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iUserService.getAllUser());
     }
-    @Secured({"ROLE_ADMIN"})
+    //@Secured({"ROLE_ADMIN"})
     @GetMapping("/admin")
     public ResponseEntity<GetUsersPaginationResponse> findAllUsers
             (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "6") int size, @PageableDefault(sort = "userId") Sort sort) {
