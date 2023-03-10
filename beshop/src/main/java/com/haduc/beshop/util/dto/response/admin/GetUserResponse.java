@@ -28,4 +28,5 @@ public class GetUserResponse {
     private String phone;
 
     private String roleName;
+    private Integer roleId;
 }

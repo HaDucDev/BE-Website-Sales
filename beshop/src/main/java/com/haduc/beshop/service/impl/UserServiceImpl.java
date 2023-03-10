@@ -64,6 +64,7 @@ public class UserServiceImpl implements IUserService {
                 .orElseThrow(()->new NotXException("Không tìm thấy user này", HttpStatus.NOT_FOUND));
         GetUserResponse getUserResponse= this.modelMapper.map(user,GetUserResponse.class);
         getUserResponse.setRoleName(user.getRole().getName().toString());
+        getUserResponse.setRoleId(user.getRole().getId());
         return getUserResponse;
     }
 
