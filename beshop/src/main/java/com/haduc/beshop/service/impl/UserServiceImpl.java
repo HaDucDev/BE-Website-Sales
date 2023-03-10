@@ -1,12 +1,14 @@
 package com.haduc.beshop.service.impl;
 
 import com.haduc.beshop.config.sendEmail.SendMail;
+import com.haduc.beshop.model.Role;
 import com.haduc.beshop.model.User;
 import com.haduc.beshop.repository.IRoleRepository;
 import com.haduc.beshop.repository.IUserRepository;
 import com.haduc.beshop.service.IUserService;
 import com.haduc.beshop.util.FunctionCommon;
 import com.haduc.beshop.util.dto.request.admin.CreateUserRequest;
+import com.haduc.beshop.util.dto.request.admin.UpdateUserRequest;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUserResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUsersPaginationResponse;
@@ -84,6 +86,22 @@ public class UserServiceImpl implements IUserService {
         User user1= this.iUserRepository.save(user);
         //luu nguoi dung thanh cong ms gui mail
         this.sendMail.sendMailWithText("Đăng ký tài khoản", "Đây là password của bạn: " + pass, user1.getEmail());//user1.getEmail() la mail gui den
+        return new MessageResponse(String.format("User %s được lưu thành công!", user1.getFullName()));
+    }
+
+    @Override
+    public MessageResponse updateUser(UpdateUserRequest updateSupplierRequest) {
+
+        Role role = this.iRoleRepository.findById(updateSupplierRequest.getRoleId()).orElseThrow(() -> new NotXException("Không tìm thấy role này", HttpStatus.NOT_FOUND));
+
+        User user = this.iUserRepository.findByUserIdAndIsDeleteFalse(updateSupplierRequest.getUserId()).orElseThrow(() -> new NotXException("Không tìm thấy user này", HttpStatus.NOT_FOUND));
+        user.setEmail(updateSupplierRequest.getEmail());
+        user.setFullName(updateSupplierRequest.getFullName());
+        //user.setUsername(updateSupplierRequest.getUsername());// dc duoc sua nhe
+        user.setAddress(updateSupplierRequest.getAddress());
+        user.setPhone(updateSupplierRequest.getPhone());
+        user.setRole(role);
+        User user1= this.iUserRepository.save(user);
         return new MessageResponse(String.format("User %s được lưu thành công!", user1.getFullName()));
     }
 

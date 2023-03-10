@@ -2,6 +2,7 @@ package com.haduc.beshop.service;
 
 import com.haduc.beshop.model.User;
 import com.haduc.beshop.util.dto.request.admin.CreateUserRequest;
+import com.haduc.beshop.util.dto.request.admin.UpdateUserRequest;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUserResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUsersPaginationResponse;
@@ -22,7 +23,7 @@ public interface IUserService {
 
     MessageResponse createUser(CreateUserRequest createUserRequest);
 
-    //MessageResponse updateSupplier(UpdateSupplierRequest updateSupplierRequest, MultipartFile supplierFile);
+    MessageResponse updateUser(UpdateUserRequest updateSupplierRequest);
 
     //void deleteById(Integer id);
 }

@@ -3,6 +3,7 @@ package com.haduc.beshop.controller;
 import com.haduc.beshop.model.User;
 import com.haduc.beshop.service.IUserService;
 import com.haduc.beshop.util.dto.request.admin.CreateUserRequest;
+import com.haduc.beshop.util.dto.request.admin.UpdateUserRequest;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUserResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUsersPaginationResponse;
@@ -49,6 +50,12 @@ public class UserController {
     @PostMapping("/admin")
     public ResponseEntity<MessageResponse> createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iUserService.createUser(createUserRequest));
+    }
+
+
+    @PutMapping("/admin")
+    public ResponseEntity<MessageResponse> UpdateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iUserService.updateUser(updateUserRequest));
     }
 
 }
