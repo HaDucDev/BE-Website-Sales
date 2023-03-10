@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,7 +80,6 @@ public class UserServiceImpl implements IUserService {
         user.setUsername(createUserRequest.getUsername());
         user.setAddress(createUserRequest.getAddress());
         user.setPhone(createUserRequest.getPhone());
-
         //tao mat khau ngau nhien
         String pass = FunctionCommon.getRandomNumber(8);
         user.setPassword(passwordEncoder.encode(pass));//ma hoa roi luu
@@ -103,6 +103,16 @@ public class UserServiceImpl implements IUserService {
         user.setRole(role);
         User user1= this.iUserRepository.save(user);
         return new MessageResponse(String.format("User %s được lưu thành công!", user1.getFullName()));
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(Integer id) {
+        int affectedRows = this.iUserRepository.softDeleteUser(id);
+        System.out.println(affectedRows);
+        if (affectedRows == 0) {
+            throw new NotXException("Xảy ra lỗi khi xóa supplier", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

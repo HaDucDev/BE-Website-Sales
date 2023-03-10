@@ -35,16 +35,15 @@ public class AccountServiceImpl implements IAccountService {
     @Override
     public LoginResponse login(LoginRequest request)  {
 
-        try {
+        try {//xac thuc
             this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         }catch (BadCredentialsException e) {
             throw new NotXException("Tên đăng nhập hoặc mật khẩu không đúng", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        //User user = this.iUserRepository.findByUsername(request.getUsername()).orElseThrow(() -> new NotXException("không tìm thấy người dùng này", HttpStatus.NOT_FOUND));
         final UserDetails userDetails = this.myUserDetailsService.loadUserByUsername(request.getUsername());
         final String jwt = this.jwtUtils.generateToken(userDetails);// sinh token
-        User user = this.iUserRepository.findByUsername(request.getUsername()).orElseThrow(() -> new NotXException("không tìm thấy người dùng này", HttpStatus.NOT_FOUND));
+        User user = this.iUserRepository.findByUsernameAndIsDeleteFalse(request.getUsername()).orElseThrow(() -> new NotXException("không tìm thấy người dùng này", HttpStatus.NOT_FOUND));
 
         return new LoginResponse(jwt, user.getUserId(), user.getUsername(),
                 user.getRole().getName().name(), user.getRole().getId(),user.getAvatar());

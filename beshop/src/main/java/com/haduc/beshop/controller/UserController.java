@@ -58,4 +58,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iUserService.updateUser(updateUserRequest));
     }
 
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<MessageResponse> deleteUser(@PathVariable Integer id) {
+        this.iUserService.deleteById(id);
+        return ResponseEntity.ok(new MessageResponse("user với id = '" + id + "' đã được xóa thành công"));
+    }
+
 }

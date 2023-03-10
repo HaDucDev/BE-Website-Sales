@@ -19,6 +19,8 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
     //common
     Optional<User> findByUsername(String username);// use java 8
 
+    Optional<User> findByUsernameAndIsDeleteFalse(String username);// use java 8
+
     //admin
     List<User> findAllByIsDeleteFalse();
 
@@ -29,9 +31,9 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
     // them,sua dung ham co san
 
     // xoa mem
-//    @Modifying
-//    @Query("UPDATE User t SET t.isDelete = true WHERE t.userId = :id AND t.isDelete = false")
-//    int softDeleteUser(@Param("id") Integer id);
+    @Modifying
+    @Query("UPDATE User t SET t.isDelete = true WHERE t.userId = :id AND t.isDelete = false")
+    int softDeleteUser(@Param("id") Integer id);
 
     //lay tat ca user theo mot role nao do
     List<User> findByRole_NameAndAssignment(ERole name, Integer assignment);

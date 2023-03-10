@@ -25,5 +25,5 @@ public interface IUserService {
 
     MessageResponse updateUser(UpdateUserRequest updateSupplierRequest);
 
-    //void deleteById(Integer id);
+    void deleteById(Integer id);
 }
