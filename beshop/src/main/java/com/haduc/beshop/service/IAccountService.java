@@ -15,4 +15,5 @@ public interface IAccountService {
     MessageResponse updateInforUser(ChangeInforAccountRequest changeInforAccountRequest, MultipartFile productFile);
 
     MessageResponse createtTokenCodeWhenFortgetPass ( ForgetPasswordRequest forgetPasswordRequest);
+    MessageResponse setPasswordRandomAndSendNewPassMail(SetPasswordRandomRequest setPasswordRandomRequest);
 }

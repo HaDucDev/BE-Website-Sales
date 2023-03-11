@@ -3,7 +3,6 @@ package com.haduc.beshop.controller;
 
 import com.haduc.beshop.service.IAccountService;
 import com.haduc.beshop.util.dto.request.account.*;
-import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
 import com.haduc.beshop.util.dto.response.account.LoginResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,5 +45,10 @@ public class AccountController {
     @PostMapping("/forget-send-code")
     public ResponseEntity<?> ForgetPassSendTokenCode(@Valid @RequestBody ForgetPasswordRequest forgetPasswordRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iAccountService.createtTokenCodeWhenFortgetPass(forgetPasswordRequest));
+    }
+
+    @PostMapping("/confirm-code-send-new-pass")
+    public ResponseEntity<?> ForgetPassCheckCodeConfirm(@Valid @RequestBody SetPasswordRandomRequest setPasswordRandomRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iAccountService.setPasswordRandomAndSendNewPassMail(setPasswordRandomRequest));
     }
 }

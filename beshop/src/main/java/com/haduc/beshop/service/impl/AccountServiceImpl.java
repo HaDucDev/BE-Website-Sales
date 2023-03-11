@@ -46,6 +46,7 @@ public class AccountServiceImpl implements IAccountService {
 
     @Autowired
     private JwtUtils jwtUtils;
+    private Date dateExpiration;
 
     @Override
     public LoginResponse login(LoginRequest request)  {
@@ -153,5 +154,30 @@ public class AccountServiceImpl implements IAccountService {
         this.sendMail.sendMailWithText("Quên mật khẩu", "Chào mừng quý khách đến với HDSHOP. Đây là mã xác nhận của bạn của bạn: " + tokenCode +". Sau 10 phút sẽ hết hạn", user1.getEmail());//user1.getEmail() la mail gui den
         return new MessageResponse(String.format("Hãy kiểm tra email %s để lấy mã xác nhận!", user1.getEmail()));
 
+    }
+
+    // gui mat khau moi ve email neu ma xac nhan hop le
+    @Override
+    public MessageResponse setPasswordRandomAndSendNewPassMail(SetPasswordRandomRequest setPasswordRandomRequest) {
+        User  user = this.iUserRepository.findByEmailAndIsDeleteFalse(setPasswordRandomRequest.getEmail()).orElseThrow(()-> new NotXException("Không tìm thấy email này", HttpStatus.NOT_FOUND));
+
+        // lay thoi gian thuc hien gui ma
+        Date currentDate = new Date(System.currentTimeMillis());
+        //lay thoi gian trong csdl len de kiem tra
+        Date dateExpiration = user.getExpirationTimeToken();
+        //kiem tra token co dung va con han hay khong
+        if(setPasswordRandomRequest.getResetCode().equals(user.getTokenResetPass())  ){
+            if(currentDate.compareTo(dateExpiration) < 0){// kiem tra time da het han chua
+                // tao mat khau ngua nhien
+                String pass = FunctionCommon.getRandomNumber(8) + "ok";
+                user.setPassword(passwordEncoder.encode(pass));//ma hoa roi luu
+                User user1= this.iUserRepository.save(user);
+                this.sendMail.sendMailWithText("Mật khẩu mới", "Chào mừng quý khách đến với HDSHOP Đây là password mới của bạn: " + pass +". Hãy đổi mật khẩu sau khi đăng nhập nhé!", user1.getEmail());
+                return new MessageResponse(String.format("Email %s đã xác nhận đổi mật khẩu thành công! Hãy vào email dê lấy mật khẩu mới", user1.getEmail()));
+            }
+
+            throw new NotXException("Mã xác đã hết hạn", HttpStatus.UNAUTHORIZED);
+        }
+        throw new NotXException("Mã xác nhận lỗi", HttpStatus.BAD_REQUEST);
     }
 }
