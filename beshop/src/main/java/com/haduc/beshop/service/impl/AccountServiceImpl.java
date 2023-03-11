@@ -78,7 +78,7 @@ public class AccountServiceImpl implements IAccountService {
         user.setPassword(passwordEncoder.encode(pass));//ma hoa roi luu
         User user1= this.iUserRepository.save(user);
         //luu nguoi dung thanh cong ms gui mail
-        this.sendMail.sendMailWithText("Đăng ký tài khoản", "Đây là password của bạn: " + pass +". Hãy đổi mật khẩu sau khi đăng nhập nhé!", user1.getEmail());//user1.getEmail() la mail gui den
-        return new MessageResponse(String.format("User %s được lưu thành công!", user1.getFullName()));
+        this.sendMail.sendMailWithText("Đăng ký tài khoản", "Chào mừng quý khách đến với HDSHOP Đây là password của bạn: " + pass +". Hãy đổi mật khẩu sau khi đăng nhập nhé!", user1.getEmail());//user1.getEmail() la mail gui den
+        return new MessageResponse(String.format("User %s đã tạo tài khoản thành công!", user1.getFullName()));
     }
 }
