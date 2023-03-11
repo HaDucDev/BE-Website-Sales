@@ -1,14 +1,12 @@
 package com.haduc.beshop.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 @Getter
@@ -49,6 +47,11 @@ public class User implements Serializable {
   @Column(name = "token_reset_password")
   @JsonIgnore
   private String tokenResetPass;
+
+  @Column(name = "expiration_time_token")
+  @JsonIgnore
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date expirationTimeToken;// thoi gian ma token doi mat khau het han
 
   @Column(name = "assignment", columnDefinition = "integer default 0")// gia tri mac dinh la 0 Integer.
   private Integer assignment;// shipper da duoc phan cong giao hang

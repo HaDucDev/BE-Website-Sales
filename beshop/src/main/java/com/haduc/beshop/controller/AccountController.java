@@ -2,10 +2,7 @@ package com.haduc.beshop.controller;
 
 
 import com.haduc.beshop.service.IAccountService;
-import com.haduc.beshop.util.dto.request.account.ChangeInforAccountRequest;
-import com.haduc.beshop.util.dto.request.account.ChangePasswordRequest;
-import com.haduc.beshop.util.dto.request.account.LoginRequest;
-import com.haduc.beshop.util.dto.request.account.RegisterRequest;
+import com.haduc.beshop.util.dto.request.account.*;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
 import com.haduc.beshop.util.dto.response.account.LoginResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +40,11 @@ public class AccountController {
     public ResponseEntity<?> changeInforAccount(@Valid @RequestPart("changeInforAccountRequest") ChangeInforAccountRequest changeInforAccountRequest
             , @RequestPart(value = "avatar",required = false) MultipartFile avatar) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iAccountService.updateInforUser(changeInforAccountRequest,avatar));
+    }
+
+
+    @PostMapping("/forget-send-code")
+    public ResponseEntity<?> ForgetPassSendTokenCode(@Valid @RequestBody ForgetPasswordRequest forgetPasswordRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iAccountService.createtTokenCodeWhenFortgetPass(forgetPasswordRequest));
     }
 }

@@ -5,16 +5,12 @@ import com.cloudinary.utils.ObjectUtils;
 import com.haduc.beshop.config.jwt.JwtUtils;
 import com.haduc.beshop.config.sendEmail.SendMail;
 import com.haduc.beshop.config.springSecurity.MyUserDetailsService;
-import com.haduc.beshop.model.Product;
 import com.haduc.beshop.model.User;
 import com.haduc.beshop.repository.IRoleRepository;
 import com.haduc.beshop.repository.IUserRepository;
 import com.haduc.beshop.service.IAccountService;
 import com.haduc.beshop.util.FunctionCommon;
-import com.haduc.beshop.util.dto.request.account.ChangeInforAccountRequest;
-import com.haduc.beshop.util.dto.request.account.ChangePasswordRequest;
-import com.haduc.beshop.util.dto.request.account.LoginRequest;
-import com.haduc.beshop.util.dto.request.account.RegisterRequest;
+import com.haduc.beshop.util.dto.request.account.*;
 import com.haduc.beshop.util.dto.response.account.LoginResponse;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.enum_role.ERole;
@@ -32,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 @Service
@@ -139,5 +136,22 @@ public class AccountServiceImpl implements IAccountService {
 
         User userSave= this.iUserRepository.save(user);
         return new MessageResponse(String.format("User %s được sửa thành công!", userSave.getFullName()));
+    }
+
+    @Override
+    public MessageResponse createtTokenCodeWhenFortgetPass(ForgetPasswordRequest forgetPasswordRequest) {
+        User  user = this.iUserRepository.findByEmailAndIsDeleteFalse(forgetPasswordRequest.getEmail()).orElseThrow(()-> new NotXException("Không tìm thấy email này", HttpStatus.NOT_FOUND));
+        //tao token xac thuc
+        String tokenCode = FunctionCommon.getRandomNumber(9);
+        user.setTokenResetPass(tokenCode);
+        // tao thoi gian het han token
+//        Date currentDate = new Date(System.currentTimeMillis());
+//        Date expirationTime = new Date(currentDate.getTime() + 10 * 60 * 1000); // thêm 10 phút
+        Date expirationTime = new Date(System.currentTimeMillis() + 10 * 60 * 1000); // thêm 10 phút
+        user.setExpirationTimeToken(expirationTime);
+        User user1 = this.iUserRepository.save(user);
+        this.sendMail.sendMailWithText("Quên mật khẩu", "Chào mừng quý khách đến với HDSHOP. Đây là mã xác nhận của bạn của bạn: " + tokenCode +". Sau 10 phút sẽ hết hạn", user1.getEmail());//user1.getEmail() la mail gui den
+        return new MessageResponse(String.format("Hãy kiểm tra email %s để lấy mã xác nhận!", user1.getEmail()));
+
     }
 }

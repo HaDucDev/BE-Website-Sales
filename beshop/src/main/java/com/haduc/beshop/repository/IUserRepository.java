@@ -53,4 +53,8 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
     //lay tat ca shipper tru shipper co id
     List<User> findByRole_NameAndAssignmentAndUserIdNot(ERole name, Integer assignment, Integer userId);
 
+
+    //lay nguoi dung vs email de tao token doi mat khau
+    Optional<User> findByEmailAndIsDeleteFalse(String email);// use java 8
+
 }
