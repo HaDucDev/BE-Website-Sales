@@ -58,7 +58,7 @@ public class ProductController {
     @DeleteMapping("/admin/{id}")
     public ResponseEntity<MessageResponse> deleteProduct(@PathVariable Integer id) {
         this.iproductService.deleteById(id);
-        return ResponseEntity.ok(new MessageResponse("product với id = '" + id + "' đã được xóa thành công"));
+        return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("product với id = '" + id + "' đã được xóa thành công"));
     }
 
     // ================================user
@@ -66,7 +66,7 @@ public class ProductController {
     public ResponseEntity<GetProductsPaginationResponse> getAllHomeProduct
     (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "8") int size, @PageableDefault(sort = "productId") Sort sort){
         Pageable paging = PageRequest.of(number, size,sort);
-        return ResponseEntity.ok(this.iproductService.getAllProductAndIsDeleteFalsePagination(paging));
+        return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.getAllProductAndIsDeleteFalsePagination(paging));
     }
 
     @GetMapping("/detail/{id}")
@@ -90,14 +90,19 @@ public class ProductController {
         System.out.println("category la"+supplierId);
         System.out.println("category la"+textSearch);
         Pageable paging = PageRequest.of(number, size,sort);
-        return ResponseEntity.ok(this.iproductService.getAllProductSearchFilterPagination(categoryId, supplierId, textSearch, paging));
+        return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.getAllProductSearchFilterPagination(categoryId, supplierId, textSearch, paging));
     }
 
     @GetMapping("/filter-menu/{categoryId}")
-    public ResponseEntity<?> getFilterSupplierFromCategory(@PathVariable Integer categoryId)
-    {
-        return ResponseEntity.ok(this.iproductService.getProductByCategoryManySupplier(categoryId));
+    public ResponseEntity<?> getFilterSupplierFromCategory(@PathVariable Integer categoryId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.getProductByCategoryManySupplier(categoryId));
     }
 
+    // top 10 san pham ban chay nhat
+
+    @GetMapping("/selling-top-10-product")
+    public ResponseEntity<?> getTop10ProductBuySelling(){
+        return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.getTop10ProductSelling());
+    }
 
 }
