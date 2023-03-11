@@ -8,6 +8,7 @@ import com.haduc.beshop.repository.IRoleRepository;
 import com.haduc.beshop.repository.IUserRepository;
 import com.haduc.beshop.service.IAccountService;
 import com.haduc.beshop.util.FunctionCommon;
+import com.haduc.beshop.util.dto.request.account.ChangePasswordRequest;
 import com.haduc.beshop.util.dto.request.account.LoginRequest;
 import com.haduc.beshop.util.dto.request.account.RegisterRequest;
 import com.haduc.beshop.util.dto.response.account.LoginResponse;
@@ -19,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -80,5 +83,18 @@ public class AccountServiceImpl implements IAccountService {
         //luu nguoi dung thanh cong ms gui mail
         this.sendMail.sendMailWithText("Đăng ký tài khoản", "Chào mừng quý khách đến với HDSHOP Đây là password của bạn: " + pass +". Hãy đổi mật khẩu sau khi đăng nhập nhé!", user1.getEmail());//user1.getEmail() la mail gui den
         return new MessageResponse(String.format("User %s đã tạo tài khoản thành công!", user1.getFullName()));
+    }
+
+    @Override
+    public MessageResponse changePass(ChangePasswordRequest changePasswordRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = this.iUserRepository.findByUsernameAndIsDeleteFalse(username).orElseThrow(()-> new NotXException("Lỗi bạn chưa đăng nhập", HttpStatus.NOT_FOUND));
+        if (passwordEncoder.matches(changePasswordRequest.getOldPassword(),user.getPassword())) {// ham san kiem tra trung pass ko
+            user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+            this.iUserRepository.save(user);
+            return new MessageResponse(String.format("User %s đã tạo đổi mật khẩu thành công!", user.getFullName()));
+        }
+        throw new NotXException("Mật khẩu cũ không chính xác. Nếu bạn quên hãy đăng xuất và chọn chức năng quên mật khẩu", HttpStatus.NOT_FOUND);
     }
 }

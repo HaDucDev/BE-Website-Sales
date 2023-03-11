@@ -2,6 +2,7 @@ package com.haduc.beshop.controller;
 
 
 import com.haduc.beshop.service.IAccountService;
+import com.haduc.beshop.util.dto.request.account.ChangePasswordRequest;
 import com.haduc.beshop.util.dto.request.account.LoginRequest;
 import com.haduc.beshop.util.dto.request.account.RegisterRequest;
 import com.haduc.beshop.util.dto.response.account.LoginResponse;
@@ -28,5 +29,10 @@ public class AccountController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iAccountService.register(request));
+    }
+
+    @PutMapping("/change-pass")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iAccountService.changePass(request));
     }
 }
