@@ -11,10 +11,7 @@ import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
 import com.haduc.beshop.util.dto.response.admin.GetProductAdminResponse;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
-import com.haduc.beshop.util.dto.response.user.GetManysupplierBuyCategory;
-import com.haduc.beshop.util.dto.response.user.GetProductDetailResponse;
-import com.haduc.beshop.util.dto.response.user.GetProductResponse;
-import com.haduc.beshop.util.dto.response.user.GetProductsPaginationResponse;
+import com.haduc.beshop.util.dto.response.user.*;
 import com.haduc.beshop.util.exception.NotXException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,6 +163,15 @@ public class ProductServiceImpl implements IproductService {
     @Override
     public List<GetManysupplierBuyCategory> getProductByCategoryManySupplier(Integer categoryId) {
         return this.iProductRepository.getProductByCategoryManySupplier(categoryId);
+    }
+
+    @Override
+    public List<ProductSellingResponse> getTop10ProductSelling() {
+        List<ProductSellingResponse> productSellingResponses = this.iProductRepository.getTop10ProductSelling();
+        if(productSellingResponses.size() >10){
+            productSellingResponses = productSellingResponses.subList(0,10);
+        }
+        return productSellingResponses;
     }
 
 }

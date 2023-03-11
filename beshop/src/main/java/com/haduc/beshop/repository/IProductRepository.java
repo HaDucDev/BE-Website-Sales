@@ -3,6 +3,7 @@ package com.haduc.beshop.repository;
 import com.haduc.beshop.model.Product;
 import com.haduc.beshop.util.dto.response.admin.ColumnChartDataResponse;
 import com.haduc.beshop.util.dto.response.user.GetManysupplierBuyCategory;
+import com.haduc.beshop.util.dto.response.user.ProductSellingResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -61,5 +62,11 @@ public interface IProductRepository extends JpaRepository<Product, Integer> {
             "JOIN Supplier s ON p.supplier.supplierId = s.supplierId " +
             "WHERE c.categoryId = :categoryId")
     List<GetManysupplierBuyCategory> getProductByCategoryManySupplier(@Param("categoryId") Integer categoryId);
+
+    // lấy ra 10 sản phẩm bản chạy nhất
+    @Query("SELECT new com.haduc.beshop.util.dto.response.user.ProductSellingResponse(p.productId, p.productName,p.productImage,p.unitPrice,p.discount,p.rating, sum (od.quantity)) " +
+            "FROM Product p JOIN OrderDetail od ON p.productId = od.product.productId "
+            + "group by p.productId order by sum (od.quantity) desc")
+    List<ProductSellingResponse> getTop10ProductSelling();
 
 }

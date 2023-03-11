@@ -8,6 +8,7 @@ import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.user.GetManysupplierBuyCategory;
 import com.haduc.beshop.util.dto.response.user.GetProductDetailResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductsPaginationResponse;
+import com.haduc.beshop.util.dto.response.user.ProductSellingResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,5 +39,9 @@ public interface IproductService {
     GetProductsPaginationResponse getAllProductSearchFilterPagination(Integer categoryId, Integer supplierId, String text,Pageable pageable);
 
     List<GetManysupplierBuyCategory> getProductByCategoryManySupplier(Integer categoryId);
+
+    //top 10 san pham ban chay nhat
+    List<ProductSellingResponse> getTop10ProductSelling();
+
 
 }
