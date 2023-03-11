@@ -158,7 +158,7 @@ public class OrderServiceImpl implements IOrderService {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();
             System.out.println("lay ra   " + username);
-            User userCheck = this.iUserRepository.findByUsername(username).orElseThrow(() -> new NotXException("Không tìm thấy người dùng này", HttpStatus.NOT_FOUND));
+            User userCheck = this.iUserRepository.findByUsernameAndIsDeleteFalse(username).orElseThrow(() -> new NotXException("Không tìm thấy người dùng này", HttpStatus.NOT_FOUND));
             if (userCheck != null) {
                 String orderId = FunctionCommon.getRandomNumber(5) + userCheck.getUsername() + System.currentTimeMillis() + "hdshop" + order1.getOrdersId();
                 String requestId = FunctionCommon.getRandomNumber(4) + userCheck.getUserId().toString() + System.currentTimeMillis();

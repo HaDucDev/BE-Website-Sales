@@ -1,6 +1,9 @@
 package com.haduc.beshop.service;
 
 import com.haduc.beshop.model.User;
+import com.haduc.beshop.util.dto.request.admin.CreateUserRequest;
+import com.haduc.beshop.util.dto.request.admin.UpdateUserRequest;
+import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUserResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUsersPaginationResponse;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +19,11 @@ public interface IUserService {
     GetUserResponse findByUserIdAndIsDeleteFalse(Integer userId);
 
     GetUsersPaginationResponse getAllUserAndIsDeleteFalsePagination(Pageable pageable);
-    //MessageResponse createSupplier(CreateSupplierRequest createSupplierRequest, MultipartFile supplierFile);
 
-    //MessageResponse updateSupplier(UpdateSupplierRequest updateSupplierRequest, MultipartFile supplierFile);
 
-    //void deleteById(Integer id);
+    MessageResponse createUser(CreateUserRequest createUserRequest);
+
+    MessageResponse updateUser(UpdateUserRequest updateSupplierRequest);
+
+    void deleteById(Integer id);
 }

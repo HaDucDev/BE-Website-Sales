@@ -2,6 +2,9 @@ package com.haduc.beshop.controller;
 
 import com.haduc.beshop.model.User;
 import com.haduc.beshop.service.IUserService;
+import com.haduc.beshop.util.dto.request.admin.CreateUserRequest;
+import com.haduc.beshop.util.dto.request.admin.UpdateUserRequest;
+import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUserResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUsersPaginationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -29,7 +33,7 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUser() {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iUserService.getAllUser());
     }
-    @Secured({"ROLE_ADMIN"})
+    //@Secured({"ROLE_ADMIN"})
     @GetMapping("/admin")
     public ResponseEntity<GetUsersPaginationResponse> findAllUsers
             (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "6") int size, @PageableDefault(sort = "userId") Sort sort) {
@@ -37,9 +41,28 @@ public class UserController {
         return ResponseEntity.ok(this.iUserService.getAllUserAndIsDeleteFalsePagination(paging));
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_CUSTOMER"})
     @GetMapping("/{id}")
     public ResponseEntity<GetUserResponse> getUserById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iUserService.findByUserIdAndIsDeleteFalse(id));
+    }
+
+    //@Secured({"ROLE_ADMIN"})
+    @PostMapping("/admin")
+    public ResponseEntity<MessageResponse> createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iUserService.createUser(createUserRequest));
+    }
+
+
+    @PutMapping("/admin")
+    public ResponseEntity<MessageResponse> UpdateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iUserService.updateUser(updateUserRequest));
+    }
+
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<MessageResponse> deleteUser(@PathVariable Integer id) {
+        this.iUserService.deleteById(id);
+        return ResponseEntity.ok(new MessageResponse("user với id = '" + id + "' đã được xóa thành công"));
     }
 
 }

@@ -1,4 +1,5 @@
-package com.haduc.beshop.util.dto.response.admin;
+package com.haduc.beshop.util.dto.request.admin;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,24 +10,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetUserResponse {
-
-    private int userId;
-
-    private String avatar;
-
-    private String username;
-
-    private String address;
-
-    private String fullName;
+public class CreateUserRequest {
 
     private String email;
-
-    //private String password;
-
+    private String fullName;
+    private String username;
+    private String address;
     private String phone;
-
-    private String roleName;
     private Integer roleId;
 }
