@@ -1,13 +1,17 @@
 package com.haduc.beshop.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.haduc.beshop.config.jwt.JwtUtils;
 import com.haduc.beshop.config.sendEmail.SendMail;
 import com.haduc.beshop.config.springSecurity.MyUserDetailsService;
+import com.haduc.beshop.model.Product;
 import com.haduc.beshop.model.User;
 import com.haduc.beshop.repository.IRoleRepository;
 import com.haduc.beshop.repository.IUserRepository;
 import com.haduc.beshop.service.IAccountService;
 import com.haduc.beshop.util.FunctionCommon;
+import com.haduc.beshop.util.dto.request.account.ChangeInforAccountRequest;
 import com.haduc.beshop.util.dto.request.account.ChangePasswordRequest;
 import com.haduc.beshop.util.dto.request.account.LoginRequest;
 import com.haduc.beshop.util.dto.request.account.RegisterRequest;
@@ -25,6 +29,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Map;
 
 @Service
 public class AccountServiceImpl implements IAccountService {
@@ -96,5 +104,40 @@ public class AccountServiceImpl implements IAccountService {
             return new MessageResponse(String.format("User %s đã tạo đổi mật khẩu thành công!", user.getFullName()));
         }
         throw new NotXException("Mật khẩu cũ không chính xác. Nếu bạn quên hãy đăng xuất và chọn chức năng quên mật khẩu", HttpStatus.NOT_FOUND);
+    }
+
+    @Autowired
+    private Cloudinary cloudinary;
+    @Override
+    public MessageResponse updateInforUser(ChangeInforAccountRequest changeInforAccountRequest, MultipartFile avatar) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = this.iUserRepository.findByUsernameAndIsDeleteFalse(username).orElseThrow(()-> new NotXException("Lỗi bạn chưa đăng nhập", HttpStatus.NOT_FOUND));
+
+        if(user.getEmail().equals(changeInforAccountRequest.getEmail())==false){
+            user.setEmail(changeInforAccountRequest.getEmail());
+        }
+        user.setFullName(changeInforAccountRequest.getFullName());
+        user.setAddress(changeInforAccountRequest.getAddress());
+        user.setPhone(changeInforAccountRequest.getPhone());
+
+        if (avatar == null || avatar.isEmpty()==true){
+            user.setAvatar(user.getAvatar());
+        }
+        else {
+
+            try {
+                Map p = this.cloudinary.uploader().upload(avatar.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                String image= (String) p.get("secure_url");
+                user.setAvatar(image);
+            }
+            catch (IOException e) {
+                System.out.println("loi post update product" + e.getMessage());
+            }
+        }
+
+        User userSave= this.iUserRepository.save(user);
+        return new MessageResponse(String.format("User %s được sửa thành công!", userSave.getFullName()));
     }
 }

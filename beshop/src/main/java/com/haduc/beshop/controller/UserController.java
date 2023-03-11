@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -40,6 +41,7 @@ public class UserController {
         return ResponseEntity.ok(this.iUserService.getAllUserAndIsDeleteFalsePagination(paging));
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_CUSTOMER"})
     @GetMapping("/{id}")
     public ResponseEntity<GetUserResponse> getUserById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iUserService.findByUserIdAndIsDeleteFalse(id));
