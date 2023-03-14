@@ -168,25 +168,27 @@ public class ProductServiceImpl implements IproductService {
         return productSellingResponses;
     }
 
+    @Transactional
     //filler guest
     @Override
     public GetProductsPaginationResponse searchFilterProductsNew(Integer categoryId, Integer supplierId, String text, List<String> priceString
 
                                               , Pageable pageable) {
-        if(categoryId== Integer.valueOf(-1)){
-            categoryId = null;
-        }
-        if(supplierId== Integer.valueOf(-1)){
-            supplierId = null;
-        }
-
-        if(text==null || text.trim().isEmpty()){//trim() xoa khoang trang dau va cuoi
-            text = "";
-        }
+        System.out.println("123456789");
+//        if(categoryId.equals(Integer.valueOf(-1))|| categoryId==0){
+//            categoryId = null;
+//        }
+//        if(supplierId== Integer.valueOf(-1) || supplierId==0){
+//            supplierId = null;
+//        }
+//
+//        if(text==null || text.trim().isEmpty()){//trim() xoa khoang trang dau va cuoi
+//            text = "";
+//        }
         System.out.println("chay den day 1");//kiem xem nhan chua
         List<PriceRangeFilterRequest> priceRanges = new ArrayList<>();
 
-         if(priceRanges.isEmpty()==false){
+         if( priceString!=null && !priceString.isEmpty() ){
              for (String i: priceString){
 
                  String[] temp = i.split("_");//mang 2 phan tu
@@ -200,9 +202,9 @@ public class ProductServiceImpl implements IproductService {
 
         System.out.println("chay den day 1");//kiem xem nhan chua
         ProductSpecification specification = new ProductSpecification(categoryId,supplierId,text,priceRanges);
-
+        System.out.println("chay den day 1");//kiem xem nhan chua
         Page<Product> productList = this.iProductRepository.findAll(specification, pageable);
-
+        System.out.println("chay den day 2"+text);//kiem xem nhan chua
         GetProductsPaginationResponse getUsersPaginationResponse = this.modelMapper.map(productList,GetProductsPaginationResponse.class);// lay 4 thuoc duoi ko co content
         // convert tung phan tu trong list.
         getUsersPaginationResponse.setContent(productList.getContent().stream().map(product -> this.modelMapper.map(product, GetProductResponse.class)).collect(Collectors.toList()));

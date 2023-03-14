@@ -12,13 +12,13 @@ import java.util.List;
 
 public class ProductSpecification implements Specification<Product> {
 
-    private final Integer categoryId;
+    private Integer categoryId;
 
-    private final Integer supplierId;
+    private Integer supplierId;
 
-    private final String text;
+    private String text;
 
-    private final List<PriceRangeFilterRequest> priceRanges;
+    private  List<PriceRangeFilterRequest> priceRanges;
 
     public ProductSpecification(Integer categoryId, Integer supplierId, String text, List<PriceRangeFilterRequest> priceRanges) {
         this.categoryId = categoryId;
@@ -33,15 +33,18 @@ public class ProductSpecification implements Specification<Product> {
 
         // add other predicates
         predicates.add(criteriaBuilder.equal(root.get("isDelete"), false));
-        if(categoryId != null){
+        if(categoryId != null && categoryId!=0){
             predicates.add(criteriaBuilder.equal(root.get("category").get("categoryId"), categoryId));
         }
-        if(supplierId != null){
+        if(supplierId != null && supplierId!=0){
             predicates.add(criteriaBuilder.equal(root.get("supplier").get("supplierId"), supplierId));
         }
+        if (text != null && !text.isEmpty()) {
+            predicates.add(criteriaBuilder.like(root.get("productName"), String.format("%%%s%%", text)));
+        }
+        //if(text !=null || text.trim().isEmpty()==false){//trim() xoa khoang trang dau va cuoi
 
-        predicates.add(criteriaBuilder.like(root.get("productName"), "%"+text+"%"));
-
+        //}
         // tinh gia ban
         Expression<Integer> x=  criteriaBuilder.diff(
                 root.get("unitPrice"), criteriaBuilder.quot(
@@ -51,7 +54,7 @@ public class ProductSpecification implements Specification<Product> {
                 ).as(Integer.class);
 
         // add price range predicate
-        if (priceRanges != null && !priceRanges.isEmpty()) {
+        if (priceRanges.size() != 0 && !priceRanges.isEmpty()) {
             Predicate[] pricePredicates = new Predicate[priceRanges.size()];
             for (int i = 0; i < priceRanges.size(); i++) {
                 PriceRangeFilterRequest priceRange = priceRanges.get(i);
@@ -75,6 +78,6 @@ public class ProductSpecification implements Specification<Product> {
             predicates.add(criteriaBuilder.or(pricePredicates));// add vo mang dk chung
         }// mot dong or
         // AND tung cac dieu kien
-        return criteriaBuilder.and(predicates.toArray(new Predicate[0]));// 0 o day la mang rong và y ns kich thuc mang ms doi tuy vao size cua list
+        return criteriaBuilder.and(predicates.toArray(new Predicate[]{}));// 0 o day la mang rong và y ns kich thuc mang ms doi tuy vao size cua list
     }
 }

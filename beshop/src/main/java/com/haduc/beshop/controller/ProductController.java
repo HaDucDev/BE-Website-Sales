@@ -75,9 +75,9 @@ public class ProductController {
     }
 
     //======================================> guest người ghe qua xem trang web có the lam khong can dang nhap
-    @GetMapping("/search-filter-check")
+    @GetMapping("/search-filter")
     public ResponseEntity<?> getAllHomeProductSearchAndFilterCheck
-            (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "8") int size,@RequestParam(defaultValue = "") String textSearch,
+            (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "8") int size,@RequestParam(required = false) String textSearch,
              @RequestParam(required = false) Integer categoryId, @RequestParam(required = false) Integer supplierId,
              @RequestParam(required = false) List<String> price, @PageableDefault(sort = "unitPrice") Sort sort)
     {
@@ -85,7 +85,9 @@ public class ProductController {
         System.out.println("category la"+categoryId);
         System.out.println("category la"+supplierId);
         System.out.println("category la"+textSearch);
+        System.out.println("category la"+price);
         Pageable paging = PageRequest.of(number, size,sort);
+
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.searchFilterProductsNew(categoryId, supplierId, textSearch,price, paging));
     }
 
