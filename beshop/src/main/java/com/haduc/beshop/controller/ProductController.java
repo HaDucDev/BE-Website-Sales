@@ -105,4 +105,19 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.getTop10ProductSelling());
     }
 
+
+    @GetMapping("/search-filter-check")
+    public ResponseEntity<?> getAllHomeProductSearchAndFilterCheck
+            (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "8") int size,@RequestParam(defaultValue = "") String textSearch,
+             @RequestParam(required = false) Integer categoryId, @RequestParam(required = false) Integer supplierId,
+             @RequestParam(required = false) List<String> price,@PageableDefault(sort = "unitPrice") Sort sort)
+    {
+
+        System.out.println("category la"+categoryId);
+        System.out.println("category la"+supplierId);
+        System.out.println("category la"+textSearch);
+        Pageable paging = PageRequest.of(number, size,sort);
+        return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.searchFilterProductsNew(categoryId, supplierId, textSearch,price, paging));
+    }
+
 }

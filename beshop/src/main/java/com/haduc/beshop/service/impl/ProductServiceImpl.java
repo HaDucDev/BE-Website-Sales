@@ -6,9 +6,11 @@ import com.haduc.beshop.model.Product;
 import com.haduc.beshop.repository.ICategoryRepository;
 import com.haduc.beshop.repository.IProductRepository;
 import com.haduc.beshop.repository.ISupplierRepository;
+import com.haduc.beshop.repository.specification.ProductSpecification;
 import com.haduc.beshop.service.IproductService;
 import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
+import com.haduc.beshop.util.dto.request.user.PriceRangeFilterRequest;
 import com.haduc.beshop.util.dto.response.admin.GetProductAdminResponse;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.user.*;
@@ -23,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -172,6 +176,38 @@ public class ProductServiceImpl implements IproductService {
             productSellingResponses = productSellingResponses.subList(0,10);
         }
         return productSellingResponses;
+    }
+
+
+    @Override
+    public Page<Product> searchFilterProductsNew(Integer categoryId, Integer supplierId, String text, List<String> priceString
+
+                                              , Pageable pageable) {
+        if(categoryId== Integer.valueOf(-1)){
+            categoryId = null;
+        }
+        if(supplierId== Integer.valueOf(-1)){
+            supplierId = null;
+        }
+
+        if(text==null || text.trim().isEmpty()){
+            text = "";
+        }
+
+        List<PriceRangeFilterRequest> priceRanges = new ArrayList<>();
+
+            for (String i: priceString){
+
+                String[] temp = i.split("_");//mang 2 phan tu
+                PriceRangeFilterRequest memo =  new PriceRangeFilterRequest();
+                memo.setStartPrice(Integer.valueOf(temp[0]));
+                memo.setEndPrice(Integer.valueOf(temp[1]));
+                priceRanges.add(memo);
+            }
+        System.out.println(priceRanges);//kiem xem nhan chua
+        ProductSpecification specification = new ProductSpecification(categoryId,supplierId,text,priceRanges);
+        return this.iProductRepository.findAll(specification, pageable);
+
     }
 
 }
