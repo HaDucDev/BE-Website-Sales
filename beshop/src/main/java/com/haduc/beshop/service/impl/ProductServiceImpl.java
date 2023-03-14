@@ -26,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -153,15 +152,6 @@ public class ProductServiceImpl implements IproductService {
         return getProductDetailResponse;
     }
 
-    // guest search filter
-    @Override
-    public GetProductsPaginationResponse getAllProductSearchFilterPagination(Integer categoryId, Integer supplierId, String text,Pageable pageable) {
-        Page<Product> productPage= this.iProductRepository.searchFilterProducts(categoryId, supplierId, text, pageable);
-        GetProductsPaginationResponse getUsersPaginationResponse = this.modelMapper.map(productPage,GetProductsPaginationResponse.class);// lay 4 thuoc duoi ko co content
-        // convert tung phan tu trong list.
-        getUsersPaginationResponse.setContent(productPage.getContent().stream().map(product -> this.modelMapper.map(product, GetProductResponse.class)).collect(Collectors.toList()));
-        return getUsersPaginationResponse;
-    }
 
     //get supplier menu
     @Override
@@ -178,9 +168,9 @@ public class ProductServiceImpl implements IproductService {
         return productSellingResponses;
     }
 
-
+    //filler guest
     @Override
-    public Page<Product> searchFilterProductsNew(Integer categoryId, Integer supplierId, String text, List<String> priceString
+    public GetProductsPaginationResponse searchFilterProductsNew(Integer categoryId, Integer supplierId, String text, List<String> priceString
 
                                               , Pageable pageable) {
         if(categoryId== Integer.valueOf(-1)){
@@ -190,23 +180,33 @@ public class ProductServiceImpl implements IproductService {
             supplierId = null;
         }
 
-        if(text==null || text.trim().isEmpty()){
+        if(text==null || text.trim().isEmpty()){//trim() xoa khoang trang dau va cuoi
             text = "";
         }
-
+        System.out.println("chay den day 1");//kiem xem nhan chua
         List<PriceRangeFilterRequest> priceRanges = new ArrayList<>();
 
-            for (String i: priceString){
+         if(priceRanges.isEmpty()==false){
+             for (String i: priceString){
 
-                String[] temp = i.split("_");//mang 2 phan tu
-                PriceRangeFilterRequest memo =  new PriceRangeFilterRequest();
-                memo.setStartPrice(Integer.valueOf(temp[0]));
-                memo.setEndPrice(Integer.valueOf(temp[1]));
-                priceRanges.add(memo);
-            }
+                 String[] temp = i.split("_");//mang 2 phan tu
+                 PriceRangeFilterRequest memo =  new PriceRangeFilterRequest();
+                 memo.setStartPrice(Integer.valueOf(temp[0]));
+                 memo.setEndPrice(Integer.valueOf(temp[1]));
+                 priceRanges.add(memo);
+             }
+         }
         System.out.println(priceRanges);//kiem xem nhan chua
+
+        System.out.println("chay den day 1");//kiem xem nhan chua
         ProductSpecification specification = new ProductSpecification(categoryId,supplierId,text,priceRanges);
-        return this.iProductRepository.findAll(specification, pageable);
+
+        Page<Product> productList = this.iProductRepository.findAll(specification, pageable);
+
+        GetProductsPaginationResponse getUsersPaginationResponse = this.modelMapper.map(productList,GetProductsPaginationResponse.class);// lay 4 thuoc duoi ko co content
+        // convert tung phan tu trong list.
+        getUsersPaginationResponse.setContent(productList.getContent().stream().map(product -> this.modelMapper.map(product, GetProductResponse.class)).collect(Collectors.toList()));
+        return getUsersPaginationResponse;
 
     }
 

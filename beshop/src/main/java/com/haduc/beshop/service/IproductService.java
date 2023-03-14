@@ -37,14 +37,14 @@ public interface IproductService {
     GetProductDetailResponse findByProductDetalAndIsDeleteFalse(Integer productId);// chi tiet san pham
 
     //ham de dung tim kiem va filter api chung
-    GetProductsPaginationResponse getAllProductSearchFilterPagination(Integer categoryId, Integer supplierId, String text,Pageable pageable);
+    GetProductsPaginationResponse searchFilterProductsNew(Integer categoryId, Integer supplierId, String text, List<String> priceString, Pageable pageable) ;
 
     List<GetManysupplierBuyCategory> getProductByCategoryManySupplier(Integer categoryId);
 
     //top 10 san pham ban chay nhat
     List<ProductSellingResponse> getTop10ProductSelling();
 
-    Page<Product> searchFilterProductsNew(Integer categoryId, Integer supplierId, String text, List<String> priceString, Pageable pageable) ;
+
 
 
 }
