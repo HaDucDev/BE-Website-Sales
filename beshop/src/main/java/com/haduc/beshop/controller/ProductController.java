@@ -31,7 +31,7 @@ public class ProductController {
     private IproductService iproductService;
 
     //admin
-    @Secured({"ROLE_ADMIN"})
+    //@Secured({"ROLE_ADMIN"})
     @GetMapping("/admin")
     public ResponseEntity<List<Product>> getAllProduct() {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iproductService.getAllProduct());
