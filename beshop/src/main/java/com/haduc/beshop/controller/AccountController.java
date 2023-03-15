@@ -7,6 +7,7 @@ import com.haduc.beshop.util.dto.response.account.LoginResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,11 +31,13 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iAccountService.register(request));
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_CUSTOMER","ROLE_SHIPPER"})
     @PutMapping("/change-pass")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iAccountService.changePass(request));
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_CUSTOMER","ROLE_SHIPPER"})
     @PutMapping("/change-account-info")
     public ResponseEntity<?> changeInforAccount(@Valid @RequestPart("changeInforAccountRequest") ChangeInforAccountRequest changeInforAccountRequest
             , @RequestPart(value = "avatar",required = false) MultipartFile avatar) {

@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,6 +35,7 @@ public class OrderController {
     @Autowired
     private IOrderService iOrderService;
 
+    @Secured({"ROLE_ADMIN","ROLE_CUSTOMER","ROLE_SHIPPER"})
     @PostMapping("/order-confirmation")//kiem tra validate
     public ResponseEntity<?> checkProductOrderConfirmation(@Valid @RequestBody OrderConfirmationRequest orderConfirmationRequest) {
         System.out.println(" Mang Du Lieu");
@@ -41,13 +43,14 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.checkProductOrderConfirmation(orderConfirmationRequest));
     }
 
-
+    @Secured({"ROLE_ADMIN","ROLE_CUSTOMER","ROLE_SHIPPER"})
     @GetMapping("/order-confirmation/{userId}")//load don hang
     public ResponseEntity<?> loadOrderComfirm(@PathVariable Integer userId) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.loadOrderComfirm(userId));
     }
 
     // thanh toan bang tien mat tao don hang hoac tra ve link thanh toan online
+    @Secured({"ROLE_ADMIN","ROLE_CUSTOMER","ROLE_SHIPPER"})
     @PostMapping("/create-offline-or-link-payment-online")
     public ResponseEntity<?> createOrderVsOffline(@RequestBody CreateOrderResquest createOrderResquest) throws Exception {
         return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.createOrderVsOfflineOrLinkTransferPayment(createOrderResquest));
@@ -60,12 +63,14 @@ public class OrderController {
     }
 
     //lay tât ca don hang của nguoi dung
+    @Secured({"ROLE_ADMIN","ROLE_CUSTOMER","ROLE_SHIPPER"})
     @GetMapping("/all-order/{userId}")
     public ResponseEntity<List<Order>> getAllOrderByIdOfUser(@PathVariable Integer userId) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.findAllByUser_UserId(userId));
     }
 
     // cap nhat giao, nhan, huy don hang dung chung admin, user
+    @Secured({"ROLE_ADMIN","ROLE_CUSTOMER","ROLE_SHIPPER"})
     @DeleteMapping("/{ordersId}")
     public ResponseEntity<MessageResponse> deleteOrderFormListOrderAdminAndUser(@PathVariable Integer ordersId) {
        this.iOrderService.deleteById(ordersId);
@@ -74,11 +79,13 @@ public class OrderController {
 
     //=====================================================================>
     //Admin
+    @Secured({"ROLE_ADMIN","ROLE_CUSTOMER","ROLE_SHIPPER"})
     @GetMapping("/admin/all-order")
     public ResponseEntity<List<Order>> getAllOrder() {
         return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.findAllOrderByCreatedDateDesc());
     }
 
+    @Secured({"ROLE_ADMIN"})
     //assignment: admin phan chia don hang
     @PostMapping("/assignment/shipper")
     public ResponseEntity<?> assignmentOrderForShipper(@RequestBody AssignmentShipperRequest assignmentShipperRequest){
@@ -89,18 +96,21 @@ public class OrderController {
     //==========================================================================>
     //SHIPPER
     // lay tat ca down hang ma shipper duoc giao
+    @Secured({"ROLE_ADMIN","ROLE_SHIPPER"})
     @GetMapping("/shipper/all-order/{shipperId}")
     public ResponseEntity<List<Order>> getAllOrderByShipper(@PathVariable Integer shipperId) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.findAllByShipperId(shipperId));
     }
 
     //xac da gioa hang
+    @Secured({"ROLE_ADMIN","ROLE_SHIPPER"})
     @PutMapping("/shipper/received")
     public ResponseEntity<MessageResponse> shipperConfirmReceivedOrder(@RequestBody ConfirmOrderRequest  confirmOrderRequest) {
        return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.softUpdateCompleteOrder(confirmOrderRequest));
     }
 
     //khong nhan giao chuyen sang shipper khac
+    @Secured({"ROLE_SHIPPER"})
     @PutMapping("/shipper/removed")
     public ResponseEntity<MessageResponse> shipperRemoveOrder(@RequestBody RemovedOrderRequest removedOrderRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iOrderService.softUpdateshipperWhenRemoveOrder(removedOrderRequest));

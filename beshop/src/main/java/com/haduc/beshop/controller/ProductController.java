@@ -31,13 +31,13 @@ public class ProductController {
     private IproductService iproductService;
 
     //admin
-    //@Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/admin")
     public ResponseEntity<List<Product>> getAllProduct() {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iproductService.getAllProduct());
     }
 
-    //@Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("admin/{id}")
     public ResponseEntity<GetProductAdminResponse> getProductById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.findByProductIdAndIsDeleteFalse(id));
@@ -48,13 +48,13 @@ public class ProductController {
             , @RequestPart(value = "productFile",required = false)MultipartFile productFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.createProduct(createProductRequest,productFile));
     }
-    //@Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN"})
     @PutMapping("/admin")
     public ResponseEntity<MessageResponse> updateProduct(@Valid @RequestPart("updateProductRequest") UpdateProductRequest updateProductRequest
             , @RequestPart(value = "productFile",required = false)MultipartFile productFile) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iproductService.updateProduct(updateProductRequest,productFile));
     }
-    //@Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/admin/{id}")
     public ResponseEntity<MessageResponse> deleteProduct(@PathVariable Integer id) {
         this.iproductService.deleteById(id);

@@ -28,7 +28,6 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<List<Category>> getAllCategory() {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iCategoryService.getAllCategory());
-        //return ResponseEntity.ok(this.iCategoryService.getAllCategory());
     }
 
 
@@ -53,7 +52,7 @@ public class CategoryController {
     @DeleteMapping("/admin/{id}")
     public ResponseEntity<MessageResponse> deleteCategory(@PathVariable Integer id) {
         this.iCategoryService.deleteById(id);
-        return ResponseEntity.ok(new MessageResponse("Category với id = '" + id + "' đã được xóa thành công"));
+        return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Category với id = '" + id + "' đã được xóa thành công"));
     }
 
 

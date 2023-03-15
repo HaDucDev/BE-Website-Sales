@@ -29,11 +29,12 @@ public class UserController {
     private IUserService iUserService;
 
 
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUser() {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iUserService.getAllUser());
     }
-    //@Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/admin")
     public ResponseEntity<GetUsersPaginationResponse> findAllUsers
             (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "6") int size, @PageableDefault(sort = "userId") Sort sort) {
@@ -41,24 +42,24 @@ public class UserController {
         return ResponseEntity.ok(this.iUserService.getAllUserAndIsDeleteFalsePagination(paging));
     }
 
-    @Secured({"ROLE_ADMIN","ROLE_CUSTOMER"})
+    @Secured({"ROLE_ADMIN","ROLE_CUSTOMER","ROLE_SHIPPER"})
     @GetMapping("/{id}")
     public ResponseEntity<GetUserResponse> getUserById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iUserService.findByUserIdAndIsDeleteFalse(id));
     }
 
-    //@Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN"})
     @PostMapping("/admin")
     public ResponseEntity<MessageResponse> createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iUserService.createUser(createUserRequest));
     }
 
-
+    @Secured({"ROLE_ADMIN"})
     @PutMapping("/admin")
     public ResponseEntity<MessageResponse> UpdateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iUserService.updateUser(updateUserRequest));
     }
-
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/admin/{id}")
     public ResponseEntity<MessageResponse> deleteUser(@PathVariable Integer id) {
         this.iUserService.deleteById(id);

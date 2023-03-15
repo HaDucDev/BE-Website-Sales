@@ -175,17 +175,6 @@ public class ProductServiceImpl implements IproductService {
 
                                               , Pageable pageable) {
         System.out.println("123456789");
-//        if(categoryId.equals(Integer.valueOf(-1))|| categoryId==0){
-//            categoryId = null;
-//        }
-//        if(supplierId== Integer.valueOf(-1) || supplierId==0){
-//            supplierId = null;
-//        }
-//
-//        if(text==null || text.trim().isEmpty()){//trim() xoa khoang trang dau va cuoi
-//            text = "";
-//        }
-        System.out.println("chay den day 1");//kiem xem nhan chua
         List<PriceRangeFilterRequest> priceRanges = new ArrayList<>();
 
          if( priceString!=null && !priceString.isEmpty() ){
