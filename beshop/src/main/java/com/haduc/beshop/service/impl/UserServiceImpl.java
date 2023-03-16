@@ -12,6 +12,7 @@ import com.haduc.beshop.util.dto.request.admin.UpdateUserRequest;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUserResponse;
 import com.haduc.beshop.util.dto.response.admin.GetUsersPaginationResponse;
+import com.haduc.beshop.util.enum_role.ERole;
 import com.haduc.beshop.util.exception.NotXException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class UserServiceImpl implements IUserService {
     private IUserRepository iUserRepository;
 
     @Autowired
-    private ModelMapper  modelMapper;
+    private ModelMapper modelMapper;
 
     @Autowired
     private IRoleRepository iRoleRepository;
@@ -47,22 +48,22 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public GetUsersPaginationResponse getAllUserAndIsDeleteFalsePagination(Pageable pageable) {
-        Page<User> userPage= this.iUserRepository.findAllByIsDeleteFalse(pageable);
+        Page<User> userPage = this.iUserRepository.findAllByIsDeleteFalse(pageable);
 
-        GetUsersPaginationResponse getUsersPaginationResponse = this.modelMapper.map(userPage,GetUsersPaginationResponse.class);// lay 4 thuoc duoi ko co content
+        GetUsersPaginationResponse getUsersPaginationResponse = this.modelMapper.map(userPage, GetUsersPaginationResponse.class);// lay 4 thuoc duoi ko co content
 
         // convert tung phan tu trong list.
         getUsersPaginationResponse.setContent(
-                userPage.getContent().stream().map(user -> this.modelMapper.map(user,GetUserResponse.class)).collect(Collectors.toList()));
+                userPage.getContent().stream().map(user -> this.modelMapper.map(user, GetUserResponse.class)).collect(Collectors.toList()));
 
         return getUsersPaginationResponse;
     }
 
     @Override
     public GetUserResponse findByUserIdAndIsDeleteFalse(Integer userId) {
-        User user=this.iUserRepository.findByUserIdAndIsDeleteFalse(userId)
-                .orElseThrow(()->new NotXException("Không tìm thấy user này", HttpStatus.NOT_FOUND));
-        GetUserResponse getUserResponse= this.modelMapper.map(user,GetUserResponse.class);
+        User user = this.iUserRepository.findByUserIdAndIsDeleteFalse(userId)
+                .orElseThrow(() -> new NotXException("Không tìm thấy user này", HttpStatus.NOT_FOUND));
+        GetUserResponse getUserResponse = this.modelMapper.map(user, GetUserResponse.class);
         getUserResponse.setRoleName(user.getRole().getName().toString());
         getUserResponse.setRoleId(user.getRole().getId());
         return getUserResponse;
@@ -73,6 +74,10 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public MessageResponse createUser(CreateUserRequest createUserRequest) {
+
+        if (this.iUserRepository.findByEmailAndIsDeleteFalse(createUserRequest.getEmail()).isPresent()) {
+            throw new NotXException("Email này đã tồn tại vui chọn tên khác", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         User user = new User();
         user.setRole(this.iRoleRepository.findById(createUserRequest.getRoleId()).orElseThrow(() -> new NotXException("Không tìm thấy role này", HttpStatus.NOT_FOUND)));
         user.setAvatar("https://res.cloudinary.com/dkdyl2pcy/image/upload/v1676872862/avatar-default-9_rv6k1c.png");// image mac dinh
@@ -84,10 +89,11 @@ public class UserServiceImpl implements IUserService {
         //tao mat khau ngau nhien
         String pass = FunctionCommon.getRandomNumber(8);
         user.setPassword(passwordEncoder.encode(pass));//ma hoa roi luu
-        User user1= this.iUserRepository.save(user);
+        User user1 = this.iUserRepository.save(user);
         //luu nguoi dung thanh cong ms gui mail
-        this.sendMail.sendMailWithText("Đăng ký tài khoản", "Đây là password của bạn: " + pass+". Hãy đổi mật khẩu sau khi đăng nhập nhé!", user1.getEmail());//user1.getEmail() la mail gui den
+        this.sendMail.sendMailWithText("Đăng ký tài khoản", "Đây là password của bạn: " + pass + ". Hãy đổi mật khẩu sau khi đăng nhập nhé!", user1.getEmail());//user1.getEmail() la mail gui den
         return new MessageResponse(String.format("User %s được lưu thành công!", user1.getFullName()));
+
     }
 
     @Override
@@ -102,7 +108,7 @@ public class UserServiceImpl implements IUserService {
         user.setAddress(updateSupplierRequest.getAddress());
         user.setPhone(updateSupplierRequest.getPhone());
         user.setRole(role);
-        User user1= this.iUserRepository.save(user);
+        User user1 = this.iUserRepository.save(user);
         return new MessageResponse(String.format("User %s được lưu thành công!", user1.getFullName()));
     }
 

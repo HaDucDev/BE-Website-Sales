@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,5 +36,23 @@ public class ApiExceptionHandler {
     public ResponseEntity<MessageResponse> handleNotXException(NotXException exception) {
         return ResponseEntity.status(exception.getHttpStatus())
                 .body(new MessageResponse(exception.getMessage()));
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<MessageResponse> handleUniqueConstraintException
+            (SQLIntegrityConstraintViolationException exception)
+            throws SQLIntegrityConstraintViolationException {
+
+        if (exception.getMessage().contains("'user.unique_username_constraint'")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("Tên người dùng đã tồn tại"));
+
+        } else if (exception.getMessage().contains("'user.unique_email_constraint'")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("Email đã được sử dụng"));
+
+        }
+        throw exception;
+
     }
 }
