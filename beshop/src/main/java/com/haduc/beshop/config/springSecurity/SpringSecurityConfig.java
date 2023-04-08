@@ -51,6 +51,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().configurationSource(request -> corsConfiguration())
                 .and().csrf().disable()
                 .authorizeRequests().antMatchers("/api/**").permitAll()
+                .antMatchers("/swagger-ui.html/**", "/swagger-resources/**", "/v2/api-docs/**", "/webjars/**").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
