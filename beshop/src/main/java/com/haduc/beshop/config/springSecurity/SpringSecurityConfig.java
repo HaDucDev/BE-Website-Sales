@@ -47,8 +47,8 @@ public class SpringSecurityConfig{
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
-//    @Autowired
-//    private AuthenticationTokenFilter authenticationJwtTokenFilter;
+    @Autowired
+    private AuthenticationTokenFilter authenticationJwtTokenFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {//phan quyen
@@ -63,10 +63,8 @@ public class SpringSecurityConfig{
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(Customizer.withDefaults())
-                //.addFilterBefore( authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class)//add filter
+                .addFilterBefore( authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class)//add filter
                 .build();
-
-
     }
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
