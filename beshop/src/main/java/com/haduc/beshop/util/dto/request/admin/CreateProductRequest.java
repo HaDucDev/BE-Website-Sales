@@ -1,13 +1,11 @@
 package com.haduc.beshop.util.dto.request.admin;
 
-import com.haduc.beshop.model.Category;
-import com.haduc.beshop.model.Supplier;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.*;
 
 
 @Getter

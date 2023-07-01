@@ -4,6 +4,7 @@ package com.haduc.beshop.controller;
 import com.haduc.beshop.service.IAccountService;
 import com.haduc.beshop.util.dto.request.account.*;
 import com.haduc.beshop.util.dto.response.account.LoginResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

@@ -1,11 +1,11 @@
 package com.haduc.beshop.util.dto.request.admin;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter

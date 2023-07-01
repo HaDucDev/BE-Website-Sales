@@ -6,13 +6,12 @@ import com.haduc.beshop.service.ICartService;
 import com.haduc.beshop.util.dto.request.user.CartRequest;
 import com.haduc.beshop.util.dto.request.user.CheckAndUpdateProductBuyRequest;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)

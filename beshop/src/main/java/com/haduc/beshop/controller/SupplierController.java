@@ -7,6 +7,7 @@ import com.haduc.beshop.util.dto.request.admin.CreateSupplierRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateSupplierRequest;
 import com.haduc.beshop.util.dto.response.admin.GetSupplierResponse;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,7 +16,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)

@@ -2,9 +2,8 @@ package com.haduc.beshop.repository.specification;
 
 import com.haduc.beshop.model.Product;
 import com.haduc.beshop.util.dto.request.user.PriceRangeFilterRequest;
+import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
-
-import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 

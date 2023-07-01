@@ -8,6 +8,7 @@ import com.haduc.beshop.util.dto.response.admin.GetProductAdminResponse;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductDetailResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductsPaginationResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)// phep các bat ki api nao goi
@@ -31,7 +31,7 @@ public class ProductController {
     private IproductService iproductService;
 
     //admin
-    //@Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/admin")
     public ResponseEntity<List<Product>> getAllProduct() {
         return  ResponseEntity.status(HttpStatus.OK).body(this.iproductService.getAllProduct());
