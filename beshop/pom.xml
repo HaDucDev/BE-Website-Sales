@@ -11,7 +11,6 @@
     <groupId>com.haduc</groupId>
     <artifactId>beshop</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
     <name>beshop</name>
     <description>Demo project for Spring Boot</description>
     <properties>
@@ -140,6 +139,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>beshop-springboot</finalName>
     </build>
 
 </project>
