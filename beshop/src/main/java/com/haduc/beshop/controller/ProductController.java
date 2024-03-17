@@ -4,6 +4,7 @@ import com.haduc.beshop.model.Product;
 import com.haduc.beshop.service.IproductService;
 import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
+import com.haduc.beshop.util.dto.response.admin.GetCSVProductAdminResponse;
 import com.haduc.beshop.util.dto.response.admin.GetProductAdminResponse;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.user.GetProductDetailResponse;
@@ -13,14 +14,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)// phep các bat ki api nao goi
 @RestController
@@ -77,9 +83,9 @@ public class ProductController {
     //======================================> guest người ghe qua xem trang web có the lam khong can dang nhap
     @GetMapping("/search-filter")
     public ResponseEntity<?> getAllHomeProductSearchAndFilterCheck
-            (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "8") int size,@RequestParam(required = false) String textSearch,
-             @RequestParam(required = false) Integer categoryId, @RequestParam(required = false) Integer supplierId,
-             @RequestParam(required = false) List<String> price, @PageableDefault(sort = "unitPrice") Sort sort)
+    (@RequestParam(defaultValue = "0") int number, @RequestParam(defaultValue = "8") int size,@RequestParam(required = false) String textSearch,
+     @RequestParam(required = false) Integer categoryId, @RequestParam(required = false) Integer supplierId,
+     @RequestParam(required = false) List<String> price, @PageableDefault(sort = "unitPrice") Sort sort)
     {
 
         System.out.println("category la"+categoryId);
@@ -105,5 +111,41 @@ public class ProductController {
 
 
 
+    @GetMapping("/download/file-product")
+    public ResponseEntity<byte[]> downloadAllProductCSV(){
+        try {
+            List<Product> dataList = this.iproductService.getAllProduct();
+            List<GetCSVProductAdminResponse> getDataAllCSVProduct = this.iproductService.getDataAllCSVProduct(dataList);
+            byte[] csvData = convertToCsvBytes(getDataAllCSVProduct); // Chuyển đổi dữ liệu thành mảng byte của tệp CSV
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.TEXT_PLAIN);
+            headers.setContentDispositionFormData("attachment", "data.csv");
+            return new ResponseEntity<>(csvData, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
+    }
+
+    private byte[] convertToCsvBytes(List<GetCSVProductAdminResponse> dataList) {
+        StringBuilder csvBuilder = new StringBuilder();
+        // Ghi tiêu đề CSV - dong 1
+        csvBuilder.append("\"Column0\",\"Column1\",\"Column2\",\"Column3\",\"Column4\",\"Column5\",\"Column6\",\"Column7\",\"Column8\",\"Column9\",\"Column10\"\n");
+        // Ghi dữ liệu vào chuỗi CSV
+        for (GetCSVProductAdminResponse data : dataList) {
+            csvBuilder.append("\"").append(data.getProductId()).append("\",")
+                    .append("\"").append(data.getProductName()).append("\",")
+                    .append("\"").append(data.getQuantity()).append("\",")
+                    .append("\"").append(data.getProductImage()).append("\",")
+                    .append("\"").append(data.getDiscount()).append("\",")
+                    .append("\"").append(data.getUnitPrice()).append("\",")
+                    .append("\"").append(data.getDescriptionProduct()).append("\",")
+                    .append("\"").append(data.getIsDelete()).append("\",")
+                    .append("\"").append(data.getRating()).append("\",")
+                    .append("\"").append(data.getCategoryId()).append("\",")
+                    .append("\"").append(data.getSupplierId()).append("\"\n");
+        }
+        return csvBuilder.toString().getBytes(StandardCharsets.UTF_8);
+    }
 }

@@ -3,6 +3,7 @@ package com.haduc.beshop.service;
 import com.haduc.beshop.model.Product;
 import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
+import com.haduc.beshop.util.dto.response.admin.GetCSVProductAdminResponse;
 import com.haduc.beshop.util.dto.response.admin.GetProductAdminResponse;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.user.GetManysupplierBuyCategory;
@@ -44,7 +45,7 @@ public interface IproductService {
     //top 10 san pham ban chay nhat
     List<ProductSellingResponse> getTop10ProductSelling();
 
-
-
+    //data download
+    List<GetCSVProductAdminResponse> getDataAllCSVProduct(List<Product> prodcutList);
 
 }

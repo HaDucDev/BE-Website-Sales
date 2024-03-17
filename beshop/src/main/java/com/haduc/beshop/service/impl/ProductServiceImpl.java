@@ -11,6 +11,7 @@ import com.haduc.beshop.service.IproductService;
 import com.haduc.beshop.util.dto.request.admin.CreateProductRequest;
 import com.haduc.beshop.util.dto.request.admin.UpdateProductRequest;
 import com.haduc.beshop.util.dto.request.user.PriceRangeFilterRequest;
+import com.haduc.beshop.util.dto.response.admin.GetCSVProductAdminResponse;
 import com.haduc.beshop.util.dto.response.admin.GetProductAdminResponse;
 import com.haduc.beshop.util.dto.response.account.MessageResponse;
 import com.haduc.beshop.util.dto.response.user.*;
@@ -144,7 +145,7 @@ public class ProductServiceImpl implements IproductService {
 
     @Override//chi tiet san pham nguoi dung
     public GetProductDetailResponse findByProductDetalAndIsDeleteFalse(Integer productId) {
-                Product product= this.iProductRepository.findByProductIdAndIsDeleteFalse(productId)
+        Product product= this.iProductRepository.findByProductIdAndIsDeleteFalse(productId)
                 .orElseThrow(()->new NotXException("Không tìm thấy product này", HttpStatus.NOT_FOUND));
         GetProductDetailResponse getProductDetailResponse = this.modelMapper.map(product, GetProductDetailResponse.class);
         getProductDetailResponse.setIsCategory(product.getCategory().getCategoryName());
@@ -173,20 +174,20 @@ public class ProductServiceImpl implements IproductService {
     @Override
     public GetProductsPaginationResponse searchFilterProductsNew(Integer categoryId, Integer supplierId, String text, List<String> priceString
 
-                                              , Pageable pageable) {
+            , Pageable pageable) {
         System.out.println("123456789");
         List<PriceRangeFilterRequest> priceRanges = new ArrayList<>();
 
-         if( priceString!=null && !priceString.isEmpty() ){
-             for (String i: priceString){
+        if( priceString!=null && !priceString.isEmpty() ){
+            for (String i: priceString){
 
-                 String[] temp = i.split("_");//mang 2 phan tu
-                 PriceRangeFilterRequest memo =  new PriceRangeFilterRequest();
-                 memo.setStartPrice(Integer.valueOf(temp[0]));
-                 memo.setEndPrice(Integer.valueOf(temp[1]));
-                 priceRanges.add(memo);
-             }
-         }
+                String[] temp = i.split("_");//mang 2 phan tu
+                PriceRangeFilterRequest memo =  new PriceRangeFilterRequest();
+                memo.setStartPrice(Integer.valueOf(temp[0]));
+                memo.setEndPrice(Integer.valueOf(temp[1]));
+                priceRanges.add(memo);
+            }
+        }
         System.out.println(priceRanges);//kiem xem nhan chua
 
         System.out.println("chay den day 1");//kiem xem nhan chua
@@ -199,6 +200,28 @@ public class ProductServiceImpl implements IproductService {
         getUsersPaginationResponse.setContent(productList.getContent().stream().map(product -> this.modelMapper.map(product, GetProductResponse.class)).collect(Collectors.toList()));
         return getUsersPaginationResponse;
 
+    }
+
+    @Override
+    public List<GetCSVProductAdminResponse> getDataAllCSVProduct(List<Product> prodcutList) {
+        List<GetCSVProductAdminResponse> csvResponses = prodcutList.stream()
+                .map(response -> {
+                    GetCSVProductAdminResponse csvResponse = new GetCSVProductAdminResponse();
+                    csvResponse.setProductId(String.valueOf(response.getProductId()));
+                    csvResponse.setProductName(response.getProductName());
+                    csvResponse.setQuantity(String.valueOf(response.getQuantity()));
+                    csvResponse.setProductImage(response.getProductImage());
+                    csvResponse.setDiscount(String.valueOf(response.getDiscount()));
+                    csvResponse.setUnitPrice(String.valueOf(response.getUnitPrice()));
+                    csvResponse.setDescriptionProduct(response.getDescriptionProduct());
+                    csvResponse.setIsDelete(String.valueOf(response.isDelete()));
+                    csvResponse.setRating(String.valueOf(response.getRating()));
+                    csvResponse.setCategoryId(String.valueOf(response.getCategory().getCategoryId()));
+                    csvResponse.setSupplierId(String.valueOf(response.getSupplier().getSupplierId()));
+                    return csvResponse;
+                })
+                .collect(Collectors.toList());
+        return csvResponses;
     }
 
 }
