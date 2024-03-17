@@ -2,8 +2,8 @@ version: "3.8"
 
 #NETWORK
 networks:
-  backend:
-  frontend:
+  my-network:
+    driver: bridge
 #SERVICES
 services: 
   mysqldb:
@@ -15,7 +15,7 @@ services:
       - MYSQL_DATABASE=hdshopdb
       - MYSQL_ROOT_PASSWORD=123456
     networks: 
-      - backend
+      - my-network
     ports:
       - 3307:3306
     volumes:
@@ -26,18 +26,17 @@ services:
       timeout: 10s
       retries: 100
 
-  beshop:
+  api_service:
     depends_on:
       mysqldb:
         condition: service_healthy
     container_name: beshop
     networks: 
-      - backend
-      - frontend
+      - my-network
     build: 
       dockerfile: Dockerfile
       context: ./beshop/
-    hostname: beshop
+    hostname: beshop-springboot
     restart: always
     ports:
       - 9090:8080
@@ -50,18 +49,16 @@ services:
         "spring.jpa.hibernate.ddl-auto" : "update"
       }'
 
-  feshop:
+  reactjs:
     depends_on:
-      - beshop
-    container_name: feshop
+      - api_service
+    container_name: reactjs
     networks: 
-      - frontend
+      - my-network
     build:
       dockerfile: Dockerfile
       context: ./feshop/
-      args:
-        REACT_APP_API_BASE_URL: http://beshop:8080/api
-    hostname: feshop
+    hostname: fe
     restart: always
     stdin_open: true
     tty: true

@@ -1,0 +1,253 @@
+.card-container {
+    width: 18rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 1%;
+}
+
+.card-image {
+    /* ep iamge trong mot khung*/
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+}
+
+.card-title {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.card-text {
+    margin-top: 10px;
+}
+
+.card-button {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.card-list-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 2px 30px;
+}
+
+/* response home */
+.card-container {
+    width: 20%;
+    margin: 1% 1%;
+}
+
+@media (max-width: 800px) {
+    .card-container {
+        width: 49%;
+        margin: 1% 1px;
+    }
+}
+
+@media (max-width: 576px) {
+    .card-container {
+        width: 100%;
+        margin: 2% 0;
+    }
+}
+
+/* cac thuoc tinh cua phan trang */
+.pagination {
+    padding: 30px 0
+}
+
+.pagination ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none
+}
+
+.pagination a {
+    cursor: pointer;
+    display: inline-block;
+    padding: 10px 18px;
+    color: #222
+}
+
+.p1 a {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    padding: 0;
+    text-align: center
+}
+
+.p1 a.is-active {
+    background-color: #2ecc71;
+    border-radius: 100%;
+    color: #fff
+}
+
+.bottom-border .is-active li {
+    font-weight: 700;
+    border-bottom: 3px solid #2ecc71
+}
+
+.p3 .is-active {
+    background-color: #2ecc71;
+    color: #fff
+}
+
+.p4 a {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 100%;
+    padding: 0;
+    text-align: center;
+    position: relative;
+    border: 3px solid #2ecc71
+}
+
+.p4 .is-active:before {
+    content: "";
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    background-color: #2ecc71;
+    position: absolute;
+    top: 5px;
+    left: 5px
+}
+
+.p5 a {
+    width: 30px;
+    height: 5px;
+    padding: 0;
+    margin: auto 5px;
+    background-color: rgba(46, 204, 113, .4)
+}
+
+.p5 .is-active {
+    background-color: #2ecc71
+}
+
+.p6 a {
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    padding: 0;
+    margin: auto 5px;
+    text-align: center;
+    position: relative;
+    background-color: rgba(46, 204, 113, .4)
+}
+
+.p6 .is-active {
+    background-color: #2ecc71
+}
+
+.square-i a {
+    border: 3px solid #2ecc71;
+    margin: auto 5px;
+    color: #2ecc71;
+    font-weight: 700
+}
+
+.p8 a,
+.square-i .is-active {
+    background-color: #2ecc71;
+    color: #fff
+}
+
+.p8 a {
+    margin: auto 5px;
+    font-weight: 700;
+    border: 3px solid #2ecc71
+}
+
+.p8 .is-active {
+    background-color: #fff;
+    color: #2ecc71
+}
+
+.circle a {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    padding: 0;
+    text-align: center;
+    margin: auto 5px
+}
+
+.circle a.is-active {
+    border: 3px solid #2ecc71;
+    border-radius: 100%
+}
+
+.square a {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    padding: 0;
+    text-align: center;
+    margin: auto 5px
+}
+
+.p11 a,
+.square a.is-active {
+    border: 3px solid #2ecc71
+}
+
+.p11 a {
+    background-color: #2ecc71;
+    margin: auto 5px;
+    color: #fff;
+    position: relative
+}
+
+.p11 a:first-of-type:before {
+    left: -25px;
+    border-right: 22px solid #2ecc71
+}
+
+.p11 a:first-of-type:before,
+.p11 a:last-of-type:after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    border-top: 22px solid transparent;
+    border-bottom: 22px solid transparent
+}
+
+.p11 a:last-of-type:after {
+    right: -25px;
+    border-left: 22px solid #2ecc71
+}
+
+.p11 .is-active {
+    font-weight: 700
+}
+
+.square-fill .is-active,
+.square-fill a:first-of-type,
+.square-fill a:last-of-type {
+    background-color: #2ecc71;
+    color: #fff;
+    font-weight: 700
+}
+
+/* css list product selling */
+.slick-slide {
+    font-size: 18px;
+    /* border: 1px solid #ccc; */
+    height: 100px;
+}
+
+.slick-slide img {
+    max-width: 100%;
+    height: auto;
+}
+
+.slick-list {
+    background-color: #f2f2f2;
+    opacity: 0.8;
+  }

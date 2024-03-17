@@ -1,9 +1,5 @@
 version: "3.8"
 
-#NETWORK
-networks:
-  backend:
-  frontend:
 #SERVICES
 services: 
   mysqldb:
@@ -14,33 +10,22 @@ services:
     environment:
       - MYSQL_DATABASE=hdshopdb
       - MYSQL_ROOT_PASSWORD=123456
-    networks: 
-      - backend
     ports:
       - 3307:3306
     volumes:
       - ./db:/var/lib/mysql
-    healthcheck:
-      test: "/usr/bin/mysql --user=root --password=123456 --execute \"SHOW DATABASES;\""
-      interval: 5s
-      timeout: 10s
-      retries: 100
 
-  beshop:
-    depends_on:
-      mysqldb:
-        condition: service_healthy
+  api_service:
     container_name: beshop
-    networks: 
-      - backend
-      - frontend
     build: 
       dockerfile: Dockerfile
       context: ./beshop/
-    hostname: beshop
+    hostname: beshop-springboot
     restart: always
     ports:
       - 9090:8080
+    links:
+      - mysqldb
     environment:
       SPRING_APPLICATION_JSON: '{
         "spring.datasource.url"  : "jdbc:mysql://mysqldb:3306/hdshopdb?useSSL=false&allowPublicKeyRetrieval=true",
@@ -50,22 +35,16 @@ services:
         "spring.jpa.hibernate.ddl-auto" : "update"
       }'
 
-  feshop:
-    depends_on:
-      - beshop
-    container_name: feshop
-    networks: 
-      - frontend
+  reactjs:
+    container_name: reactjs
     build:
       dockerfile: Dockerfile
       context: ./feshop/
-      args:
-        REACT_APP_API_BASE_URL: http://beshop:8080/api
-    hostname: feshop
+    hostname: fe
     restart: always
-    stdin_open: true
-    tty: true
     ports:
       - 3000:3000
+    links:
+      - api_service
 
 
