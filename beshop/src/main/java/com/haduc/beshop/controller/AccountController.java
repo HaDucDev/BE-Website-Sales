@@ -4,6 +4,7 @@ package com.haduc.beshop.controller;
 import com.haduc.beshop.service.IAccountService;
 import com.haduc.beshop.util.dto.request.account.*;
 import com.haduc.beshop.util.dto.response.account.LoginResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/")
+@Slf4j
 public class AccountController {
 
     @Autowired
@@ -28,6 +30,7 @@ public class AccountController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+        log.info("run register");
         return ResponseEntity.status(HttpStatus.OK).body(this.iAccountService.register(request));
     }
 

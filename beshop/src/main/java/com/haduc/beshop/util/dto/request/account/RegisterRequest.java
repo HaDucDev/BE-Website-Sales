@@ -1,15 +1,13 @@
 package com.haduc.beshop.util.dto.request.account;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class RegisterRequest {
     private String email;
     private String fullName;
