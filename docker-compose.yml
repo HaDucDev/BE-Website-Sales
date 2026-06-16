@@ -1,46 +1,44 @@
-version: "3.8"
-
-#NETWORK
 networks:
   backend:
   frontend:
-#SERVICES
-services: 
+
+services:
   mysqldb:
     container_name: mysqldb
     image: mysql:8.0.29
     hostname: mysqldb
     restart: always
     environment:
-      - MYSQL_DATABASE=hdshopdb
-      - MYSQL_ROOT_PASSWORD=123456
-    networks: 
+      MYSQL_DATABASE: hdshopdb
+      MYSQL_ROOT_PASSWORD: 123456
+    networks:
       - backend
     ports:
-      - 3307:3306
+      - "3307:3306"
     volumes:
       - ./db:/var/lib/mysql
     healthcheck:
-      test: "/usr/bin/mysql --user=root --password=123456 --execute \"SHOW DATABASES;\""
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p123456 --silent"]
       interval: 5s
       timeout: 10s
-      retries: 100
+      retries: 60
+      start_period: 20s
 
   beshop:
     depends_on:
       mysqldb:
         condition: service_healthy
     container_name: beshop
-    networks: 
+    networks:
       - backend
       - frontend
-    build: 
+    build:
       dockerfile: Dockerfile
       context: ./beshop/
     hostname: beshop
     restart: always
     ports:
-      - 9090:8080
+      - "9090:8080"
     environment:
       SPRING_APPLICATION_JSON: '{
         "spring.datasource.url"  : "jdbc:mysql://mysqldb:3306/hdshopdb?useSSL=false&allowPublicKeyRetrieval=true",
@@ -50,22 +48,45 @@ services:
         "spring.jpa.hibernate.ddl-auto" : "update"
       }'
 
+  db-seed:
+    container_name: hdshopdb-seed
+    image: mysql:8.0.29
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+      beshop:
+        condition: service_started
+    networks:
+      - backend
+    environment:
+      MYSQL_HOST: mysqldb
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: hdshopdb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 123456
+    volumes:
+      - ./seed-hdshopdb.sql:/seed/seed-hdshopdb.sql:ro
+      - ./docker/mysql/seed-if-empty.sh:/seed/seed-if-empty.sh:ro
+    entrypoint: ["/bin/sh", "/seed/seed-if-empty.sh"]
+    restart: "no"
+
   feshop:
     depends_on:
-      - beshop
+      beshop:
+        condition: service_started
+      db-seed:
+        condition: service_completed_successfully
     container_name: feshop
-    networks: 
+    networks:
       - frontend
     build:
       dockerfile: Dockerfile
       context: ./feshop/
       args:
-        REACT_APP_API_BASE_URL: http://beshop:8080/api
+        REACT_APP_API_BASE_URL: /api/
     hostname: feshop
     restart: always
     stdin_open: true
     tty: true
     ports:
-      - 3000:3000
-
-
+      - "3000:80"

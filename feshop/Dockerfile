@@ -1,31 +1,17 @@
-FROM node:16-alpine
-
+FROM node:16-alpine AS build
 WORKDIR /app
 
-COPY . .
+ARG REACT_APP_API_BASE_URL=/api/
+ENV REACT_APP_API_BASE_URL=${REACT_APP_API_BASE_URL}
 
+COPY package*.json ./
 RUN npm install
-FROM nginx
+
+COPY . .
+RUN npm run build
+
+FROM nginx:1.25-alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
-# EXPOSE 3000
-
-# CMD ["npm", "start"]
-# # Fetching the latest node image on alpine linux
-# FROM node:alpine AS development
-
-# # Declaring env
-# ENV NODE_ENV development
-
-# # Setting up the work directory
-# WORKDIR /react-app
-
-# # Installing dependencies
-# COPY ./package.json /react-app
-# RUN npm install
-
-# # Copying all the files in our project
-# COPY . .
-
-# # Starting our application
-# CMD npm start
+CMD ["nginx", "-g", "daemon off;"]

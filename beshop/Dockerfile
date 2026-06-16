@@ -1,9 +1,11 @@
-# Base Alpine Linux based image with OpenJDK JRE only
-FROM openjdk:8
+FROM maven:3.8.8-eclipse-temurin-8 AS build
 WORKDIR /app
-# port
+COPY pom.xml .
+COPY src ./src
+RUN mvn -DskipTests package
+
+FROM eclipse-temurin:8-jre
+WORKDIR /app
 EXPOSE 8080
-# copy application WAR (with libraries inside)
-ADD target/beshop-springboot.jar beshop-springboot.jar
-# specify default command
+COPY --from=build /app/target/beshop-springboot.jar beshop-springboot.jar
 ENTRYPOINT ["java", "-jar", "beshop-springboot.jar"]
